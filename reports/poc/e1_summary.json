@@ -1,0 +1,199 @@
+{
+  "n_months": 1047,
+  "quantile": 0.05,
+  "horizon_days": 10,
+  "first": "1935-10-31",
+  "last": "2022-12-30",
+  "bear_months": 150,
+  "coverage": {
+    "uncond": {
+      "breaches": 57,
+      "n": 1047,
+      "rate": 0.054441260744985676,
+      "expected": 0.05,
+      "lr": 0.42309643743811876,
+      "p": 0.5153960121294817,
+      "ci": [
+        0.041490609827342255,
+        0.069962867710383
+      ]
+    },
+    "scaled": {
+      "breaches": 75,
+      "n": 1047,
+      "rate": 0.07163323782234957,
+      "expected": 0.05,
+      "lr": 9.150168661133023,
+      "p": 0.0024869514195582057,
+      "ci": [
+        0.056757645778912666,
+        0.088968050197281
+      ]
+    },
+    "cond": {
+      "breaches": 75,
+      "n": 1047,
+      "rate": 0.07163323782234957,
+      "expected": 0.05,
+      "lr": 9.150168661133023,
+      "p": 0.0024869514195582057,
+      "ci": [
+        0.056757645778912666,
+        0.088968050197281
+      ]
+    }
+  },
+  "mean_pinball": {
+    "uncond": 0.0038676993873249807,
+    "scaled": 0.003311221616298831,
+    "cond": 0.003394645848330053
+  },
+  "primary_scaled_vs_uncond": {
+    "6": {
+      "ratio": 0.8561217625005166,
+      "ci90": [
+        0.7773203814986324,
+        0.9283620752473085
+      ],
+      "block_months": 6,
+      "excludes_one": true
+    },
+    "12": {
+      "ratio": 0.8561217625005166,
+      "ci90": [
+        0.7864443181924602,
+        0.9277020436535068
+      ],
+      "block_months": 12,
+      "excludes_one": true
+    },
+    "24": {
+      "ratio": 0.8561217625005166,
+      "ci90": [
+        0.7868419920167784,
+        0.9233492237440413
+      ],
+      "block_months": 24,
+      "excludes_one": true
+    }
+  },
+  "secondary_cond_vs_scaled": {
+    "6": {
+      "ratio": 1.0251943970227129,
+      "ci90": [
+        1.0040716016338191,
+        1.0456893556374993
+      ],
+      "block_months": 6,
+      "excludes_one": true
+    },
+    "12": {
+      "ratio": 1.0251943970227129,
+      "ci90": [
+        1.0045950612279364,
+        1.0456765117766609
+      ],
+      "block_months": 12,
+      "excludes_one": true
+    },
+    "24": {
+      "ratio": 1.0251943970227129,
+      "ci90": [
+        1.004676058693582,
+        1.045812751767935
+      ],
+      "block_months": 24,
+      "excludes_one": true
+    }
+  },
+  "conditional_coverage": {
+    "uncond": {
+      "by_vol_tercile": {
+        "low vol": 0.008595988538681949,
+        "mid vol": 0.04297994269340974,
+        "high vol": 0.11174785100286533
+      },
+      "spread_across_terciles": 0.10315186246418338,
+      "by_bear_state": {
+        "bear": 0.12,
+        "not_bear": 0.043478260869565216
+      }
+    },
+    "scaled": {
+      "by_vol_tercile": {
+        "low vol": 0.07736389684813753,
+        "mid vol": 0.08595988538681948,
+        "high vol": 0.05157593123209169
+      },
+      "spread_across_terciles": 0.03438395415472779,
+      "by_bear_state": {
+        "bear": 0.07333333333333333,
+        "not_bear": 0.0713489409141583
+      }
+    },
+    "cond": {
+      "by_vol_tercile": {
+        "low vol": 0.07736389684813753,
+        "mid vol": 0.09169054441260745,
+        "high vol": 0.045845272206303724
+      },
+      "spread_across_terciles": 0.045845272206303724,
+      "by_bear_state": {
+        "bear": 0.04,
+        "not_bear": 0.07692307692307693
+      }
+    }
+  },
+  "planted_effect": {
+    "calibrating_multiplier": 1.1578574167578428,
+    "breach_rate_after": 0.050620821394460364,
+    "ratio": 0.9963336683780643,
+    "ci90": [
+      0.9782185758654176,
+      1.0165279696995506
+    ],
+    "detects_a_real_improvement": false,
+    "grid": [
+      {
+        "share_of_correction": 0.25,
+        "multiplier": 1.0394643541894606,
+        "ratio": 0.995418196558846,
+        "ci90": [
+          0.9904058017508217,
+          1.0008058371121369
+        ],
+        "detected": false
+      },
+      {
+        "share_of_correction": 0.5,
+        "multiplier": 1.0789287083789214,
+        "ratio": 0.9936764670983299,
+        "ci90": [
+          0.9844627394021451,
+          1.0035298972779885
+        ],
+        "detected": false
+      },
+      {
+        "share_of_correction": 1.0,
+        "multiplier": 1.1578574167578428,
+        "ratio": 0.9963336683780643,
+        "ci90": [
+          0.9784253555526743,
+          1.01572187608633
+        ],
+        "detected": false
+      }
+    ],
+    "note": "the level correction leaves the conditioning intact, so it is an improvement of the shape the secondary comparison was looking for"
+  },
+  "verdict": {
+    "primary_passes": true,
+    "secondary_passes": false,
+    "coverage_passes": {
+      "uncond": true,
+      "scaled": false,
+      "cond": false
+    }
+  }
+}

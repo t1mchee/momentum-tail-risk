@@ -1,0 +1,493 @@
+{
+  "experiment": "exp-090",
+  "kind": "sensitivity analysis, not a hypothesis test; no p-value is claimed for the difference between weightings",
+  "latest_formation_date": "2026-07-31",
+  "dates": [
+    "2024-08-31",
+    "2024-09-30",
+    "2024-10-31",
+    "2024-11-30",
+    "2024-12-31",
+    "2025-01-31",
+    "2025-02-28",
+    "2025-03-31",
+    "2025-04-30",
+    "2025-05-31",
+    "2025-06-30",
+    "2025-07-31",
+    "2025-08-31",
+    "2025-09-30",
+    "2025-10-31",
+    "2025-11-30",
+    "2025-12-31",
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30",
+    "2026-07-31"
+  ],
+  "n_dates": 24,
+  "n_draws_requested": 500,
+  "seed": 20260903,
+  "membership_path_for_q1": "factor.cleanlegs, the path scripts/current_book.py uses",
+  "reference_panel_span": [
+    "2012-02-29",
+    "2026-06-30"
+  ],
+  "latest": {
+    "weight_pct": {
+      "mkt": {
+        "spread_value": 1.4579966417941843,
+        "z_value": 5.127951285347977,
+        "spread_equal": 0.6879483545976679,
+        "z_equal": 9.485125494555676,
+        "placebo_band_value_p5_p95": [
+          0.0210189093996324,
+          0.7010250841349293
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0142921777027539,
+          0.2064667759000325
+        ],
+        "rank_value": 3,
+        "rank_equal": 4
+      },
+      "d10y": {
+        "spread_value": -0.0733076942295492,
+        "z_value": 3.4996259006373696,
+        "spread_equal": -0.035253241666146,
+        "z_equal": 5.422623159103421,
+        "placebo_band_value_p5_p95": [
+          0.001594309406968,
+          0.0498211669355543
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.000530356800111,
+          0.0164482600356037
+        ],
+        "rank_value": 5,
+        "rank_equal": 6
+      },
+      "wti": {
+        "spread_value": -0.1557291877826762,
+        "z_value": 6.144902819411248,
+        "spread_equal": -0.0892593743193381,
+        "z_equal": 8.063473367795654,
+        "placebo_band_value_p5_p95": [
+          0.0021439634604703,
+          0.0665947987357495
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0015965865206404,
+          0.0303085194848219
+        ],
+        "rank_value": 2,
+        "rank_equal": 5
+      },
+      "usd": {
+        "spread_value": -2.530351620017931,
+        "z_value": 8.792068198079226,
+        "spread_equal": -1.611641003310777,
+        "z_equal": 12.786503869807277,
+        "placebo_band_value_p5_p95": [
+          0.0325200652553082,
+          0.830499893800091
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.042214133997802,
+          0.4040356866643078
+        ],
+        "rank_value": 1,
+        "rank_equal": 2
+      },
+      "ig": {
+        "spread_value": -0.1082776173044409,
+        "z_value": 1.86579325753714,
+        "spread_equal": -0.0282575426280144,
+        "z_equal": 1.9658889624738325,
+        "placebo_band_value_p5_p95": [
+          0.0037422629585058,
+          0.1094596376526513
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0010578001925212,
+          0.0268363176524706
+        ],
+        "rank_value": 6,
+        "rank_equal": 8
+      },
+      "concentration": {
+        "spread_value": 0.5321621828646093,
+        "z_value": 1.179532365710834,
+        "spread_equal": 0.3056073427029467,
+        "z_equal": 15.703208793950775,
+        "placebo_band_value_p5_p95": [
+          0.0216441087754998,
+          0.6981916166596451
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0036157860901086,
+          0.0583658019201585
+        ],
+        "rank_value": 7,
+        "rank_equal": 1
+      },
+      "pc1": {
+        "spread_value": -0.0002754138267601,
+        "z_value": -0.8910248488308085,
+        "spread_equal": -0.0005022898440721,
+        "z_equal": 2.764591555101837,
+        "placebo_band_value_p5_p95": [
+          6.236898283911052e-05,
+          0.001789862105008
+        ],
+        "placebo_band_equal_p5_p95": [
+          1.41877894772671e-05,
+          0.000411709668849
+        ],
+        "rank_value": 8,
+        "rank_equal": 7
+      },
+      "pc2": {
+        "spread_value": 0.0035768727970996,
+        "z_value": 4.906488550797957,
+        "spread_equal": 0.002475988367303,
+        "z_equal": 11.974016130976349,
+        "placebo_band_value_p5_p95": [
+          7.03466686194553e-05,
+          0.0018876976305227
+        ],
+        "placebo_band_equal_p5_p95": [
+          2.0391419712756193e-05,
+          0.0006035623378952
+        ],
+        "rank_value": 4,
+        "rank_equal": 3
+      }
+    },
+    "market_value": {
+      "mkt": {
+        "spread_value": 1.4579966417941843,
+        "z_value": 6.029625155351528,
+        "spread_equal": 0.6879483545976679,
+        "z_equal": 9.3079740777115,
+        "placebo_band_value_p5_p95": [
+          0.0231768567287245,
+          0.6580299023664676
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0278747280576642,
+          0.2280877693024461
+        ],
+        "rank_value": 2,
+        "rank_equal": 4
+      },
+      "d10y": {
+        "spread_value": -0.0733076942295492,
+        "z_value": 3.232334143707614,
+        "spread_equal": -0.035253241666146,
+        "z_equal": 4.313226423519264,
+        "placebo_band_value_p5_p95": [
+          0.0018015974916135,
+          0.0522952388828313
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0013471666831544,
+          0.0197611748727054
+        ],
+        "rank_value": 5,
+        "rank_equal": 6
+      },
+      "wti": {
+        "spread_value": -0.1557291877826762,
+        "z_value": 5.536101442748774,
+        "spread_equal": -0.0892593743193381,
+        "z_equal": 7.937176852221973,
+        "placebo_band_value_p5_p95": [
+          0.002046435057313,
+          0.0806504614082404
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.001792501225267,
+          0.0318197367504546
+        ],
+        "rank_value": 3,
+        "rank_equal": 5
+      },
+      "usd": {
+        "spread_value": -2.530351620017931,
+        "z_value": 8.67306208115494,
+        "spread_equal": -1.611641003310777,
+        "z_equal": 13.58200599758718,
+        "placebo_band_value_p5_p95": [
+          0.0345855830812463,
+          0.8093051235840785
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0708442381566986,
+          0.4025635051202028
+        ],
+        "rank_value": 1,
+        "rank_equal": 2
+      },
+      "ig": {
+        "spread_value": -0.1082776173044409,
+        "z_value": 2.184713115842517,
+        "spread_equal": -0.0282575426280144,
+        "z_equal": 1.7989534954121973,
+        "placebo_band_value_p5_p95": [
+          0.0038225589990836,
+          0.1012343908569224
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0015461337126507,
+          0.0282067647418854
+        ],
+        "rank_value": 6,
+        "rank_equal": 8
+      },
+      "concentration": {
+        "spread_value": 0.5321621828646093,
+        "z_value": 1.502391454425383,
+        "spread_equal": 0.3056073427029467,
+        "z_equal": 18.904551862454195,
+        "placebo_band_value_p5_p95": [
+          0.0133276371720932,
+          0.5896834580841068
+        ],
+        "placebo_band_equal_p5_p95": [
+          0.0016022934528747,
+          0.048466859437959
+        ],
+        "rank_value": 7,
+        "rank_equal": 1
+      },
+      "pc1": {
+        "spread_value": -0.0002754138267601,
+        "z_value": -0.90779716684179,
+        "spread_equal": -0.0005022898440721,
+        "z_equal": 2.27053021339786,
+        "placebo_band_value_p5_p95": [
+          6.294839870799409e-05,
+          0.0018134559243395
+        ],
+        "placebo_band_equal_p5_p95": [
+          2.0129314372299775e-05,
+          0.0004412341965952
+        ],
+        "rank_value": 8,
+        "rank_equal": 7
+      },
+      "pc2": {
+        "spread_value": 0.0035768727970996,
+        "z_value": 4.342273481379276,
+        "spread_equal": 0.002475988367303,
+        "z_equal": 12.09086595884188,
+        "placebo_band_value_p5_p95": [
+          7.264576082647965e-05,
+          0.0020389529208675
+        ],
+        "placebo_band_equal_p5_p95": [
+          2.5801579494139224e-05,
+          0.0005974939862154
+        ],
+        "rank_value": 4,
+        "rank_equal": 3
+      }
+    }
+  },
+  "median_z_across_dates": {
+    "weight_pct": {
+      "equal": {
+        "concentration": 16.012512720763972,
+        "d10y": 7.641083591395419,
+        "ig": 1.5759131920827332,
+        "mkt": 3.076746639952421,
+        "pc1": 3.8627928105028726,
+        "pc2": 1.5125930135487842,
+        "usd": 6.5552785850626805,
+        "wti": 4.134670393359379
+      },
+      "value": {
+        "concentration": 2.90553871931861,
+        "d10y": 1.9400288759636148,
+        "ig": 1.56509304685069,
+        "mkt": 2.3365608930627233,
+        "pc1": 1.3733382660405966,
+        "pc2": 0.5226886482007698,
+        "usd": 0.25730978223857326,
+        "wti": 3.09967304549782
+      }
+    },
+    "market_value": {
+      "equal": {
+        "concentration": 15.39617889371737,
+        "d10y": 6.762730954839343,
+        "ig": 1.113748488856768,
+        "mkt": 1.5250577370045462,
+        "pc1": 2.2770055939130818,
+        "pc2": 1.045112523371542,
+        "usd": 3.770458994861163,
+        "wti": 3.302598849164794
+      },
+      "value": {
+        "concentration": 2.7622848929148756,
+        "d10y": 1.923637479246115,
+        "ig": 1.583621226832427,
+        "mkt": 2.4258405841157837,
+        "pc1": 1.4875690639826638,
+        "pc2": 0.5722054560683024,
+        "usd": 0.2531603395959864,
+        "wti": 2.627374776435779
+      }
+    }
+  },
+  "ranking": {
+    "weight_pct": {
+      "value": [
+        "usd",
+        "wti",
+        "mkt",
+        "pc2",
+        "d10y",
+        "ig",
+        "concentration",
+        "pc1"
+      ],
+      "equal": [
+        "concentration",
+        "usd",
+        "pc2",
+        "mkt",
+        "wti",
+        "d10y",
+        "pc1",
+        "ig"
+      ]
+    },
+    "market_value": {
+      "value": [
+        "usd",
+        "mkt",
+        "wti",
+        "pc2",
+        "d10y",
+        "ig",
+        "concentration",
+        "pc1"
+      ],
+      "equal": [
+        "concentration",
+        "usd",
+        "pc2",
+        "mkt",
+        "wti",
+        "d10y",
+        "pc1",
+        "ig"
+      ]
+    }
+  },
+  "concentration_profile_latest": {
+    "asof": "2026-07-31",
+    "n_universe": 2355,
+    "n_leg": 235,
+    "win_eff_n": 15.694479767041695,
+    "win_top1": 0.1788428950272522,
+    "win_top1_name": "AMD",
+    "win_top5": 0.4968954421100298,
+    "los_eff_n": 24.77235498655232,
+    "los_top1": 0.1242513488765692,
+    "los_top5": 0.3656370331133574,
+    "stored_win_eff_n": 10.707005019721151,
+    "stored_win_top1": 0.2456337201722965,
+    "stored_win_top1_name": "GOOGL",
+    "stored_win_top5": 0.5416161539318781,
+    "caps_zero_frac_universe": 0.5057324840764331,
+    "caps_zero_frac_winleg": 0.5063829787234042
+  },
+  "latest_date_diagnostic": {
+    "eff_n_real_value_weighted_winner_leg": 15.694479767041695,
+    "eff_n_placebo_value_weighted_winner_leg": {
+      "median": 13.43894175057076,
+      "p5": 3.0454558245007504,
+      "p95": 36.70795503627754
+    },
+    "equal": {
+      "real_abs_spread": 0.30560734270294676,
+      "placebo_mean": 0.027747411990002267,
+      "placebo_sd": 0.017694468331847086,
+      "placebo_median": 0.025020627643829438,
+      "placebo_max": 0.0898766907541137,
+      "real_percentile_in_placebo": 100.0,
+      "z": 15.703208793950767,
+      "z_dropping_5_largest_placebos": 16.576534993452867
+    },
+    "value": {
+      "real_abs_spread": 0.5321621828646093,
+      "placebo_mean": 0.2803844238939683,
+      "placebo_sd": 0.21345557467506146,
+      "placebo_median": 0.24488595331650137,
+      "placebo_max": 0.8759288846030417,
+      "real_percentile_in_placebo": 84.39999999999999,
+      "z": 1.1795323657108348,
+      "z_dropping_5_largest_placebos": 1.2367153309303522
+    }
+  },
+  "membership": {
+    "stored_pickle": "data/processed/leg_members.pkl",
+    "per_leg": {
+      "losers": {
+        "jaccard_median": 0.6945906432748539,
+        "jaccard_min": 0.5806451612903226,
+        "jaccard_max": 0.7482517482517482,
+        "median_names_differing": 43.0,
+        "median_leg_size": 244.5,
+        "top10_identical_dates": 0,
+        "top10_dates": 24,
+        "top10_overlap_median": 6.5
+      },
+      "winners": {
+        "jaccard_median": 0.675227416224306,
+        "jaccard_min": 0.6045016077170418,
+        "jaccard_max": 0.7272727272727273,
+        "median_names_differing": 46.0,
+        "median_leg_size": 244.5,
+        "top10_identical_dates": 1,
+        "top10_dates": 24,
+        "top10_overlap_median": 8.0
+      }
+    },
+    "latest_winner_top10_cleanlegs": [
+      "AMD",
+      "AMAT",
+      "LRCX",
+      "CAT",
+      "KLAC",
+      "MRVL",
+      "DELL",
+      "GLW",
+      "VRT",
+      "HPE"
+    ],
+    "latest_winner_top10_stored": [
+      "GOOGL",
+      "MU",
+      "AMD",
+      "AMAT",
+      "INTC",
+      "LRCX",
+      "CAT",
+      "GEV",
+      "KLAC",
+      "WDC"
+    ]
+  },
+  "declared_before_run": {
+    "D1": "current_book.py aggregates legs with .mean(axis=1), which is EQUAL weighting. The live z of 15.4 is already the equal-weighted number.",
+    "D2": "current_book.py passes weight_pct as caps to placebo.random_matched; it is 0.00 for ~53% of the universe (trp-91) and pd.qcut breaks those ties by index order, so the bottom five cap buckets are an arbitrary alphabetical partition rather than a cap match. Repeated with market-value caps as a secondary grid."
+  },
+  "runtime_seconds": 113.1
+}

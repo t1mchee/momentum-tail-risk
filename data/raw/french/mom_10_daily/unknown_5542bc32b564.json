@@ -1,0 +1,9 @@
+{
+  "dataset": "mom_10_daily",
+  "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/10_Portfolios_Prior_12_2_Daily_CSV.zip",
+  "sha256": "5542bc32b564ebc33c0fbc3181a4087c9de3a7c43cd0a591174c9668be3fb72d",
+  "last_modified": "Mon, 03 Aug 2026 19:18:12 GMT",
+  "crsp_vintage": null,
+  "fetched_at": "2026-08-21T01:42:10.835636+00:00",
+  "n_bytes": 898974
+}

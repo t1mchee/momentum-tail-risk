@@ -1,0 +1,30 @@
+{
+  "components": {
+    "comomentum": {
+      "spread": -0.029471514620233726,
+      "avg": 0.04182951963199629,
+      "pctile_spread": 0.24390243902439024,
+      "as_of_row": "2020-10-31",
+      "n_history": 82,
+      "scope": "Percentile is within this series' own history; the measured economic magnitude of the effect is small."
+    },
+    "short_volume": {
+      "ratio": 0.4654435803745481,
+      "ratio_21d_prior": 0.4731574684453435,
+      "change": -0.007713888070795427,
+      "as_of_row": "2020-10-30",
+      "window_calendar_days": 29
+    },
+    "mtum_flow": {
+      "shares_outstanding": 82500000.0,
+      "shares_21d_prior": 82100000.0,
+      "pct_change_21d": 0.004872107186357999,
+      "as_of_row": "2020-10-30",
+      "window_calendar_days": 29
+    }
+  },
+  "unavailable": {
+    "skew": "option capture begins 2026-08-20, after this date; no snapshot exists for it and none can be reconstructed"
+  },
+  "as_of": "2020-10-31"
+}

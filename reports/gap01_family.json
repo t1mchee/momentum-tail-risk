@@ -1,0 +1,8 @@
+{
+  "n_dates": 108,
+  "n_draws": 200,
+  "clears_family": 108,
+  "clears_naive": 108,
+  "family_rate": 1.0,
+  "naive_rate": 1.0
+}

@@ -1,0 +1,2591 @@
+# Things that returned a success code, parsed without error, looked plausible, and were wrong.
+# Every entry here cost real time. The defence column is the reusable part.
+
+- id: trp-01
+  one_breath: A data endpoint served a web page while claiming it was a spreadsheet.
+  symptom: >
+    The holdings download returned 1.4 megabytes of web page markup under a header
+    declaring it comma-separated data, with a success code.
+  why_it_parsed: >
+    The reader was trusting the declared content type. Markup parsed into a single
+    enormous column without complaint.
+  defence: >
+    Validate the body, never the headers. Assert that the first line looks like the
+    columns expected and that the row count is plausible.
+  found_on: 2026-08-12
+  affected_sources: [src-iwv]
+
+- id: trp-02
+  one_breath: Non-trading days returned a tiny placeholder file instead of an error.
+  symptom: >
+    Requesting holdings for a weekend or holiday returned a 303-byte file containing a
+    single dash, with a success code.
+  why_it_parsed: >
+    It is valid comma-separated data. It simply describes nothing, and appended silently
+    as an empty day.
+  defence: >
+    Raise a specific not-a-trading-date error on undersized bodies rather than letting a
+    zero-row day enter the panel.
+  found_on: 2026-08-12
+  affected_sources: [src-iwv]
+
+- id: trp-03
+  one_breath: A field's own vocabulary changed across eras, so filtering on it emptied a year.
+  symptom: >
+    The asset-class field reads Equity in 2013, Other in 2016, and Equity again in 2019
+    for the same kind of holding.
+  why_it_parsed: >
+    Keeping only rows labelled Equity is the obvious filter and is correct in two of the
+    three eras. The middle era silently emptied.
+  defence: >
+    Never keep by label. Exclude the things that are definitely not wanted and let
+    everything else through, because label vocabularies drift and exclusion fails safe.
+  found_on: 2026-08-13
+  affected_sources: [src-iwv]
+
+- id: trp-04
+  one_breath: A field was blank for every row in the earliest files, and the filter deleted them all.
+  symptom: >
+    The sector field is a single dash for all 2,956 holdings in the 2006 files. Excluding
+    dashes dropped the entire year.
+  why_it_parsed: >
+    Excluding a placeholder value is normally right. Here the placeholder was universal,
+    so the filter was total.
+  defence: >
+    After every filter, compare the surviving row count against the input count and fail
+    when a filter removes essentially everything.
+  found_on: 2026-08-13
+  affected_sources: [src-iwv]
+
+- id: trp-05
+  one_breath: A reverse stock split read as a 1,900 percent gain and put a failing company among the winners.
+  symptom: >
+    A one-for-twenty reverse split made a pharmacy chain's raw price ratio look like a
+    nineteen-fold return, promoting it into the top-performing group.
+  why_it_parsed: >
+    Price on day two divided by price on day one is arithmetically fine. The share count
+    changed underneath it.
+  defence: >
+    Compound the return series the data provider already adjusts, never a raw price ratio,
+    and cap plausible single-day moves as a tripwire.
+  found_on: 2026-08-14
+  affected_sources: [src-iwv]
+
+- id: trp-06
+  one_breath: A placeholder row was ranked as if it were a company.
+  symptom: >
+    A row whose ticker was a single dash was sorted alongside real stocks and landed in
+    the worst-performing group.
+  why_it_parsed: It is a valid row with a valid, if meaningless, identifier.
+  defence: Require tickers to match the shape of a real ticker before a row can be ranked.
+  found_on: 2026-08-14
+  affected_sources: [src-iwv]
+
+- id: trp-07
+  one_breath: A published series was abandoned upstream years ago but still downloads cleanly.
+  symptom: >
+    The equity put-and-call ratio file stops being updated on 2019-10-04, yet the download
+    succeeds and parses every time.
+  why_it_parsed: >
+    A stale file is a valid file. Nothing in the response says the series is dead, and a
+    flat tail reads as calm markets.
+  defence: >
+    Assert that the last date in any downloaded series is close to today, and keep an
+    explicit list of series known to have been discontinued.
+  found_on: 2026-08-15
+  affected_sources: [src-cboe-index]
+
+- id: trp-08
+  one_breath: A daily file dated today also contains yesterday's entries, injecting hidden lookahead.
+  symptom: >
+    The short-sale restriction file for a given day contains triggers from both the
+    previous day and that day.
+  why_it_parsed: >
+    Joining the file to its own filename date is the natural thing to do and is wrong for
+    half the rows, precisely on the days that matter.
+  defence: >
+    Use the timestamp inside each row rather than the date on the container, and test the
+    join on a day where the two disagree.
+  found_on: 2026-08-16
+  affected_sources: [src-finra]
+
+- id: trp-09
+  one_breath: Two backfills running at once corrupted a stored panel through interleaved writes.
+  symptom: >
+    Two processes read the same panel, each appended its own days, and each wrote back,
+    so the second silently erased the first.
+  why_it_parsed: >
+    The resulting file was structurally valid and had a plausible row count. Only a date
+    audit revealed the missing block.
+  defence: >
+    Lock before appending, write to a temporary file and rename, and keep raw responses so
+    any derived panel can be rebuilt from scratch. That last habit is what made this
+    recoverable.
+  found_on: 2026-08-16
+  affected_sources: [src-iwv]
+
+- id: trp-10
+  one_breath: A news search returned its error message as plain text under a success code.
+  symptom: >
+    An unparenthesised either-or query returned a human-readable complaint about syntax,
+    served with a success code where results were expected.
+  why_it_parsed: >
+    The reader treated any successful response as results, and an error sentence became
+    zero matches rather than a failure.
+  defence: >
+    Parse the body and confirm it has the shape of a result set before treating an
+    absence of matches as evidence of absence.
+  found_on: 2026-08-17
+  affected_sources: [src-gdelt]
+
+- id: trp-11
+  one_breath: I asserted twice that volatility was low without checking, and it was high.
+  symptom: >
+    The severity model was calm before the September 2019 reversal and I attributed that
+    to quiet markets. Trailing volatility was in fact at the 75th percentile.
+  why_it_parsed: >
+    Quiet markets is the intuitive story for a calm model and nobody challenged it. The
+    real cause was a separate term detecting the absence of a bear market.
+  defence: >
+    Decompose the model into its parts and read each one before explaining what the model
+    did. An explanation of a number is itself a claim requiring evidence.
+  found_on: 2026-08-18
+  affected_sources: []
+
+- id: trp-12
+  one_breath: I repeated a survey's claim that free option history does not exist, without probing.
+  symptom: >
+    I stated no free historical implied volatility was available. Free correlation indices
+    run from 2006 and single-name volatility indices from 2011.
+  why_it_parsed: >
+    It came from a plausible market-data survey and matched the general reputation of
+    options data as expensive.
+  defence: >
+    Probe the endpoint before repeating a claim about what data exists. It took one
+    command to disprove.
+  found_on: 2026-08-19
+  affected_sources: [src-cboe-index]
+
+- id: trp-13
+  one_breath: >
+    One missing option chain aborted an entire day of capture that can never be recovered,
+    because a retry wrapper hid the error from its handler.
+  symptom: >
+    A company with no listed options returned a not-found response, which the retry
+    library wrapped in its own error type, escaping the handler and killing the whole run.
+  why_it_parsed: >
+    The handler caught network errors, and a wrapped not-found is technically a different
+    exception class. One absent ticker cost a full day.
+  defence: >
+    Isolate every item in any batch job whose output cannot be regenerated. One element
+    must never be able to fail the batch. Concretely: never retry a not-found, catch
+    broadly per item rather than per batch, and record which items failed instead of
+    aborting. This is the most transferable entry in this log, because the shape recurs
+    wherever a retry wrapper re-raises through a handler that was written for the
+    underlying exception rather than the wrapper's own.
+  found_on: 2026-08-21
+  affected_sources: [src-cboe-chains]
+
+- id: trp-14
+  one_breath: Requesting too fast got the whole session blocked, including the requests that mattered.
+  symptom: >
+    Fetching 128 option chains a fifth of a second apart tripped the provider's bot
+    defence, after which every subsequent request failed regardless of target.
+  why_it_parsed: >
+    The block arrives as an ordinary page with an error code inside it, so requests appear
+    to succeed while returning nothing usable.
+  defence: >
+    Throttle to a pace the provider tolerates and back off on refusal. Three minutes for a
+    complete daily capture is a good trade against a permanent hole in the record.
+  found_on: 2026-08-21
+  affected_sources: [src-cboe-chains]
+
+- id: trp-15
+  one_breath: >
+    A capture ran perfectly and collected the wrong half of the portfolio, surfacing only
+    when the test needing it was designed.
+  symptom: >
+    The first option capture walked only the winning side of the book. It succeeded, stored
+    valid data, and made the one test that needs no history impossible to run.
+  why_it_parsed: >
+    Nothing was malformed. The universe was built from a single leg because that is what
+    the first caller happened to pass, and a capture cannot tell that it is collecting the
+    wrong thing. Forward-only capture means the day cannot be re-collected.
+  defence: >
+    For any irreversible capture, assert the shape of the universe before the run rather
+    than the shape of the response after it: expected count, expected composition, and a
+    stored manifest of what was asked for. A capture that silently collects the wrong
+    population is worse than one that fails, because it looks like progress.
+  found_on: 2026-08-21
+  affected_sources: [src-cboe-chains]
+
+- id: trp-16
+  one_breath: >
+    A capture folder named for the day it ran holds the previous day's session, and I
+    believed the folder name.
+  symptom: >
+    Option chains stored under 21 August were captured at 01:36 that morning and contain
+    the 20 August closing session. Pairing them with short-selling data for the 21st would
+    have joined two different trading days. The same mistake had a second consequence
+    nobody was looking for: a folder named for the 20th holds the same session as the
+    folder named for the 21st, because both runs fired minutes apart after midnight, so
+    counting folders reported two sessions of a forward-only series that has one.
+  why_it_parsed: >
+    Both files exist, both parse, and both are named for the same date. The mismatch is
+    only visible in a field inside the file recording when the underlying last traded.
+  defence: >
+    Derive the session date from inside the file and store it as a column, never from the
+    filename or folder. Count distinct sessions, never files or folders, when reporting how
+    much of a series exists. This is the second time this shape has appeared here, in a
+    different source, and the second time it was invisible until something was joined to
+    it. Treat any date on a container as a label, not a fact.
+  found_on: 2026-08-21
+  affected_sources: [src-cboe-chains]
+
+- id: trp-17
+  one_breath: >
+    I corrected for multiplicity across nine cells on one hypothesis, then generalised from
+    a single episode on another, in the same project.
+  symptom: >
+    The calendar hypotheses were tested across every reasonable definition with a
+    multiple-testing correction. The news hypothesis was tested on one date and written up
+    as a general statement about news and reversals.
+  why_it_parsed: >
+    Each result was individually careful. A null from one episode reads as a conservative
+    finding, so it attracts less scrutiny than a positive one would. The inconsistency
+    between the two tests is visible only when they are laid side by side, and neither
+    experiment is read that way while it is being run.
+  defence: >
+    Record the number of episodes a claim rests on as a structured field. A single-episode
+    claim then cannot be phrased generally without the count contradicting it on the same
+    page. Uneven standards across a project are invisible per-experiment and visible in a
+    view that shows every experiment at once.
+  found_on: 2026-08-22
+  affected_sources: [src-gdelt]
+
+- id: trp-18
+  one_breath: >
+    A media company in the portfolio absorbed three-quarters of the news corpus, because it
+    is named in every article that cites it.
+  symptom: >
+    Attributing articles to holdings by organisation name gave 46,024 of 61,095
+    winning-side articles to a single newspaper publisher that happened to be a holding.
+    The top three companies took 91 percent of the corpus. The themes most
+    over-represented on the winning side were prisons, trafficking and suicide.
+  why_it_parsed: >
+    Every match was correct on its own terms: the organisation field really does contain
+    that name. The name is present because the outlet is the source or is being cited, not
+    because the article is about the company. A mention is not evidence of aboutness, and
+    nothing in the data distinguishes the two.
+  defence: >
+    Cap any single entity's share of a corpus and inspect the top contributors before
+    computing anything over it. Exclude entities whose names occur as publishers or
+    sources. Where budget allows, filter for aboutness with a model, which was measured on
+    this project at sixteen times the precision of matching and was then left out of the
+    one test that needed it.
+  found_on: 2026-08-22
+  affected_sources: [src-gdelt]
+
+- id: trp-19
+  one_breath: >
+    One press release syndicated to fifty outlets counted as fifty independent
+    observations, making two thirds of all themes significant.
+  symptom: >
+    A test of which themes separate one window from another returned 286 significant
+    results out of 421 after correction for multiple testing. The strongest was carried by
+    50 articles that were all one company's mental-health benefits announcement.
+  why_it_parsed: >
+    Every article is a distinct row with a distinct address and a distinct timestamp, so
+    the data looks like 1,030 observations. Correction for multiple testing was applied and
+    passed, which reads as rigour and hid the fact that the unit of observation was wrong
+    before any correction was reached.
+  defence: >
+    Read the proportion of tests that clear correction as a diagnostic. Two thirds is not a
+    finding, it is a broken error model. Cluster at the level the world generates
+    independently, which for news is the story rather than the article, and check the
+    article count behind the strongest result before believing it.
+  found_on: 2026-08-22
+  affected_sources: [src-gdelt]
+
+- id: trp-20
+  one_breath: >
+    A prompt with no way to answer "nothing here" produced a confident, plausible, wrong
+    label for a portfolio with no shared exposure.
+  symptom: >
+    Asked to name the shared economic exposure of a momentum book's largest holdings, the
+    model returned "long-duration secular growth with global expansion" and explained that
+    the valuations were sensitive to duration. It read as the interest-rate story the
+    holdings data independently supports. Given the same companies and an explicit option to
+    answer "no coherent shared exposure", it chose that instead, at confidence 8 out of 10.
+  why_it_parsed: >
+    The label was economically literate, hedged at confidence 5, and shipped with a dissent
+    field naming a competing explanation. Everything about it looked like careful analysis.
+    The prompt simply never offered a way to decline, so a compliant model produced the best
+    available answer to a question that had none.
+  defence: >
+    Every classification or labelling prompt must contain an explicit null option, and the
+    null must be exercised on placebo inputs before the real ones are trusted. Randomly
+    drawn companies and one-per-sector sets are cheap and decisive. A model that never
+    answers "nothing" is not measuring the input.
+  found_on: 2026-08-22
+  affected_sources: []
+
+- id: trp-21
+  one_breath: >
+    I refuted an entire data source after reading the one section of it that could not have
+    worked.
+  symptom: >
+    Annual filings were dismissed as a text source because business descriptions are
+    recycled year to year. The objection was correct for that section and was applied to the
+    document. Item 7A, a mandatory disclosure where companies quantify their interest-rate
+    exposure, was never opened. It is precisely the exposure the project then spent days
+    failing to recover from news.
+  why_it_parsed: >
+    The reasoning was sound and the conclusion followed from it. Nothing was wrong except
+    the scope of the premise, and a refutation that is internally valid attracts no further
+    checking. The claim was even filed with the correct narrow wording, then cited as though
+    it were the general one.
+  defence: >
+    A refutation must name the exact slice it rests on, and any generalisation beyond that
+    slice needs its own evidence. Before dismissing a structured document, enumerate its
+    sections and state which were examined. The cost of opening one more section is minutes;
+    the cost of not doing so here was several days of work on a corpus that could not carry
+    the question.
+  found_on: 2026-08-22
+  affected_sources: [src-edgar]
+
+- id: trp-22
+  one_breath: >
+    A filing section that says "these disclosures appear elsewhere" parses as a section, and
+    the extractor read the pointer.
+  symptom: >
+    Half the financial companies in the book were extracted as disclosing no interest-rate
+    exposure, including a bank with the highest rate-language density in the corpus and a
+    rate beta of +0.28. Their Item 7A opens with a cross-reference into the management
+    discussion, and the slicer then ran to its character cap on whatever followed.
+  why_it_parsed: >
+    The heading is present, the section is non-empty, and the extracted text is real prose
+    from the same filing. Nothing is malformed. The aggregate positive control passed,
+    because the failure is concentrated in one sector and eight companies could not move a
+    mean computed over 120.
+  defence: >
+    Resolve cross-references before extracting: a section shorter than a threshold, or one
+    whose opening sentence points elsewhere, is a pointer and not content. Inspect positive
+    controls per stratum and never only in aggregate, because a systematic failure inside
+    one stratum is exactly what an average is designed to hide.
+  found_on: 2026-08-22
+  affected_sources: [src-edgar]
+
+- id: trp-23
+  one_breath: >
+    I compared a measure against the wrong null and got a saturated statistic that could not
+    answer the question.
+  symptom: >
+    A momentum leg was tested for sector concentration against random draws from the same
+    universe and came out at the 100th percentile, making the comparison useless. The
+    finding it was meant to probe had measured the same quantity against the book's own
+    history and got the 50th percentile.
+  why_it_parsed: >
+    Both percentiles are correctly computed and both describe something true. Nothing is
+    malformed. A percentile carries no record of what it was taken against, so two numbers
+    that mean different things look interchangeable, and the caveat written before the run
+    identified the risk without preventing it.
+  defence: >
+    State the null in the same breath as the percentile, always, so a reader cannot mistake
+    one for the other. Before running, ask whether the proposed null can saturate; if a
+    measure is elevated by construction under it, the test has no power in that direction
+    and needs a different comparison rather than a caveat.
+  found_on: 2026-08-23
+  affected_sources: []
+
+- id: trp-24
+  one_breath: >
+    New data appeared to beat a standard benchmark by 13 percent, and the same pipeline
+    without the data beat it equally.
+  symptom: >
+    Shrinking a covariance matrix toward a target fitted on risk-disclosure similarity gave
+    13 percent lower realised portfolio volatility than Ledoit-Wolf, in every window tested.
+    An estimator built the same way from sector membership alone produced portfolios
+    identical to within one part in a thousand.
+  why_it_parsed: >
+    The comparison against the benchmark was correct, the improvement was real, and the
+    registration required a sector control inside the regression that built the target.
+    That control is not the right one: including a variable in a regression does not test
+    whether another variable adds anything. The gain came from the estimator's structure,
+    fitting a target rather than assuming a constant one, and any input would have produced
+    it.
+  defence: >
+    To show that new data helps, build the identical pipeline WITHOUT the data and compare
+    against that, not only against the external benchmark. The relevant baseline is never
+    the published state of the art; it is your own machinery running on what you already
+    had.
+  found_on: 2026-08-23
+  affected_sources: [src-edgar]
+
+- id: trp-25
+  one_breath: >
+    A filing index returns only the most recent block, so a decade-long pull came back
+    concentrated in its last five years.
+  symptom: >
+    A pull of annual filings across 2012 to 2023 returned 5 documents for 2012 and 227 for
+    2023. The submissions endpoint exposes roughly the last thousand filings under a recent
+    block and puts older ones in separate files that were never requested.
+  why_it_parsed: >
+    Every filing retrieved was correct and the counts rose smoothly, which reads like a
+    growing panel rather than a truncated one. The limitation is documented in this
+    project's own earnings module, in a docstring stating that truncation would show up as
+    missing early history. I reused the access pattern without carrying the caveat.
+  defence: >
+    When a source paginates, fetch the index of additional pages before assuming the first
+    is complete, and plot coverage against time before using a panel. A monotone rise in
+    counts toward the present is the signature of truncation, not of growth. A limitation
+    written down once must travel with the pattern that causes it, not sit in the module
+    where it was first found.
+  found_on: 2026-08-23
+  affected_sources: [src-edgar]
+
+- id: trp-26
+  one_breath: >
+    A section slicer failed on single filings, and each failure produced two corrupt
+    year-on-year comparisons rather than one.
+  symptom: >
+    Comparing consecutive risk-factor sections gave length ratios from 0.015 to 65. One
+    insurer appeared twice, once at 0.015 and the next year at 65, because a single bad
+    slice corrupts both the pair that ends on it and the pair that starts from it.
+  why_it_parsed: >
+    Each extracted section is real text from the right filing, and a similarity of 0.07 is a
+    perfectly well-formed number. Nothing signals that one side of the comparison is a
+    fragment. In a change measure a single bad observation does double damage, which is not
+    true of a level measure and is easy to miss when moving from one to the other.
+  defence: >
+    Sanity-check the ratio of lengths between consecutive extractions before computing any
+    change, and drop both pairs touching a failure rather than one. A ratio outside roughly
+    a third to three times is a parsing failure, not a company rewriting its disclosure.
+  found_on: 2026-08-23
+  affected_sources: [src-edgar]
+
+- id: trp-27
+  one_breath: >
+    Model labels measured at 97 percent precision were then used as if they were perfect,
+    which biases every statistic computed on them.
+  symptom: >
+    An aboutness filter was validated at 96.6 percent precision against blind hand labels,
+    used to build a corpus of roughly twenty thousand articles, and every downstream
+    statistic was computed on that corpus as though the labels were gold. No correction for
+    label error was applied anywhere.
+  why_it_parsed: >
+    The filter was carefully validated, which felt like the work was done. Validation
+    establishes the error rate; it does not remove the error from what follows. The
+    literature is explicit that even highly accurate annotations produce biased estimates
+    and invalid intervals when simply averaged, and there is an established correction that
+    was not applied.
+  defence: >
+    Keep a probability sample with gold labels and rectify full-population estimates by the
+    measured bias, using prediction-powered inference or design-based supervised learning.
+    Note the direction: label noise attenuates associations toward zero, so uncorrected
+    estimates favour a null, and every text null in this project was computed that way.
+  found_on: 2026-08-23
+  affected_sources: [src-gdelt]
+
+- id: trp-28
+  one_breath: >
+    EDGAR's index quarter is when a 13F was filed, not the date its holdings describe, so
+    conflating them dates positions before anyone disclosed them.
+  symptom: >
+    A first pass read the full-index by quarter and treated that quarter as the position
+    date. Validation implied Apple at 536 dollars a share for a quarter in which the stock
+    ended at 93, a 5.8x gap that looked like a units error.
+  why_it_parsed: >
+    Every field was present and well-formed, and the quarter label on the index file reads
+    naturally as the quarter being described. A 13F accepted in May 2014 reports holdings as
+    of 31 March 2014, and nothing in the index says so. The discrepancy resolved instantly
+    once checked against the previous quarter end: Apple closed at 536.74 on 2014-03-31,
+    matching the implied price to the cent and naming the fault exactly.
+  defence: >
+    Read period_of_report from the filing header and available_at from the acceptance
+    timestamp, keep them as separate columns, and never derive either from the index path.
+    This is a leakage control, not a tidiness one: crowding dated the wrong way would look
+    predictive because it was reading the future.
+  found_on: 2026-08-24
+  affected_sources: []
+
+- id: trp-29
+  one_breath: >
+    A minimum-holdings gate sent a six-line filer to the quarter's default units and
+    multiplied its positions by a thousand, while the headline validation still passed.
+  symptom: >
+    Aegis Financial reported six holdings in whole dollars during an era when the rule said
+    thousands. The unit detector required eight lines before ruling, so the filing was typed
+    unknown, inherited the modal thousands, and its positions became twenty-four billion
+    dollars each. Two such filings held 62 percent of the panel's total value.
+  why_it_parsed: >
+    The quarter still reproduced Apple's closing price to the cent, because that check takes
+    a median across filings and two corrupted filers cannot move a median. The validation
+    was real, it was passing, and it was blind to the failure by construction. A check that
+    passes while most of the value is wrong is worse than no check, because it reassures.
+  defence: >
+    Drop the count gate; the two unit regimes sit three orders of magnitude apart, so a few
+    consistent value-per-share ratios settle the question and a threshold only discards
+    evidence. Report untyped value share and implausible-price value share as first-class
+    outputs, because a median-based validation cannot see a concentrated fault and only a
+    share-of-value statistic can.
+  found_on: 2026-08-24
+  affected_sources: []
+
+- id: trp-30
+  one_breath: >
+    Dropping every ambiguous name before the price check removed the index's largest
+    companies while the confirmation rate read 99.5 percent.
+  symptom: >
+    A CUSIP-to-ticker crosswalk dropped any issuer name appearing more than once on either
+    side, on the reasoning that a duplicate cannot be resolved. It reported a 99.5 percent
+    price-confirmation rate on 1,649 matches and covered 47 percent of index weight. The
+    missing 53 percent was Exxon, AT&T, Microsoft, Pfizer, Altria, JPMorgan and Cisco: the
+    top of the index almost exactly in order.
+  why_it_parsed: >
+    Large issuers carry several CUSIPs across filers, being the common stock plus a warrant,
+    an ADR line, a share class or a transcription error, so the very names that matter most
+    were the ones flagged ambiguous. The headline statistic was confirmation rate, which is
+    computed on survivors and therefore rose as more of the index was discarded. Every
+    additional deletion made the quality metric look better.
+  defence: >
+    Apply the price check first and settle ambiguity afterwards, since a value divided by a
+    share count is a price and that is exactly the instrument that separates a common stock
+    from its warrant. Ambiguity on the index side stays unresolvable and is still dropped,
+    but that is five names rather than 225. Report coverage weighted by index weight beside
+    any rate computed on survivors, because a survivor-conditioned rate improves as coverage
+    collapses.
+  found_on: 2026-08-24
+  affected_sources: [src-13f, src-iwv]
+
+- id: trp-31
+  one_breath: >
+    Pairwise Jaccard rises with how widely a basket is held, so it scored popularity as
+    crowding, and the size permutation guarding it never shuffled anything.
+  symptom: >
+    An ownership-overlap measure written to separate crowding from popularity did neither.
+    A negative control that merely raised winner-leg breadth from 60 filers to 220, drawing
+    every holder independently so that no common constituency existed, produced a leg
+    difference of +0.0280, against +0.0342 for genuinely concentrating 60 percent of the leg
+    into one clique. The permutation returned a probability of exactly 1.000 for every input
+    tested, including the null case and the strongest signal.
+  why_it_parsed: >
+    Two sets drawn independently from N filers already share about their product over N, so
+    Jaccard climbs with breadth alone and a widely held basket outscores a narrow one with
+    no shared owners whatever. Separately, the strata were built with ranks whose ties broke
+    by position, and the pool was assembled winners then losers, so every stratum came out
+    entirely one leg and shuffling labels inside it changed nothing. Both faults produce
+    smooth, monotone, entirely plausible output.
+  defence: >
+    Score each pair as observed co-ownership over its independence expectation, which is 1.0
+    when holders are unrelated regardless of breadth. Break rank ties at random rather than
+    by position. And run both controls, not just the positive one: the positive control
+    passed throughout and would have licensed the measure on its own, while it was the
+    negative control that showed the measure could not tell the two hypotheses apart.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-32
+  one_breath: >
+    A quarter of 2006 filings use a reversed column order, and the wrong reading scores
+    perfectly because an inverted price is still a plausible price.
+  symptom: >
+    785 of 2,902 filings in one quarter parsed to nothing. They were not empty: they use a
+    layout with the CUSIP first and no share-or-principal token, and their two numeric
+    columns run in the OPPOSITE order to the layout already handled. A first attempt to
+    arbitrate between the orderings by price plausibility chose wrong and scored it 100
+    percent, putting Iomega at 401 dollars a share in a quarter it closed near 2.50.
+  why_it_parsed: >
+    Transposing value and share count inverts the implied price, and an inverted price is
+    usually still an entirely plausible price, so no fixed range can separate the readings:
+    401 dollars and 2.49 dollars are both prices stocks have. Worse, the wrong reading was
+    uniformly wrong, so the share of rows inside the plausible band was 100 percent and the
+    quality score rose to its maximum on the incorrect answer. Relaxing the pattern to admit
+    both layouts without arbitrating would have silently inverted a quarter of the panel.
+  defence: >
+    Arbitrate against an external referent rather than an internal range. Filings whose
+    layout is unambiguous, being the XML era and the text tables that carry an explicit SH
+    or PRN token, establish a consensus price per CUSIP; the ambiguous ones are then read
+    whichever way agrees with it. Iomega resolves to 2.48994. This runs as a second pass over
+    cached documents, so the arbitration costs no network. More generally: when two readings
+    of the same bytes are both internally plausible, no internal statistic can choose between
+    them, and the check has to come from outside the file.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-33
+  one_breath: >
+    Eighty percent of a quarter's value sat in two filings whose CUSIP was a name fragment,
+    and the price check still passed.
+  symptom: >
+    The 2007-09-30 panel reported 79.7 percent of its total value at an impossible implied
+    price, carried by 653 rows out of 930,621. Two filings held it: a token read as the CUSIP
+    "IFIEDREIT", a fragment of DIVERSIFIED REIT, attached to a position of 2.5e13 dollars.
+    The quarter's anchor check reproduced Apple's close to the cent throughout.
+  why_it_parsed: >
+    The pattern for a CUSIP was nine alphanumeric characters, which matches a great many
+    things that are not identifiers, including runs of letters inside issuer names. The
+    filings were fixed-width with no separator between columns, so the CUSIP ran straight
+    into the market value and there was no whitespace to anchor on. Two further layers of the
+    same fault appeared underneath: a nine-character window starting inside a truncated class
+    name passes the CUSIP check digit about one time in ten, which put a Suez ADR at 21
+    million dollars a share; and the plausibility guard that should have caught all of it
+    rejected Berkshire Hathaway A at 118,510 dollars, which is simply what Berkshire A cost.
+  defence: >
+    Validate the check digit, which the identifier carries for exactly this purpose. Where
+    columns abut, treat every offset yielding a valid CUSIP with an all-digit remainder as a
+    candidate and let implied price choose between them, preferring the smaller value since
+    a split too far left absorbs digits from the name and can only inflate. Set the
+    plausibility ceiling above the most expensive real security rather than below it. And
+    keep reporting implausible value as a share of value: 653 rows in 930,621 is 0.07 percent
+    by count and 79.7 percent by value, and only one of those two numbers is alarming.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-34
+  one_breath: >
+    A correct parse was nearly rejected as over-matching because it was compared against a
+    different filing's declared totals.
+  symptom: >
+    A newly added layout returned 386 rows and 603.5 million dollars for a filing whose
+    stated totals appeared to be 285 entries and 216.5 million. The obvious reading was that
+    the pattern matched a third more rows than existed and inflated the value by nearly
+    three times, and the next step would have been to tighten it.
+  why_it_parsed: >
+    The filing was selected with a name prefix, and the prefix matched two different filers.
+    1ST SOURCE BANK sorted first; 1ST SOURCE CORP INVESTMENT ADVISORS was the one whose
+    totals had been read a moment earlier. The parse reproduced its own filing's declared
+    figures exactly, 386 entries and 603,536 thousand dollars, and tightening the pattern
+    would have broken a component that was already right.
+  defence: >
+    Compare a parse against the totals of the document it parsed, carried through in the
+    same object rather than looked up separately. More usefully, this is where the
+    stated-totals check came from: Form 13F asks filers to declare entry count and value
+    total, which is a checksum each document carries about itself, and it settles layout,
+    column order and units in one comparison. It is also the only check here that can see
+    over-matching, because a spurious row with a plausible price is invisible to every
+    price-based test and obvious in an entry count.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-35
+  one_breath: >
+    A single bond row read as shares carried 99.99 percent of a quarter's value, and
+    reporting the problem was not the same as removing it.
+  symptom: >
+    After a permissive layout was added to recover unread filings, one quarter came back
+    with 99.992 percent of its total value at an impossible implied price. One row did it:
+    a Duke Energy bond held by a Canadian bank, its principal amount read as a share count
+    and its value glued from adjacent digits, priced at six billion dollars a share. The
+    quarter's anchor check passed, as it had every previous time.
+  why_it_parsed: >
+    The layout with no share-or-principal token has nothing to read the instrument type
+    from, so it labelled every row as shares, and a principal amount divided by nothing
+    meaningful is not a price. The deeper fault is that implausible value had been added as
+    a REPORTED statistic three traps earlier and never as an action. It correctly showed
+    79.7 percent once and 99.99 percent again, and both times the pipeline carried on,
+    because nothing consumed the number.
+  defence: >
+    Drop share-denominated rows whose value and share count imply an impossible price under
+    either unit scaling, and count what was dropped. Principal rows are exempt, since a
+    principal amount is not a price. A metric that only reports is a metric that has to be
+    read by someone, and the point of the enforcement layer in this project is that nothing
+    important should depend on being read.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-36
+  one_breath: >
+    No absolute price bound can work, because any ceiling admitting Berkshire Hathaway also
+    admits a misparsed Conoco at 370,000 dollars.
+  symptom: >
+    One quarter reported 35.3 percent of its value at an impossible price while a diagnostic
+    on the same file reported 0.009 percent. Two constants had drifted apart: the ceiling was
+    raised to clear Berkshire Hathaway A in the parser's copy and left at the old value in
+    the reporting copy. Underneath that, the row-level guard was running BEFORE unit scaling,
+    so a ConocoPhillips row whose raw value over shares came to 370 passed as a dollar price
+    and then became 370,770 dollars a share when the filing was typed as thousands.
+  why_it_parsed: >
+    Both faults are about where a check sits rather than what it tests. Units are a property
+    of a whole table, so a per-row check that runs first cannot know which scaling will
+    apply and has to admit either, which admits everything. And once the check was moved
+    after scaling it still could not work, because the bound has to clear Berkshire A at
+    118,510 dollars and any bound that does also clears a misparse at 370,770. Absolute
+    plausibility cannot separate a rare real price from a common wrong one.
+  defence: >
+    Judge a row against the other filers holding the same security on the same date. Fifty
+    managers reporting ConocoPhillips at 88 dollars settle what no constant could, and the
+    redundancy is free because widely held names are reported by hundreds of filers. Rows
+    deviating from the cross-filer median by more than five times are dropped, names with
+    fewer than three reporters are left to the absolute bound, and one constant is now shared
+    rather than two that can drift. It is the same instrument as the layout arbitration
+    elsewhere in this source -- a referent from outside the document being checked --
+    applied across filings instead of within one.
+  found_on: 2026-08-24
+  affected_sources: [src-13f]
+
+- id: trp-37
+  one_breath: >
+    A pass-or-fail threshold was invented in the script after registration, so the gate's
+    verdict rested on a number nobody had committed to.
+  symptom: >
+    The registered prediction said loser-leg days-to-cover would exceed size-matched
+    winner-leg days-to-cover at every settlement date. The script that ran it declared PASS
+    if the direction held on more than 90 percent of dates and the permutation cleared 0.05
+    on more than half. Neither figure appears in the registration. The result came back at
+    85.1 percent and printed FAIL, which is a verdict against a bar invented after the
+    hypothesis and before the data, in code that nobody reviewed as a design decision.
+  why_it_parsed: >
+    Writing a threshold into a script feels like implementation rather than design, and it
+    reads as tidy engineering: the alternative is printing numbers and deciding by eye, which
+    feels worse. But a decision rule is part of the specification whatever file it lives in,
+    and inventing one afterwards leaves exactly the freedom the registration exists to
+    remove. Had the result come in at 91 percent it would have printed PASS and nobody,
+    including me, would have gone looking for where the 90 came from.
+  defence: >
+    Decision rules belong in the registration with the hypothesis, or the experiment reports
+    a quantity and no verdict at all. Where a rule has to be added later, it is written down
+    as an amendment before the run, which this project already does for data and method and
+    should have been doing for thresholds. The honest report here is the quantity: direction
+    correct on 166 of 195 dates, median difference 1.175 days to cover, median permutation
+    probability 0.047.
+  found_on: 2026-08-24
+  affected_sources: [src-short-interest]
+
+- id: trp-38
+  one_breath: >
+    Raw sentence embeddings put every company at cosine 0.96 to every other, so a
+    concentration measure built on them would have moved and meant nothing.
+  symptom: >
+    A semiconductor designer and a regulated electric utility embedded at cosine 0.973. Across
+    eight deliberately unrelated business descriptions every pair fell between 0.943 and
+    0.982, and same-industry pairs exceeded different-industry pairs by 0.013. The embedding
+    tier's four measures -- within-leg dispersion, centroid drift, leg distance, cluster
+    structure -- are all cosine geometry, so all four would have been computed on a space with
+    almost no discrimination in it.
+  why_it_parsed: >
+    Nothing errors. The vectors have the right shape, the cosines are numbers between minus
+    one and one, and a dispersion series computed from them varies from month to month and
+    looks like a signal. Anisotropy in mean-pooled encoder output is well known in the NLP
+    literature and completely invisible from the finance side, where the natural assumption
+    is that a similarity of 0.97 means two things are similar rather than that the model puts
+    everything at 0.97.
+  defence: >
+    Subtract the cross-sectional mean before any cosine. Separation goes from 0.013 to 0.412,
+    thirty times, from one subtraction. Do not whiten on top: estimating a 768-dimensional
+    covariance from a small cross-section destroyed the separation completely. And take the
+    mean over the cross-section AS OF THE SAME DATE rather than over pooled history, because
+    a mean computed across all dates carries future documents into a past measure, which is
+    the same fault as dating a holdings panel by its period instead of its filing.
+  found_on: 2026-08-24
+  affected_sources: [src-edgar]
+
+- id: trp-39
+  one_breath: >
+    The extractor takes the LAST heading match, so a quarter of the corpus is a
+    cross-reference or contents page, not the section.
+  symptom: >
+    An audit found 24.7 percent of embedded filings, and 29.2 percent of the momentum leg,
+    did not begin at Item 1A at all. Roughly 19 percent start at a late cross-reference
+    reading "Item 1A - Risk Factors of this Form 10-K. Except to the extent required by
+    applicable law", and 5 percent start at the table of contents and then run through the
+    whole of Item 1 Business. Risk-word density in those windows is 6.4 and 8.1 per thousand
+    words against 24.7 for clean extractions. The 49 table-of-contents documents sit at an
+    internal mean cosine of 0.477 against 0.012 for the pool, a synthetic near-duplicate
+    clique of boilerplate with twelve members inside the leg, contaminating both sides of the
+    comparison.
+  why_it_parsed: >
+    Taking the last match was a deliberate choice, documented as skipping the table of
+    contents, and it does that correctly for filings whose only other mention is the
+    contents page. It fails for the far more common case of a later cross-reference, and the
+    guard that skips a terminator within the first two thousand characters lets a
+    contents-page extraction run on past its own end. Every failure produces a long
+    plausible-looking string, and length checks pass because the wrong slice is long.
+  defence: >
+    Take the second heading match rather than the last, and require risk-factor prose density
+    in the opening two thousand characters before accepting a slice. Refuse to store anything
+    that hits the section cap rather than truncating to it. And consume the flags: 228 of the
+    900 embedded filings already carried an implausible-length flag that the export never
+    read, which is the same fault as computing an implausible-value share and never acting on
+    it.
+  found_on: 2026-08-25
+  affected_sources: [src-edgar]
+
+- id: trp-40
+  one_breath: >
+    Mean pairwise cosine is the squared centroid norm, so a shared sub-bet enters squared
+    and the test had no power against its own hypothesis.
+  symptom: >
+    A gate asked whether a momentum leg shares a latent exposure and measured mean pairwise
+    cosine within the leg against sector-matched baskets. The statistic is algebraically
+    (k times the squared centroid norm, minus one, over k minus one), verified to five
+    places. A sub-bet of forty percent of the leg would need internal cosine of 0.138 to move
+    the statistic two standard deviations, and a whole GICS sector inside that leg achieves
+    between 0.00 and 0.13. The gate could not have passed even if the hypothesis were true.
+  why_it_parsed: >
+    A positive control was run and passed convincingly, at z between 6.8 and 14.6 on
+    single-sector groups, which felt like a demonstration that the measure had power. It
+    demonstrated power against a hundred-percent-loading single-block alternative, which is
+    not the alternative on trial. A control that passes against the wrong alternative is
+    worse than no control, because it converts an underpowered design into a confident null.
+  defence: >
+    Derive what effect size the statistic can resolve at the observed null spread BEFORE
+    running, and state it in the registration next to the power arithmetic. Where the
+    hypothesis is that a SUBSET shares a direction, use a statistic built for that: the
+    leading eigenvalue of the similarity matrix, or a densest-subset scan. On the same data
+    both are positive where the mean is negative. And when a positive control is chosen,
+    check that its alternative resembles the one being tested.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-41
+  one_breath: >
+    Momentum was computed from unadjusted holdings-file prices, so reverse splits became the
+    two strongest winners and dividends handicapped the bond proxies.
+  symptom: >
+    The winner leg used for the embedding gate was formed from raw iShares price fields,
+    which are point-in-time snapshots with no split or dividend adjustment. Spirit Realty,
+    after a one-for-five reverse split, ranks as the strongest winner in the book; Rite Aid,
+    after one-for-twenty, ranks second. A filter rejecting moves above five times removed two
+    names universe-wide and every reverse split up to one-for-five passed through. Separately,
+    price-only returns understate a REIT by about five points and a utility by three against
+    one for technology, at a decile cut of 28.7 percent.
+  why_it_parsed: >
+    This project already recorded a reverse split reading as nineteen hundred percent
+    momentum, and added a filter in response. The filter was set at a threshold that catches
+    the extreme case and misses the common one, so the defence existed and was calibrated too
+    loosely to work. The dividend half was never considered at all.
+  defence: >
+    Use split and dividend adjusted returns to form any leg. The dividend bias is the part
+    that matters here rather than the splits: it systematically handicaps high-yield
+    rate-sensitive names, and the leg under test came out 27 percent technology and 2.4
+    percent utilities where the project's own rate-beta work describes a bond-proxy book. The
+    leg being tested may not have been the leg that was documented, which invalidates the
+    comparison before any embedding is computed.
+  found_on: 2026-08-25
+  affected_sources: [src-iwv]
+
+- id: trp-42
+  one_breath: >
+    An adversarial audit was right about four defects and wrong about a fifth, and the fifth
+    was repeated to the user as fact.
+  symptom: >
+    A commissioned audit reported that the 2019 winner leg "came out 27 percent technology and
+    2.4 percent utilities where the project's own rate-beta work describes a bond-proxy book",
+    and concluded the leg being tested might not be the leg documented. That framing was
+    relayed onward and used to argue that the project's strongest AI experiment had been fed a
+    defective input. It had not. The project's own headline claim says the September 2019 book
+    was a bet on falling rates WEARING TEN DIFFERENT SECTOR LABELS, at sector concentration in
+    the 50th percentile, and that the failure was aggregation rather than measurement. A
+    technology-heavy leg is what that claim predicts, because long-duration growth is
+    rate-sensitive. Correcting 142 corporate actions and adding sector dividend yields back
+    moved technology from 28.9 to 28.2 percent and the bond-proxy share from 13.5 to 15.0.
+    The composition was never the defect.
+  why_it_parsed: >
+    The audit's other four findings were verified and severe, which bought the fifth an
+    unearned presumption. It also arrived phrased as a contradiction with the project's own
+    record, which is exactly the shape a real finding takes, and it confirmed a diagnosis
+    already forming. An adversarial reviewer is optimised to produce contradictions, so its
+    output needs the same verification as any other result rather than more trust because it
+    was critical.
+  defence: >
+    Check an audit's claims about the record AGAINST the record before repeating them, in the
+    same way a positive result would be checked. The cheap test here was one grep of the
+    ledger, which takes seconds and would have caught it before it reached the user. Where an
+    audit asserts a conflict with an existing claim, quote the existing claim and verify the
+    conflict is real. Findings about code can be reproduced by running the code; findings
+    about interpretation cannot, and are the ones to slow down on.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-43
+  one_breath: >
+    A factor series already in decimals was divided by a hundred, and every beta came out a
+    hundred times too large.
+  symptom: >
+    The first run of the conferred-tilt panel reported a mean market-beta spread of -11.9,
+    a minimum of -382 and a maximum of +61. Market betas live near one. The cause was a
+    division by a hundred applied to a factor series that was already decimal rather than
+    percent: the market factor's daily standard deviation became 0.00009 instead of 0.0108,
+    and since beta is a ratio, shrinking the denominator by a hundred multiplied every
+    loading by a hundred. A beta of 112 was really 1.12.
+  why_it_parsed: >
+    Nothing failed. The regression solved, the panel wrote, and 134 rows of well-formed
+    output appeared with plausible-looking column names. Percent-versus-decimal is the most
+    common unit convention clash in return data and the two conventions are visually
+    identical in a dataframe. The error was caught only because a market beta of -382 is
+    absurd on its face; a hundredfold error in a less familiar quantity would have passed.
+  defence: >
+    Assert the magnitude of any factor series before it enters a regression, not after. A
+    daily market factor has a standard deviation near one percent, so a band from 0.003 to
+    0.03 separates decimals from percent and from anything corrupted, and the assertion now
+    sits in the panel builder. The general rule is that units should be checked by their
+    known scale rather than inferred from a column name or from a library's documentation,
+    because the number is available and the documentation may not be.
+  found_on: 2026-08-25
+  affected_sources: [src-french]
+
+- id: trp-44
+  one_breath: >
+    A falsifier landed exactly on its threshold and binary floating point scored a refuted
+    call as standing.
+  symptom: >
+    The first translation this system generated for the September 2019 book predicted that a
+    rise of 0.40 in the ten-year yield within 42 trading days would refute its defensive read.
+    The yield went from 1.50 to 1.90 — exactly 0.40 — and the scorer returned "stood". In
+    binary floating point 1.9 minus 1.5 evaluates to 0.3999999999999999, which is below the
+    threshold by 1.1e-16, and the printed value rounded to +0.400 so the output looked correct.
+  why_it_parsed: >
+    Everything about the result was plausible. The move displayed as exactly the threshold, the
+    status field held a legal value, and nothing raised. A boundary case is also the one place
+    a reader is least likely to check, because the number matching the threshold reads as
+    confirmation that the machinery is working rather than as a warning. The series carry two
+    decimals, so the comparison had precision the data never had.
+  defence: >
+    Compare at the precision the data actually carries, with an explicit tolerance and a
+    comment saying which case forced it. More generally, any scored track record needs a test
+    that lands exactly on its own boundary, because that is where the verdict flips and where
+    a silent error is indistinguishable from a correct answer. The test is now in the suite
+    with the real 2019 numbers rather than synthetic ones, so it fails if the tolerance is
+    ever removed.
+  found_on: 2026-08-26
+  affected_sources: [src-fred]
+
+- id: trp-45
+  one_breath: >
+    Centring the basket instead of the pool inverts the sign of a planted effect, so the
+    statistic falls as the effect grows.
+  symptom: >
+    Building the planted-effect harness, injecting a shared direction into 40 percent of a
+    basket made mean pairwise cosine go DOWN as cohesion rose: +0.0048 at a target of 0.15,
+    +0.0030 at 0.25, +0.0010 at 0.40, against a null mean of +0.0068. Detection was zero
+    everywhere. The cause was centring on the 168-name basket rather than on the 900-name pool.
+    Centring forces the vectors to sum to zero, so a shared direction in a minority of rows
+    pushes the majority the other way, and the cross-pairs -- 48 percent of all pairs at a 40
+    percent split -- more than cancel the within-group gain.
+  why_it_parsed: >
+    Both orders are one line and both produce a centred, unit-normalised matrix that every
+    downstream function accepts. The failed embedding gate centred on its pool and indexed the
+    leg out; the harness written to certify that gate centred on the basket, and nothing in
+    either signature records which. Three other harness bugs were caught the same session by the
+    same self-test, and this was the only one that silently reversed a direction rather than
+    changing a magnitude.
+  defence: >
+    Centre once on the population the comparison is drawn from, then index subsets out of the
+    centred matrix, and say so at the call site. A test asserts that planting RAISES the
+    statistic; a sign inversion is not a subtle numerical issue and a direction check catches it
+    in one assertion. More generally, when an instrument is rebuilt to certify an older result,
+    the rebuild has to reproduce the older result's order of operations before its power
+    statement means anything.
+  found_on: 2026-08-26
+  affected_sources: []
+
+- id: trp-46
+  one_breath: >
+    A bootstrap null duplicated a quarter of the rows, and duplicate pairs have cosine one, so
+    no planted effect could clear it.
+  symptom: >
+    The first text-layer certificate reported zero percent detection in all six cells, including
+    forty percent of documents carrying six injected sentences of real rate vocabulary. The
+    instrument looked completely blind. The cause was the null: it resampled the unplanted
+    vectors WITH REPLACEMENT, which duplicates about thirty-three of a hundred and twenty rows
+    per draw, and a duplicated pair has cosine 1.0 after normalisation. The null's ninety-fifth
+    percentile sat at +0.00718 against a statistic of +0.00161 on the real data, four and a half
+    times higher, so the threshold was unreachable by construction.
+  why_it_parsed: >
+    Bootstrapping is the reflex for "what would this statistic look like by chance", and for a
+    mean of independent observations it is correct. It is wrong for a pairwise similarity
+    statistic, because resampling with replacement manufactures identical pairs, which is
+    exactly the structure the statistic measures. The failure mode is also silent in the
+    friendliest possible way: a uniform zero reads as a clean negative result about the
+    instrument rather than as a broken comparison.
+  defence: >
+    For a plant, the null is the SAME procedure with a neutral treatment, not a resample. Here
+    that means inserting the same number of sentences using ordinary filing vocabulary rather
+    than driver vocabulary, which also controls for the act of insertion itself: adding text
+    changes length, token mix and pooling regardless of what it says. As a general rule, never
+    build a null for a similarity statistic by resampling with replacement, and treat a
+    uniformly zero detection grid as a suspect null until the null has been checked against the
+    statistic's value on untouched data.
+  found_on: 2026-08-26
+  affected_sources: []
+
+- id: trp-47
+  one_breath: >
+    Mean pairwise cosine is pinned to minus one over k minus one when you centre on the set you
+    then measure.
+  symptom: >
+    Six apparently separate harness bugs were one fact. Centring forces the vectors to sum to
+    zero, which forces the sum of all off-diagonal cosines to minus k, which forces their mean
+    to exactly -1/(k-1). Measured against theory the agreement is 2.7e-06 at k equal to 168. A
+    forty percent planted bet at cosine 0.30 moves the statistic from -0.00599 to -0.00355,
+    while the leading eigenvalue on the identical data moves from 0.0127 to 0.1743, fourteen
+    times further. The statistic has almost no room to move, so every null built around it was
+    degenerate in a different disguise: a scramble null with zero variance, a bootstrap null
+    reachable only by duplicate rows whose cosine is one, a basket-centred plant that inverted
+    its own sign, and a twenty-document check sitting exactly on the floor at -0.0526.
+  why_it_parsed: >
+    Nothing errors. The statistic returns a plausible small number, nulls return distributions,
+    permutation probabilities compute. And the failed embedding gate DID see movement, which
+    made the statistic look serviceable -- but only because it centred on a 900-name pool and
+    measured a 168-name leg, so the leg's own sum was not zero and the pinning did not apply.
+    That escape was accidental rather than designed, and it disguised the defect for a month.
+    The deeper error was procedural: each symptom was patched as it appeared, six times, where
+    ten minutes of algebra would have settled all of them at once.
+  defence: >
+    Derive a statistic's behaviour under the transformation that precedes it BEFORE building a
+    certificate for it. Centring is not a neutral preprocessing step; for a similarity statistic
+    it is a constraint on the answer. Concretely: mean pairwise cosine is admissible only when
+    the centring population is strictly larger than the evaluated subset, and that requirement
+    belongs in the docstring rather than in a caller's memory. Prefer statistics with genuine
+    range under centring -- the leading eigenvalue and a densest-subset scan -- and keep mean
+    pairwise cosine only to reproduce older results for comparison.
+  found_on: 2026-08-26
+  affected_sources: []
+
+- id: trp-48
+  one_breath: >
+    Three modules were written, run, cited as evidence, and never committed; only their cached
+    outputs survive.
+  symptom: >
+    A build rule added to catch ONE known case -- a method cited as a defence with no
+    implementation -- found five more on its first run, and following the thread found eleven
+    reproduce commands pointing at code absent from the working tree AND from all git history.
+    Two of the affected claims carry the strongest confidence tier, including the risk-factor
+    similarity result that replicated at +0.094 and +0.095 and had been cited that same day as
+    load-bearing evidence that text and models work. Its reproduce command does not run. Three
+    distinct modules are gone: the filings exposure extractor, the risk-pair similarity module,
+    and the referee. In every case the results are on the record and the outputs sit in
+    gitignored interim files.
+  why_it_parsed: >
+    Nothing depends on these modules at import time, so the test suite passes, the console
+    renders, and every entry looks complete. The reproduce field is a string that no build step
+    executed or even resolved, so "reproducible" was an assertion rather than a check. And the
+    outputs surviving in data/interim made the work feel present: the numbers could still be
+    read, so their absence from the repository was invisible.
+  defence: >
+    Resolve every reproduce path at build time and fail on a module that does not exist. That
+    check now exists and is what surfaced this. Where a module is genuinely gone, record it as
+    LOST with its surviving outputs named, rather than deleting the field -- a method with no
+    module reads as one never built, and these were built. The deeper habit is that a result is
+    not recorded until the code that produced it is committed alongside it; three losses in one
+    project make the cause procedural rather than accidental.
+  found_on: 2026-08-26
+  affected_sources: []
+
+- id: trp-49
+  one_breath: >
+    A dict.get default was evaluated eagerly and raised, and a bare except turned the crash into
+    a zero that read as a bad regex.
+  symptom: >
+    Extracting a new section from filings already on disk, 10-Q Item 2 came back present in 0 of
+    32,679 quarterly filings while Item 1 and Item 7 came back at 79 and 84 percent. It looked
+    like a pattern that did not match. The pattern was registered and correct. The slicer read
+    SECTIONS.get((form, name), SECTIONS[("10-K", name)]), and Python evaluates a default argument
+    BEFORE the call, so every 10-Q Item 2 lookup computed SECTIONS[("10-K", "item_2")] first and
+    raised KeyError -- there is no Item 2 in a 10-K. The caller caught bare Exception and wrote
+    an empty string. Corrected, the same pattern extracts 80 percent.
+  why_it_parsed: >
+    Both halves are idiomatic. dict.get with a fallback reads as "use this if the key is
+    missing", and the eager evaluation of defaults is a well-known Python behaviour that is
+    nonetheless invisible at the call site. The except existed for a real reason -- a malformed
+    filing should not stop a 55,000-document pass -- and it is exactly that reasonableness which
+    let it hide a programming error among the genuine data failures. A zero is also the most
+    plausible-looking wrong answer available: sections DO fail to extract, so 0 percent invited a
+    regex explanation rather than a stack trace.
+  defence: >
+    Never put a subscript in a get default; resolve the key first. And separate the two kinds of
+    failure in the handler: a missing pattern is a bug and must re-raise, while a malformed
+    document is data and may be counted. The extraction pass now reports its error counts BY
+    SECTION alongside its coverage, so a systematic zero arrives with the reason attached
+    instead of inviting a guess.
+  found_on: 2026-08-25
+  affected_sources: [src-edgar]
+
+- id: trp-50
+  one_breath: >
+    Every long job guarded free disk and none guarded swap, so the disk floor watched the
+    machine kernel-panic.
+  symptom: >
+    A section extraction held all 43,446 filings' text in one list. Swap grew from 1 GB to 10
+    against a 9.2 GB backing store, on a volume with 1.7 GB free. With nowhere for swap to grow,
+    page faults queued until watchdogd missed its check-in for 92 seconds and the kernel force-
+    panicked. Every long job in the project already carried a disk floor and it never fired,
+    because disk was not the binding resource.
+  why_it_parsed: >
+    A free-bytes check is the obvious guard and it is the wrong one. Swap consumes the volume
+    only after the process is already thrashing, so by the time free disk crosses a floor the
+    machine has lost. The memory design that caused it was ALSO already fixed -- the job streams
+    to parts now -- but swap does not shrink while the machine runs, and I noted that twice and
+    ran a second full pass anyway because it was "only nineteen minutes". Reboot reclaimed
+    everything and cost nothing; the crash cost an unclean shutdown.
+  defence: >
+    Guard the resource that binds, not the one that is easy to read. `guard.check` refuses on a
+    swap ceiling as well as a disk floor, and any memory-heavy pass calls it between chunks.
+    Two second-order lessons are in the tests: a swap reader that returns zero on real input is
+    indistinguishable from a healthy machine, so it is tested against a known-LOADED string
+    rather than against a quiet one; and when a resource is known to be unreclaimable without a
+    restart, the restart is the cheap move and deferring it is not.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-51
+  one_breath: >
+    Evidence was cited whose generator was never committed, and a YAML string always parses, so
+    nineteen citations were false and invisible.
+  symptom: >
+    A build rule written to catch ONE known case found five more on its first run, and following
+    the thread found nineteen reproduce commands that did not resolve. Three species. Eleven
+    named modules absent from the working tree AND from all git history -- the risk-pair
+    similarity module under two reproduced claims and four experiments, and the referee under a
+    supported experiment. Seven recorded a bare script path where a runnable command belonged,
+    pointing at files that existed and worked. One cited a flag its module never had. In every
+    module case the RESULTS were real and only gitignored outputs survived.
+  why_it_parsed: >
+    Nothing imports a reproduce field, so the test suite passes, the console renders, and every
+    entry looks complete. It is a string that no build step executed or even resolved, which
+    makes "reproducible" an assertion rather than a check. The surviving outputs made the work
+    feel present: the numbers could still be read, so their absence from the repository was
+    invisible. And the three species look identical in the ledger, which meant the trivial ones
+    -- a missing runner prefix -- hid among the serious ones.
+  defence: >
+    Two guards, both now in the build. The validator refuses a reproduce path naming a module or
+    script not in the repository, and refuses a path that is not a runnable command. A CI job
+    additionally EXECUTES every path and fails on an import error, a missing file or an argparse
+    error -- testing resolution rather than completion, since a command still working at the
+    timeout has imported, parsed and opened its data.
+    Both guards were tested against known-BAD input rather than a clean ledger, which caught that
+    the first version of the module rule never fired. Registered-but-unrun entries are exempt:
+    their reproduce path is a forward intention, and demanding it resolve would force placeholder
+    code to exist before the experiment it serves.
+    The recovery pattern generalises: where an analysis-level output survived, the rebuild was
+    gated on reproducing the RECORDED numbers from it, and a rebuild that cannot is not done.
+    Where inputs did not survive, the command reports the loss rather than substituting a
+    different file and presenting its numbers under the old label.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-52
+  one_breath: >
+    A validator rule passed green because it never fired, and it never fired because the
+    known-bad test string was quoted differently from the real line.
+  symptom: >
+    A rule refusing any reproduce path that names a module absent from the repository was added,
+    make check went green, and the rule was believed. It had never fired. The test meant to
+    ghost a module used an unquoted string where the real ledger line was quoted and carried a
+    trailing argument, so the substitution matched nothing and the green result proved only that
+    the ledger was unmutated. The rule was correct; the demonstration was not. It fired
+    immediately once a real mutation reached it.
+  why_it_parsed: >
+    A passing build is the signal a guard is supposed to give, so a guard that does nothing and
+    a guard that works are indistinguishable from the outside. That makes this strictly worse
+    than having no guard at all: it converts vigilance into false confidence, and the whole
+    point of the enforcement layer is that it is trusted rather than re-checked. The same shape
+    as a positive control validated against the wrong alternative, and as a null whose spread
+    came from duplicate rows -- an instrument agreeing with itself.
+  defence: >
+    Every validator rule ships with a known-bad fixture it must reject, run in CI forever;
+    mutation testing for guards, in miniature. The fixtures mutate an in-memory copy of the REAL
+    ledger rather than a synthetic entry, so they exercise the shapes the project contains.
+    Two assertions per fixture, and the second is the one that matters: the mutation must raise
+    at least one error at all, and one of those errors must name the rule under test. Requiring
+    the count to RISE is what catches a mutation that silently matched nothing, which is exactly
+    what happened. The harness is itself tested against a no-op mutation and must reject it.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-53
+  one_breath: >
+    Nineteen broken citations looked like one problem and were three, and the diagnostic that
+    counted them was wrong twice.
+  symptom: >
+    A reproduce-path audit reported eleven failures. The true count was nineteen across three
+    species that are indistinguishable in the ledger: eleven citing modules absent from the
+    working tree and from git history, seven recording a bare script path where a runnable
+    command belonged and pointing at files that existed and worked, and one naming a flag its
+    module never had on an experiment that had not yet run. The static diagnostic itself failed
+    twice on the way -- 61 false positives from checking whether a flag string appeared literally
+    in a module's source, since argparse builds flags from parts, and six spurious PARSE ERRORs
+    from wrapping the check in `timeout`, which does not exist on macOS.
+  why_it_parsed: >
+    Three species share one symptom, a command that does not run, and one field, a string. The
+    trivial ones hid among the serious: a missing "uv run python" prefix reads identically to a
+    module that was never committed. And the diagnostic was static where the property is
+    dynamic; only executing the commands separated a recording defect from a lost generator.
+  defence: >
+    Audit by running, not by parsing. The smoke runner executes every path and classifies by
+    what actually goes wrong -- import error, missing file, argparse error -- which sorted the
+    nineteen into their species in one pass after two static attempts had failed. The general
+    form is the project's recurring lesson at a new layer: the instrument that audits
+    reproducibility needs the same run-it-and-check treatment as everything it audits.
+  found_on: 2026-08-25
+  affected_sources: []
+
+- id: trp-54
+  one_breath: >
+    A collapsed clusterer reports as a clean null, because a partition of one group is
+    invariant under every relabelling its own null can perform.
+  found_on: 2026-08-25
+  symptom: >
+    Two text arms of the comparator returned a lift of 2.8e-17 at p = 1.000, on different
+    representations, with identical observed values to six figures. That reads as a decisive
+    null: the representation carries nothing the returns did not already have. It was a broken
+    clusterer. A helper that had been widened to CENTRE vectors on the cross-section -- correct
+    for representations -- was still being called to normalise single centroid rows, and
+    centring one row by its own mean returns the zero vector. Every centroid became zero, every
+    similarity became zero, argmax sent all 132 names to group 0. A one-group partition cannot
+    be changed by a permutation that relabels within cells, so the null distribution collapsed
+    onto the observation and the p-value was exactly 1.
+    The general shape is worse than this instance. A permutation test compares an observation
+    to relabellings of itself, so any degeneracy that makes the observation invariant under
+    relabelling produces a perfect, confident, meaningless null -- and it produces it silently,
+    with a small p-value's opposite rather than with an error.
+  why_it_parsed: >
+    A p-value of exactly 1.000 and a lift at machine epsilon are valid outputs of a
+    correctly implemented permutation test. Nothing in the arithmetic is wrong: the statistic
+    was computed, the null was drawn, the comparison was made. The degeneracy sits one level
+    below, in a partition that the null cannot perturb, and it surfaces as the strongest
+    possible evidence for the null rather than as an error.
+  affected_sources: []
+  defence: >
+    Two changes, one specific and one general. Centring and normalisation are now separate
+    functions with the reason written between them, because their arguments are different
+    shapes and only one of them may be centred. And the clusterer refuses to return a partition
+    whose largest group holds more than four fifths of the sample, so a collapse raises where it
+    previously reported.
+    The general defence is to distrust a null whose p-value is EXACTLY one or whose lift is at
+    machine epsilon. Those are not weak evidence of no effect; they are the signature of a
+    statistic that could not have moved.
+
+- id: trp-55
+  one_breath: >
+    A floor is only a floor on its own scale, and this one was compared against a statistic it
+    had never been measured with.
+  found_on: 2026-08-25
+  symptom: >
+    The comparator's network arm uses peer cohesion, since a peer set is not a partition and
+    cannot share the partition arms' statistic. The sector floor was computed once, as a sector
+    PARTITION, and every arm was tested against it. The network arm was therefore recorded as
+    clearing a floor built from a different statistic on a different scale -- and it cleared it
+    comfortably, at p = 0.0066, which is exactly the kind of number that gets believed.
+  why_it_parsed: >
+    Both quantities are correlations, both live in roughly the same numeric range, and
+    both are called `lift` in the same table. Nothing about a lift of 0.017 against a floor of
+    0.003 looks wrong until you ask which statistic produced each, and the table did not say.
+  affected_sources: []
+  defence: >
+    A floor must be the same KIND of object as the arm it bounds. There are now two floors, one
+    per statistic in use: a sector partition scored with the partition statistic, and a sector
+    NETWORK -- every firm's peers are its sector-mates -- scored with peer cohesion. The
+    network threshold is calibrated to sector density, so both networks carry the same edge
+    count and the contrast is which pairs are joined rather than how many.
+
+- id: trp-56
+  one_breath: >
+    A guard can measure the wrong quantity and still look vigilant, blocking work that is
+    behaving while missing the state it was written for.
+  found_on: 2026-08-25
+  symptom: >
+    The resource guard exists because this machine kernel-panicked, and its own docstring names
+    the condition correctly: swap with "nowhere to grow", on a volume with 1.7 GB free. What it
+    actually measured was absolute swap USED against a fixed ceiling. Those are different
+    quantities. A machine carrying five gigabytes of stale pages from other applications, with
+    nine gigabytes of free disk for swap to grow into, is not in the panic state -- and the
+    guard refused to let a well-behaved job start on exactly that reading, having never fired on
+    the state it was built to catch.
+  why_it_parsed: >
+    Swap used is a real reading of a real resource, taken correctly, and the ceiling was
+    a defensible number. The reading simply does not answer the question the guard exists to
+    ask. A guard that raises on a true measurement of the wrong quantity looks more trustworthy
+    than one that crashes, and it had a test suite that passed.
+  affected_sources: []
+  defence: >
+    Measure the resource that runs out. Free swap plus free disk is the pool macOS can still
+    page into, and a floor on that sum names the panic condition directly. The swap ceiling
+    became a ceiling on swap THIS JOB added, against a baseline captured at start, because the
+    standing baseline is not the job's doing. Four tests assert each trip fires, including that
+    callers passing no baseline keep the original strict reading, so the change is a new option
+    rather than a silent weakening of every guard in the repo.
+
+- id: trp-57
+  one_breath: >
+    A false-alarm rate estimated from a hundred replicates cannot tell nominal from
+    two-and-a-half times nominal, which makes the certification layer fail to certify itself.
+  found_on: 2026-08-25
+  symptom: >
+    The first returns-layer certificate reported a false-alarm rate of 0.130 for one statistic
+    against a nominal 0.05. Read as a finding, that is a badly miscalibrated test and a reason
+    to abandon the instrument. A second run at a different seed returned 0.050 for the same
+    instrument on the same panel. Both were estimated from 100 replicates, where the standard
+    error on a rate near 0.05 is 0.022 -- so 0.05 and 0.13 are two standard errors apart and
+    the pair is unremarkable sampling noise. The number had no error bar, so neither reading
+    could be judged and the first was nearly believed.
+  why_it_parsed: >
+    0.130 is a plausible false-alarm rate for a permutation test with a slightly
+    mismatched null, and there was a mechanism ready to explain it. A number that arrives with a
+    story is not checked for precision, and this one arrived without an error bar to check.
+  affected_sources: []
+  defence: >
+    Four hundred replicates as the floor, halving the error to 0.011, and every certificate now
+    carries its replicate count so the statement prints the rate with its error bar. A
+    certification layer that reports a rate without its precision is asking to be read the way
+    it just was.
+
+- id: trp-58
+  one_breath: >
+    An extraction cache silently outlives the extractor, so every fix is invisible to exactly
+    the filings that needed it.
+  found_on: 2026-08-25
+  symptom: >
+    Item 1 was empty for 36 of the 168 names in the 2019 book, and those same filings carried an
+    Item 1A truncated at the 200,000-character cap -- a section eight times its plausible length,
+    stored and used. The current extractor refuses any slice reaching the cap. It never saw
+    them: the section builder read cached fields from the filing JSONs first and only called the
+    extractor when a field was absent, so filings extracted under the older, buggier code kept
+    their old sections forever. The bug fixed months earlier was still in the data.
+    Four separate anchor faults were underneath: a separator class with no colon, heading words
+    split by tag stripping into "Bu siness" and "Ri sk Factors", and a prose threshold of six
+    rejecting genuine business descriptions that score five because the register list described
+    what Item 1 discusses and omitted what it opens with. And implausible() had existed since the
+    section work began with nothing calling it, so out-of-band slices were stored
+    indistinguishably from good ones.
+  why_it_parsed: >
+    Every cached section parsed cleanly, had a plausible-looking ticker and date, and
+    loaded into a dataframe without complaint. A 200,000-character risk-factor section is
+    absurd only if something compares it to a band, and the function that held the band was
+    never called. An empty Item 1 reads as a filing that lacks the section rather than as an
+    anchor that missed.
+  affected_sources: [src-edgar]
+  defence: >
+    Re-derive from the source text whenever the source text exists; fall back to a cached field
+    only when it does not. Anchors allow whitespace between the letters of a heading word, since
+    that is what tag stripping leaves behind. Plausibility is recorded per row rather than
+    checked nowhere, with bands set from measured percentiles for the three sections that had
+    none. Measured on 700 held-out filings, old against new: 10-K Item 1 81 to 93 percent, Item
+    1A 87 to 92, 10-Q Item 1A 62 to 65, Item 2 84 to 86, with no contents-page contamination in
+    the recovered slices.
+
+- id: trp-59
+  one_breath: >
+    A cache keyed on text and checkpoint but not on truncation length returns the wrong window's
+    vectors, and the speed reads as good news.
+  found_on: 2026-08-25
+  symptom: >
+    Measuring what a longer context window would cost, the same texts re-embedded at four and
+    eight times the length came back in 0.0 seconds per document. Read at face value that is a
+    free eight-fold increase in how much of a filing the model reads. It was the cache
+    answering: its key was the text plus the checkpoint, and truncation length changes the
+    vector as surely as the checkpoint does.
+    Underneath it was a larger fact. Every embedding pass in this project has run at a
+    max_length of 1,024 tokens. The model's context is 8,192. A median Item 1 section is about
+    7,000 tokens, so the encoder has been reading under a fifth of it, and the embedding
+    experiment whose verdict is instrument-limited reached it under that truncation -- a
+    handicap chosen by a
+    default, never measured, and invisible because the number appeared only as a constructor
+    argument. The character estimate that went with it was also wrong: 1,024 tokens covers
+    about 5,600 characters of filing prose, not the 4,000 that four-characters-per-token
+    implies.
+  why_it_parsed: >
+    A cache hit is indistinguishable from a fast computation from the outside, and both return
+    an array of the right shape and dtype. Vectors from a truncated document are perfectly
+    valid vectors; nothing downstream can tell how much of the document they came from. And
+    1,024 is such an ordinary default that it never invited the question of what the model
+    could actually do.
+  affected_sources: [src-edgar]
+  defence: >
+    The cache key carries max_length. The context window is read from the tokenizer rather than
+    assumed, and the gauntlet prints how many sections fit whole inside it, so the fraction of
+    each document the encoder saw is part of the output rather than a property of a constructor
+    call. The comparator now runs the embedding arm at the model's real context, and its
+    matched-input secondary cuts EVERY arm to the same window so a win cannot be a
+    context-window win wearing a representation's name.
+
+- id: trp-60
+  one_breath: >
+    A loader scoped to one population and reused for another returns a confident empty set, not
+    an error.
+  found_on: 2026-08-26
+  symptom: >
+    The peer-network placebo cell reported that no placebo book had any names with a filing --
+    zero, for every book, cleanly. The corpus loader had been called with the REAL leg's 168
+    tickers, so its index held only those names, and every placebo ticker missed. The function
+    did exactly what it was asked; the ask was scoped to the wrong population.
+    Its sibling appeared in the same hour. Placebo legs were drawn at the real leg's pre-filter
+    size of 168 and then filtered for text coverage, which left about 109 names against the real
+    leg's 162. Nothing failed. The comparison simply became partly a comparison of sample sizes,
+    and a 109-name grouping is measurably noisier than a 162-name one, so the placebo would have
+    looked weaker for a reason that had nothing to do with selection.
+    Both belong to a species this project now has several members of: an object built for one
+    population and reused for another, where the mismatch produces a plausible number rather
+    than a failure. The sector series resolved by first-occurrence across yearly files is the
+    same shape, and so is a certificate issued on one pool and cited for a verdict on another.
+  why_it_parsed: >
+    An empty intersection is a valid intersection and a smaller sample is a valid sample. Neither
+    raises, neither warns, and both produce output of the right type and shape. The failure is
+    upstream of the computation, in the scope of the thing being computed over, which is exactly
+    where no assertion is usually placed.
+  affected_sources: [src-edgar]
+  defence: >
+    State the population a loaded object covers, in the output, next to the number derived from
+    it. The cell now prints the universe size, the covered subset and the drawn size on every
+    run, which is what made both faults visible within one execution each. And when two sets are
+    to be compared, match them AFTER every filter rather than before: both sides are drawn to
+    the same post-filter size, so a difference cannot be a difference in how many names survived.
+
+- id: trp-61
+  one_breath: >
+    Repairing a null re-issues the certificate but not the sentence quoting it, so the ledger
+    keeps the broken null's number.
+  found_on: 2026-08-26
+  symptom: >
+    A certificate artefact and the console log of its own instrument disagreed on three of four
+    false-alarm rates -- mean_within 0.065 against 0.055, max_within 0.052 against 0.045,
+    eigen_within 0.055 against 0.065 -- with identical universe size, identical hashes, and
+    modification times seventy-nine minutes apart. Two explanations were available and both were
+    plausible: a seed-nondeterminism bug in the harness, or two runs with a silently different
+    parameter.
+    It was neither, in the sense that matters. The harness is fully deterministic: every value
+    reproduced to three decimals on demand. Between the two writes a characteristic-cell
+    construction was repaired so that no cell could span a sector boundary, and the certificate
+    was correctly re-issued afterwards. What was not re-issued was the SENTENCE. The experiment's
+    power statement had been written from the earlier console output and still quoted the
+    false-alarm rates measured under the broken null.
+    The rule against this was written the same day, after a different instance of it, and says a
+    published number is never carried across a null change. It was violated within the hour, on
+    the same experiment whose null repair had prompted it.
+  why_it_parsed: >
+    Both numbers are correct measurements of something. The log is an accurate record of the
+    instrument under the old null and the artefact is an accurate record under the new one, so
+    neither reads as wrong on its own and nothing downstream can tell which null a quoted rate
+    belongs to. A certificate carries a universe hash, which caught a stale POPULATION the day
+    before; it carries no fingerprint of the null CONSTRUCTION, which is what changed here.
+  affected_sources: []
+  defence: >
+    Re-issuing a certificate after a null repair is not the end of the repair. Every sentence
+    quoting it is stale until it is rewritten from the artefact, and the artefact -- not a
+    console log, not a transcript -- is the only admissible source for a quoted rate.
+    The diagnostic that settles this class in minutes is worth keeping: compute the disputed
+    statistic under BOTH constructions and see which one each number matches. It distinguishes
+    nondeterminism from a parameter change without a triple run, and here it matched all three
+    statistics under both constructions exactly.
+    THE STRUCTURAL FIX WAS MADE ON 2026-08-26, after a ruling. A certificate now fingerprints
+    its null construction the way it already fingerprints its universe -- the cell assignment
+    itself, the permutation count, the level and the sampler -- and the validator refuses a power
+    statement citing a null hash no current certificate carries. A known-bad fixture asserts the
+    refusal fires for that stated reason.
+    Re-issued under the extended schema, every returns-layer value reproduced exactly: false
+    alarms 0.055, 0.065, 0.052 and 0.055, the artefact's numbers and not the log's. The harness
+    being deterministic is what made the fix free to verify.
+
+- id: trp-62
+  one_breath: >
+    An artefact whose display order differs from its ranking order is eventually read as its
+    ranking, and a good result looks like noise.
+  found_on: 2026-08-26
+  symptom: >
+    A freshly built driver taxonomy was inspected by printing the first terms of each list. The
+    compute driver returned agamatrix, alarms, animas, artificial, assemblers, audible, byram --
+    medical-device company names and filler. The conclusion drawn, and stated, was that the
+    expansion had produced noise and would poison the screen downstream.
+    It had not. The storage layer sorted terms alphabetically, discarding the lift ranking the
+    expansion had computed. The first terms alphabetically are the TAIL of the ranking. The
+    actual top terms for that driver were semiconductor, wafer, wafers, memory, lithography,
+    foundry and chips -- a good expansion, read from the wrong end.
+    This runs OPPOSITE to every other trap in this file. The recurring species here is something
+    that parses cleanly and is wrong toward a false positive: a believable number that should not
+    be believed. This one nearly recorded a false NEGATIVE on a working artefact, because the
+    inspection surface destroyed the very information being inspected.
+  why_it_parsed: >
+    An alphabetically sorted list is a valid list, and nothing about reading its first entries
+    announces that the order carries no meaning. Sorting for stable identity is also a reasonable
+    thing for a storage layer to do -- the content hash SHOULD be order-independent -- so the
+    sort had a good reason and destroyed something anyway.
+  affected_sources: []
+  defence: >
+    Store and render in the order that carries the meaning, or label the order explicitly on the
+    surface where it will be read. Here the terms are stored in lift order while the content hash
+    still sorts before hashing, so identity stays order-independent and inspection stays truthful.
+    The conduct rule matters as much as the code one. The suspicion was diagnosed before it was
+    acted on -- the expansion was re-run at three document-frequency floors and the ranking
+    inspected directly -- rather than being carried into a decision to rebuild or discard. A
+    false negative acted on quietly is as expensive as a false positive, and harder to notice,
+    because nothing downstream ever contradicts a thing that was thrown away.
+
+
+- id: trp-63
+  one_breath: >
+    A held-out set is guarded against tests, then read by the certification that is not
+    itself a test.
+  found_on: 2026-08-26
+  symptom: >
+    A power certification planted synthetic conditioning effects into real forward momentum
+    returns and measured how often the procedure detected them. It ran on all 128 month-ends of
+    the conferred panel. Thirty-six of those month-ends are 2023 or later, which is SEALED tier,
+    untouched by standing rule until the final phase.
+    The certification read the sealed years. It was caught while locating the second test's
+    conditioner -- the tier boundaries were checked because the short-interest panel obviously ran
+    to 2026, and the same check applied to the panel already used showed it ran to 2025-12-31.
+    Nothing verdict-bearing had run yet, so the cost was one re-run.
+  why_it_parsed: >
+    Every guard in this repo watches EXPERIMENTS. The tier rule is phrased as a rule about tests,
+    the validator checks tiers on registrations, and a certification is not a registration -- it
+    is scaffolding that runs before one. It also does not feel like reading the answer, because it
+    genuinely is not: no verdict was extracted from the sealed years and no hypothesis was
+    evaluated against them.
+    It contaminates anyway. A certificate describes a procedure ON A POPULATION, and the MDE and
+    false-alarm rate both come from the null's spread, which comes from the data. Certifying on
+    2013-2025 and then testing on 2013-2022 quotes an MDE for a population the test never touches.
+    The two numbers differ materially: the full-panel certificate put the MDE region between 0.6
+    and 0.9 sigma, the DESIGN-tier certificate puts it at 1.3. Carrying the first would have
+    understated the instrument's blindness by roughly half.
+  affected_sources: []
+  defence: >
+    The tier cut belongs in the CERTIFICATION, not only in the experiment, and it is cut twice --
+    formation dates before the boundary and forward observations dropped at it -- so a late-2022
+    conditioner cannot pull sealed returns through its forward window.
+    The general rule is the one worth keeping: anything that produces a number a verdict will
+    quote is inside the tier discipline, whether or not it is called an experiment. Certificates,
+    thresholds, calibration sets and vocabularies all qualify. The contaminated certificate was
+    discarded rather than adjusted, on the same principle as the null-repair rule -- a published
+    number is never carried across a change in the population that produced it.
+
+- id: trp-64
+  one_breath: >
+    A ceiling that binds on one model and not another turns a configuration limit into a
+    capability comparison.
+  found_on: 2026-08-26
+  symptom: >
+    A dual-harvest pilot ran sixty passages through two model tiers. Opus returned sixty clean
+    records. Sonnet returned thirty-eight and raised twenty-two errors, all of them on the cheaper
+    tier: thirteen `NoneType object has no attribute stated` and nine `Invalid JSON: EOF while
+    parsing`. Read at face value that is a 37 percent failure rate for one model on a task the
+    other completed perfectly, and it is the kind of number that would have gone straight into a
+    tier decision.
+    It was a ceiling. `max_tokens` was 4,000. Sonnet's largest CLEAN response was 3,933 tokens and
+    its p90 was 3,677, so the cheaper tier was running flush against the wall; opus, more concise
+    at a mean of 1,231 output tokens against sonnet's 2,323, never came close. The errors were
+    truncated JSON, several frames away from the ceiling that caused them.
+  why_it_parsed: >
+    Both error messages are about parsing, and neither mentions tokens, limits, or truncation. The
+    exception surfaces where the malformed output is CONSUMED rather than where it was cut, so the
+    stack trace points at the schema layer and the schema layer is innocent.
+    The comparison also looked like exactly the thing the pilot was built to measure. A tier
+    bake-off expects the cheaper model to do worse, so a cheaper model doing worse is the
+    hypothesis confirming itself, and a confirmed hypothesis is not something anyone instruments.
+    The tell was in the artefact rather than the errors: a maximum clean output of 3,933 against a
+    ceiling of 4,000 is not a coincidence, and it is only visible if the token counts are recorded
+    per record and then actually looked at.
+  affected_sources: []
+  defence: >
+    Truncation announces itself. The harvester now checks `stop_reason` and raises an error naming
+    the ceiling and the passage, so the limit is reported where it happens rather than inferred
+    from a parse failure downstream. The ceiling is 12,000.
+    The general rule is that a shared limit is not a shared condition. Any parameter held constant
+    across the arms of a comparison can still BIND on one arm and not the other, at which point the
+    comparison measures the parameter. Verbosity differs by model, context length by encoder,
+    rate limits by tier -- each is a constant that is not a control.
+    One thing that did NOT need fixing is worth recording, because it looks like the same species
+    and is not. `max_tokens` is absent from the harvest cache key, which resembles {{trp-59}}, where
+    an embedding cache omitted `max_length` and silently served vectors built at the wrong context.
+    There the parameter changed the output for every input; here the ceiling can only truncate, and
+    a truncated response raises before the cache write, so nothing truncated is ever stored. Every
+    cached record is untruncated and therefore identical under a higher ceiling. Adding the
+    parameter to the key would have re-billed one hundred harvests to fix nothing.
+
+- id: trp-65
+  one_breath: A panel advertised reach to 2007 by estimating market betas from twelve monthly returns.
+  symptom: >
+    The conferred-tilt block of the state vector carried a spread of +2.05 at March 2009,
+    when the momentum sort's defining property in that month is a strongly NEGATIVE
+    conferred beta spread -- winners defensive, losers the high-beta financials that ripped.
+    Neighbouring months read +2.63, -4.41 and -7.29, flipping sign monthly. The valuation
+    column of the same panel reached an HML loading of 18.4, which is not a loading.
+  why_it_parsed: >
+    `conferred_monthly.parquet` was built to reach back to 2007-10, where the daily panel
+    starts 2013. The iShares holdings panel is MONTHLY before mid-2013 and daily after, so
+    the pre-2013 rows regress a leg's returns on the factors using twelve to thirteen
+    monthly observations. That produces well-formed floats in every column, a complete
+    index, and no warning. The project had already written the gate that catches it --
+    `features.conferred.MIN_DATES_PER_YEAR = 120`, with the docstring "a loading cannot be
+    estimated from twelve points, so dates are what the gate counts" -- and the monthly
+    builder simply never applied it. Below the threshold beta_spread carries sd 3.664 and a
+    range of [-7.41, +10.45]; above it, sd 0.340 and [-0.74, +1.48]. A tenfold difference in
+    dispersion between two halves of one column, presented as one series.
+  defence: >
+    Carry the estimation sample size as a COLUMN beside every estimate, not as a property of
+    the builder, and gate on it at the point of consumption. `n_obs` was already in the file;
+    nothing read it. The general rule: when a panel's underlying source changes frequency
+    part-way through its span, the frequency change is a coverage boundary and must be
+    materialised as a mask, because the reach it appears to buy is the thing that is wrong.
+  found_on: 2026-08-30
+  affected_sources: [src-iwv]
+
+- id: trp-66
+  one_breath: A gate required a monthly panel to separate an episode that lasted four days.
+  symptom: >
+    The Stage 3 regime gate required the jump model to assign September 2019 and August 2007
+    to different states. It assigned both to the calm state and failed. So did the incumbent
+    two-channel indicator, which separates those two episodes by construction and is the
+    reason the gate was written that way.
+  why_it_parsed: >
+    The joint channel reads -3.03 on 9 August 2007, the 2.5th percentile of a century of
+    daily history. The state vector samples month-ends, and by 31 August the same series
+    reads +0.93, the 86th percentile. The quant quake round-tripped by 10 August -- the
+    project's own episode registry says so in the entry's note -- so the month-end
+    observation is taken twenty-one days after the event, on the opposite side of zero. The
+    criterion was inherited from daily-frequency work and carried onto a monthly panel
+    without anyone asking whether the episode survives the resampling.
+  defence: >
+    Before a gate names an episode, check that the episode is VISIBLE at the frequency the
+    gate will run at. One line -- compare the event-window extreme against the sampled value
+    on the same series -- and it distinguishes a model that failed from a criterion that
+    could not have been met. The general form: resampling is a filter, and an event shorter
+    than the sampling interval is removed by it rather than attenuated.
+  found_on: 2026-08-30
+  affected_sources: [src-french]
+
+- id: trp-67
+  one_breath: A fingerprint statistic recognised the calendar and it looked like recognising the environment.
+  symptom: >
+    The 8-K item-type fingerprint identified which of 60 months a held-out half of the filings
+    came from at 24.9 percent top-1 against a chance rate of 1.7 percent, a fifteenfold lift,
+    clearing a permutation null at p95 = 0.050. It would have been the project's first strong
+    text result.
+  why_it_parsed: >
+    The permutation null was correct and passing it meant less than it appeared. The two item
+    codes carrying most of the cross-month variance are 2.02, results of operations, and 5.07,
+    shareholder vote -- earnings season and proxy season. The statistic was recognising
+    January because January is earnings season. Removing each calendar month's own mean across
+    years cut top-1 from 0.249 to 0.072 and the median rank from 4.1 to 15.8, so roughly
+    seventy percent of the apparent signal was the calendar. The tell that names the mechanism:
+    of 44 errors, 21 picked the SAME CALENDAR MONTH IN A DIFFERENT YEAR, 47.7 percent against
+    6.8 percent by chance.
+  defence: >
+    Any recognition, fingerprint or identification statistic must face a CALENDAR-STRUCTURE
+    null in addition to a permutation null. Seasonality is a date-recogniser, so in every task
+    whose target is "which period is this", it is signal-shaped and passes the permutation test
+    honestly. Two cheap checks: recompute after subtracting each calendar month's mean, and
+    tabulate whether errors concentrate on the same calendar month in other years. The second
+    is diagnostic rather than merely corrective -- it names the confound instead of only
+    removing it, and a later placebo showed it is also the more trustworthy of the two.
+    SECOND-ORDER FINDING, and it changes how the first control may be quoted: subtracting a
+    group mean over five observations removes shared structure whether or not the grouping
+    means anything. Applying the identical subtraction to twelve RANDOM groups of five moves
+    recognition UP rather than down -- 0.314 against a raw 0.249 on the item arm, 0.368
+    against 0.283 on the narrative arm. So the drop under de-seasonalisation is NOT a
+    decomposition and must never be quoted as "seventy percent of the signal was the
+    calendar". It is a conservative FLOOR. The error-confusion tabulation subtracts nothing
+    and is what speaks to mechanism: on those terms the two arms differ sharply, with item
+    errors landing on the same calendar month seven times above chance and narrative errors
+    barely above it, which says the item MIX repeats every year while the narrative CONTENT
+    of each season does not.
+  found_on: 2026-08-30
+  affected_sources: [src-edgar-8k]
+
+- id: trp-68
+  one_breath: A permutation null was algebraically the identity and returned the observed statistic on every draw.
+  symptom: >
+    The null for month recognition reported a 95th percentile exactly equal to the observed
+    statistic, 0.249 against 0.249, on 1,000 draws. Any pass or fail decided by it would have
+    been meaningless in either direction.
+  why_it_parsed: >
+    The code permuted the COLUMNS of the similarity matrix and then looked the true month up
+    through the same permutation. Composing a permutation with its own inverse index lookup is
+    the identity, so the statistic was recomputed unchanged 1,000 times. It runs without error,
+    consumes the right amount of time, produces a distribution-shaped array, and the only
+    visible symptom is a suspiciously round agreement that a reader can rationalise. The
+    correct operation was to shuffle the second-half VECTORS, breaking the correspondence
+    rather than relabelling the axis.
+  defence: >
+    Before a null bears a gate, assert two things about it. First, that its distribution has
+    positive variance -- a null that cannot vary cannot adjudicate. Second, and this is the
+    load-bearing one, that it is CALIBRATED: where an analytic chance rate exists, the null
+    must centre on it. Equality of the null's p95 and the observed value is the wrong check,
+    because a discrete statistic ties its own null by coincidence often enough to make that
+    test brittle; the identity bug is caught decisively by the null centring on the
+    observation instead of on chance. Two lines, and this species becomes unshippable.
+  found_on: 2026-08-30
+  affected_sources: []
+
+- id: trp-69
+  one_breath: A control was quoted as a decomposition without anyone checking what it does when it corrects nothing.
+  symptom: >
+    Removing each calendar month's mean across years cut the item arm's month-recognition
+    from 0.249 top-1 to 0.072 and the narrative arm's from 0.283 to 0.100. That was reported,
+    twice and in a commit message, as "roughly seventy percent of the apparent signal is the
+    calendar". The number is real and the sentence is wrong.
+  why_it_parsed: >
+    The control is correct as a control. What was invalid was reading its EFFECT as a share.
+    Subtracting a group mean over five observations removes structure shared inside the
+    group whether or not the grouping means anything, and it also declines to remove
+    structure the grouping happens to cut across. Applying the identical subtraction to
+    twelve RANDOM groups of five moved recognition UP, to 0.314 and 0.368 against raw 0.249
+    and 0.283. So the operation's own effect is not zero and is not even the same sign as the
+    quantity it was being used to measure. Nothing in the output looks wrong: the adjusted
+    number is smaller, the direction matches the hypothesis, and the arithmetic is right.
+  defence: >
+    Any adjustment whose effect will be READ AS "the share explained by X" must first be run
+    on meaningless groupings of the same shape, and must be shown to do nothing there. A
+    control that moves the statistic under a random regrouping cannot have its own movement
+    attributed to the thing it corrects for. Controls need their own placebos, exactly as
+    estimators need their own nulls.
+    The corollary is worth as much: prefer a diagnostic that SUBTRACTS NOTHING when one
+    exists. Tabulating where the errors land -- same calendar month in another year, 47.7
+    percent for the item mix against 6.8 by chance, 9.3 percent for the narrative content --
+    needed no adjustment, survived this whole problem, and is the evidence that actually
+    distinguishes the two arms.
+  found_on: 2026-08-30
+  affected_sources: [src-edgar-8k]
+
+- id: trp-70
+  one_breath: A truncation guard sat downstream of the parse that raises, so it never ran for the case it existed to catch.
+  symptom: >
+    The narrative-comparison batch died after six records with "ValidationError ... Invalid
+    JSON: EOF while parsing a string at line 1 column 4258". The guard written specifically to
+    turn that failure into a clear message about the token ceiling was in the same function,
+    eight lines below, and did not fire.
+  why_it_parsed: >
+    The guard tested the response's `stop_reason` AFTER `messages.parse` returned. The
+    structured-output helper validates the model's JSON before returning, so a response cut
+    off at `max_tokens` raises inside the SDK and the guard is never reached. The code reads
+    correctly -- call, check for truncation, proceed -- and is unreachable on exactly the path
+    it was written for. This repo had already recorded the parent species: a 4,000-token
+    ceiling whose failures surfaced as `EOF while parsing` and read as a 37 percent model
+    failure rate until the token counts were inspected. The lesson was banked as "raise the
+    ceiling"; the new instance is that the WARNING ABOUT THE CEILING was itself placed where
+    it could not run.
+  defence: >
+    A guard must sit where the failure actually surfaces, not where the author pictures the
+    failure occurring. When a library validates before returning, the only reachable place for
+    a truncation check is inside an exception handler around the call. The general test, worth
+    applying to any defensive branch: construct the condition the guard exists for and confirm
+    the guard is what reports it. A guard that has never been seen to fire is a guard whose
+    reachability is an assumption.
+  found_on: 2026-08-30
+  affected_sources: []
+
+- id: trp-71
+  one_breath: An ablation drew all ten test cases from one year, so a constant answer would have scored perfectly.
+  symptom: >
+    Two hypotheses about what leaked the period from masked filings were tested by ablation
+    and both appeared refuted: masking every monetary figure left recovery at 10 of 10, and
+    stripping exhibit filenames left it at 10 of 10. Reported as "two hypotheses refuted by
+    ablation".
+  why_it_parsed: >
+    The ten blocks were taken as `months[:10]` from a sorted list, which is 2018-01 through
+    2018-10 -- every one of them in the same year. The statistic was recovery within plus or
+    minus three months, so an attacker answering "mid-2018" every time scores 10 of 10 on no
+    information at all. The ablation could not have registered a REDUCTION, because the
+    unablated condition was already at a ceiling that required nothing. Both numbers were
+    real, identical and meaningless. Repeating the ablation on ten months evenly spaced
+    across the 59-month corpus gave 9 of 10 in both conditions, which refutes the same two
+    hypotheses for the first time.
+  defence: >
+    An ablation is a comparison, so the sampling has to leave room for the comparison to
+    move. State the null answer explicitly before running one -- here, "what would a constant
+    guess score on these cases?" -- and if the answer is "the same as the observed result",
+    the design is measuring nothing. The general rule: when test cases are drawn by position
+    from an ordered list rather than spread across it, check whether the ordering is
+    correlated with the thing being measured. It usually is; that is why the list was ordered.
+    What surfaced this was the validator refusing a `refuted` verdict without a power
+    statement. Writing the power statement forces the question the ablation had skipped.
+  found_on: 2026-08-30
+  affected_sources: [src-edgar-8k]
+
+- id: trp-72
+  one_breath: An attribution was printed under a label that inverted its meaning, on every page of the replay.
+  symptom: >
+    Each retrieved analogue printed "matched on: mechanism 52%, dispersion 46%, volregime 2%".
+    A faithfulness test then found that removing the block the page NAMED cost the analogue
+    LESS rank than removing a block it did not name -- median 4 against 6, paired difference
+    -3.47. The explanation was anti-correlated with the thing it claimed to explain.
+  why_it_parsed: >
+    The number was the share of squared distance each block contributed. That is a real
+    quantity, correctly computed, and it answers "where does the remaining DISSIMILARITY come
+    from". The page labelled it "matched on", which asserts the opposite. Both readings
+    produce a plausible-looking percentage breakdown summing to 100, so nothing about the
+    output distinguishes them, and the label had been carried unexamined from the output
+    contract into 372 replay pages.
+    The first diagnosis of it was also wrong and is recorded because the correction matters:
+    the obvious explanation is that a high share means large raw differences, and the data
+    refuted that -- the highest-share block had the SMALLEST mean absolute z difference, 0.12
+    against 0.49. The real mechanism is the unit normalisation the cosine metric requires,
+    which rescales both vectors before differencing, so the per-block share describes where
+    two months' normalised PROFILES still differ, not where their levels do.
+  defence: >
+    A quantity and its label are separate artefacts and both need checking. The mechanical
+    test is the one that caught this: ablate what the explanation names and confirm the
+    outcome degrades MORE than ablating something it does not name. An explanation that
+    survives its own removal is decoration; one that improves on removal is inverted.
+    Where an explanation is meant to answer "why are these alike", it must be computed against
+    a reference for what alike means -- here, per-block distance as a multiple of the median
+    for two arbitrary months. That version passes the same test at +5.17 [+1.67, +8.87].
+  found_on: 2026-08-31
+  affected_sources: []
+
+- id: trp-73
+  one_breath: Adding any fourth block improved the retrieval statistic, so "adding X helps" was never a claim about X.
+  symptom: >
+    Appending a century-deep newspaper-narrative block to a three-block retrieval key raised
+    the forward-dispersion statistic from 0.594 to 0.634 on 547 queries and closed part of the
+    gap to every reader baseline, with consistent deltas of +0.0013 to +0.0025. The registered
+    pass condition was met.
+  why_it_parsed: >
+    The key is unit-normalised before distances are taken, so appending a block re-weights the
+    other three and renormalises every vector. That operation changes the retrieval geometry
+    whether or not the new block carries information. Replacing the two text columns with
+    NOISE of matched marginals -- same dimensionality, same weights, same normalisation, only
+    the temporal information destroyed -- moves the statistic from 0.594 to 0.616 on its own,
+    and 13.3 percent of noise draws reach or exceed the real block's 0.634. The paired
+    per-query difference between the two arms is +0.0017 with an interval of [-0.0005,
+    +0.0040], and the augmented arm is tighter on 52 percent of queries, which is a coin flip.
+    Nothing in the gate output showed this. The arms were compared to the BASELINES and never
+    to each other with an interval, and the augmentation had no placebo of its own.
+  defence: >
+    An augmentation needs its own placebo, exactly as a correction does. Before reporting that
+    adding a feature block helped, add a NOISE block of the same shape and weights and show
+    the gain does not survive it. And put an interval on the arm-versus-arm difference, not
+    only on each arm against the shared baseline: two arms can each shift against a common
+    reference while being indistinguishable from one another.
+    The general form, which this project has now met twice from opposite directions: a control
+    and an augmentation are the same kind of intervention, and both need to be run in a
+    condition where they should do nothing.
+  found_on: 2026-08-31
+  affected_sources: [src-epu]
+
+- id: trp-74
+  one_breath: Hand-typed percentiles in the episode registry cannot be reproduced from the committed panels.
+  symptom: >
+    The episode registry annotates the November 2020 vaccine reversal with "tilt rate beta was
+    at the 5th pctile (bond-proxy-like) going in" and the March 2021 rotation with "tilt rate
+    beta at the 4.7th pctile". Recomputing from conferred_tilt.csv, the conferred 10-year rate
+    beta SPREAD sits at the 83.6th and 79.1st percentiles at the preceding month-ends -- the
+    opposite end of the distribution. The loser leg's rate beta is at 5.2 percent for
+    2020-10-31, which is probably what the first note meant, and nothing reproduces the 4.7
+    figure for 2021-02.
+  why_it_parsed: >
+    These are `note` fields on a hand-curated registry, not gated claims, so no validator
+    checks them and no reproduce command exists. They read exactly like measurements: a
+    quantity, a percentile, a direction, an interpretation. They were about to be quoted in a
+    submission memo as evidence for the system's most PM-relevant story -- that the momentum
+    sort builds a duration bet -- and the number would have been wrong or unattributable while
+    sounding precise.
+  defence: >
+    A number in prose is a claim and needs the same provenance as a number in a table. Either
+    it carries a reproduce command and a panel reference, or it is written as a qualitative
+    statement without a figure. Concretely, for any memo or report: quote only numbers that
+    come from a gated claim or an experiment result field, never from a hand-written note,
+    and re-derive every quoted figure from the committed artifact before it ships.
+    The general rule this instance teaches: prose fields are the part of a record that no
+    tooling checks, so they are where stale numbers survive longest. Audit them the way code
+    audits its inputs, at the point of use.
+  found_on: 2026-08-31
+  affected_sources: [src-iwv]
+
+- id: trp-75
+  found_on: 2026-08-31
+  one_breath: A gated experiment record carried a count its own committed artifact does not reproduce.
+  affected_sources: []
+  symptom: >
+    Two faults on the same replay, found together. The page-composition experiment's result
+    field records the manufactured-bet could-not-measure entry as firing on 345 of 372 pages.
+    Re-running the replay script, which is deterministic and reproduces the rest of the
+    artifact byte-identically, gives 337 of 372. Nothing in the repo produces 345. Separately,
+    the artifact's summary key `pages_carrying_a_rendered_narrative` was computed from the
+    restricted-block count -- retrieval deliberately confined to the corpus era, which fires
+    on 5 of the 19 text-era pages -- while the quantity that name plainly denotes, whether a
+    page's own analogues carry a narrative, is 0 of 372 and sits three lines above under a
+    different name.
+  why_it_parsed: >
+    Both survived because they are internally plausible and sit beside correct numbers. The
+    345 is the right order of magnitude and the right shape for its comparison sentence. The
+    mislabelled key was truthful in the console line that prints it, where a "5 of 19"
+    denominator supplies the missing context; the name misleads only when read alone, which
+    is exactly how a number gets lifted into prose. Both were quoted into a draft memo, the 5
+    in place of the 0, in the direction that flattered the system: it converted the project's
+    central negative finding -- that the text layer appears on no page of the replay -- into a
+    modest positive.
+  defence: >
+    Recompute rather than choose. When a registry and its artifact disagree, neither is
+    authoritative until the generator is re-run; here the artifact was right and the gated
+    experiment record was wrong. That inverts the usual presumption, so the earlier rule that
+    prose may quote a gated claim or an experiment result field is not sufficient on its own:
+    a number bound for a memo needs its generator re-run, not merely a citation. A summary key
+    must be named for the quantity it computes, not the quantity it sits near; where two
+    counts differ only by a restriction, both names must carry that restriction explicitly.
+
+
+- id: trp-76
+  found_on: 2026-08-31
+  one_breath: A claim's reproduce command names a module with no command-line interface, so it silently does nothing.
+  affected_sources: []
+  symptom: >
+    The strong classical baseline claim carries the reproduce command
+    `python -m unstructured_momentum.model.baselines --garch`. That module defines functions
+    and no entry point, so running it imports, defines, and exits 0 with no output and no
+    error. The claim's numbers -- a 0.052 breach rate, coverage p 0.850, independence p 0.279
+    on 325 forecasts -- cannot be regenerated by the command on file. A paired comparison
+    written afterwards, on a grid where both models forecast, puts the same baseline at a
+    0.0851 breach rate failing coverage at p 5.9e-07 in every era. The two do not reconcile.
+  why_it_parsed: >
+    Exit code 0 and no output reads as success to anything that checks a return code, and the
+    command is well formed, names a real module and a plausible flag. The claim was cited into
+    a draft memo as the conventional bar the whole system had to beat, which made it the most
+    load-bearing unreproducible number in the document: it was doing the work of proving the
+    project honest about conventional methods winning.
+  defence: >
+    A reproduce command must be executed, not merely written, and a run that produces no output
+    is a failure rather than a pass. Checking a return code is not checking a result. Any claim
+    whose command emits nothing should be treated as unsupported until the command is repaired
+    and the numbers regenerated, and where a later reproducible run contradicts an earlier
+    unreproducible one, the contradiction is reported rather than silently resolved in favour
+    of either.
+
+- id: trp-77
+  found_on: 2026-08-31
+  one_breath: The event tripwire's placebo calibration used windows dated years after the date it was armed on.
+  affected_sources: []
+  symptom: >
+    The 8-K tripwire is armed at a historical as-of date and calibrated against 200 placebo
+    baskets before arming, targeting a clearance of roughly one in four. For the cohort armed
+    at 2020-10-31 the calibration windows run from 2018-03 to 2024-04 and include 2021-02,
+    2021-07, 2022-03, 2023-10, 2024-01 and 2024-04. The clearance figure that decided whether
+    to accept the declared item set and horizon, and whether to run a revision round, was
+    therefore computed partly from filings that did not exist on the arming date. Two recipe
+    versions were run on that cohort, moving clearance from 0.16 to 0.19 as the item set was
+    narrowed and the horizon lengthened from 45 to 60 days, and the shipped version is the
+    looser of the two.
+  why_it_parsed: >
+    Every other part of this component is scrupulous about the as-of date: the members, the
+    filings scanned, the horizon and the quote gate are all bounded by it, and the arming
+    record carries the as-of in its first field. The calibration is a different kind of
+    quantity -- a property of the RULE rather than of the date -- so it did not look like a
+    thing that needed a cutoff, and the phrase used to describe it, "calibrated before arming",
+    is true and conceals the issue: before arming is not before the as-of. It was cited as the
+    demonstration that a model can be given a narrow job under measured controls, which made it
+    the one place a leak would do most damage to the argument it supported.
+  defence: >
+    Anything that informs a decision recorded against an as-of date is itself point-in-time,
+    including the calibration of the rule and the choice of how many revision rounds to run.
+    The fix is to restrict placebo windows to those closing on or before the as-of, recompute
+    clearance, and report how many recipe versions were tried on each cohort rather than
+    describing a revision as singular. Until that is done the tripwire is a demonstration of
+    the architecture and not a point-in-time result, and must be described as one.
+
+- id: trp-78
+  found_on: 2026-08-31
+  one_breath: Most registered reproduce commands name modules with no entry point and so verify nothing.
+  affected_sources: []
+  symptom: >
+    An earlier trap recorded a single claim whose reproduce command imported a module,
+    printed nothing and exited 0. A static audit of every registered command shows that this
+    was not one case but the majority: of 104 commands across claims and experiments, 61 named
+    a target with no entry point. Among them were the generator for the severity result this
+    memo leads with, cited by ten claims; the construction study producing the -8.37 and -6.88
+    percent figures the problem definition opens with; the narrative feature module cited by
+    ten more; and the synthesis module behind the date-blinding leakage claim. Repairing the
+    severity module brought the count to 51.
+  why_it_parsed: >
+    Running a module that defines only functions succeeds. There is no error, no output and a
+    zero exit code, so any check based on return codes passes, and a reader who does not
+    execute the command sees a well-formed invocation naming a real module and a plausible
+    flag. The earlier trap treated its single instance as an isolated defect and its defence
+    told prose to cite a reproduce command; that defence quietly assumed the commands ran. The
+    memo then described the fault as one command shipping for months doing nothing, which
+    understated it by two orders of scale, and did so in the direction that flattered the
+    project.
+  defence: >
+    A guard, not a rule. A test now resolves every registered reproduce command to the file
+    that must carry its entry point and fails when there is none, with the known-dead set held
+    in a debt list that may only shrink; repairing one also fails the test until the id is
+    removed, so repairs cannot be silently absorbed either. The first repair also introduced a
+    seal breach -- the new entry point read the full series through the sealed years -- so an
+    entry point added to satisfy an audit must apply the tier seal itself rather than trusting
+    callers to remember.
+
+- id: trp-79
+  found_on: 2026-09-02
+  one_breath: A parser skipped a third of an archive on encoding errors, and a link filter removed the crash months.
+  affected_sources: [src-ftd]
+  symptom: >
+    Two independent faults in one acquisition, both of which produce silence rather than an
+    error. The parser caught decode failures and printed a skip line per file, which looked
+    harmless because only the last few were visible on screen; it had in fact dropped about two
+    thirds of the archive, 6.7 million rows against the 18.2 million actually present, and
+    1,145 settlement dates against 3,305. Separately, the SEC index serves these files under
+    four path prefixes, one of which reads like a content-management artefact rather than a
+    data path. That prefix was filtered out of the download list as junk. It is the real
+    location of six half-month files covering February, March and April 2020, so the archive
+    was missing exactly the COVID crash, which contains a registered episode.
+  why_it_parsed: >
+    Both faults present as an absence. A dropped half-month does not raise, does not appear as
+    a null, and downstream reads as a period with no settlement stress -- that is, as a calm
+    market. The coverage check that caught the second fault only worked because it compared
+    against a continuous month range rather than against the file list, which was itself
+    wrong. Checking the downloaded files against the download list would have passed, since the
+    list was the thing that was incomplete.
+  defence: >
+    A parser must raise on a file it cannot read rather than continue, because a missing period
+    and a quiet period are indistinguishable once the data is in memory; decode is now attempted
+    across several codecs and only an unreadable file stops the build. A link filter must never
+    drop a candidate on the grounds that its path looks wrong -- if a prefix appears in the
+    index it is a location, and the only safe test is whether the fetched bytes are the expected
+    format. Coverage is verified against a continuous calendar built from the data's own span,
+    never against the list used to fetch it.
+
+- id: trp-80
+  found_on: 2026-09-02
+  one_breath: A committed result panel no longer reproduced from its own generator and nobody had re-run it.
+  affected_sources: []
+  symptom: >
+    Regenerating the placebo panel behind the mechanism claim moved it from 104 of 128 months
+    clearing to 105 of 137. The change had been authorised to test one specific revision, point-
+    in-time index membership, and the expectation was that June reconstitution dates would drive
+    any movement. Of the nine month-ends whose verdict flipped, only one is a June date. The
+    stored panel had simply gone stale against code that had already been committed: the current
+    generator resolves sectors for 7,433 of 7,456 tickers where the stored panel was built when
+    the first-occurrence rule resolved 5,808, and its span begins 2014-01 rather than 2013-09.
+  why_it_parsed: >
+    A committed CSV reads as a result. Nothing in the record distinguishes an artifact that
+    reproduces today from one that reproduced eleven days ago against code since changed, and
+    re-running is expensive enough that it is only done when something forces it. The claim's
+    numbers were quoted repeatedly in the intervening period, including into a submission memo,
+    with no indication that they were no longer what the pipeline produced.
+  defence: >
+    An artifact that carries a headline number needs a reproduction stamp -- the commit its
+    generator was at when it was written -- and a check that the stamp still matches. Where that
+    is too expensive to run continuously, the staleness risk belongs beside the number rather
+    than discovered when someone finally re-runs it. Attribution also has to be designed in:
+    this regeneration bundled a membership revision, a loading-window fix and an unrelated sector
+    improvement, so the before-and-after cannot attribute the move to any one of them. The clean
+    measurement is the one taken on the intermediate artifact with a single variable changed.
+
+- id: trp-81
+  found_on: 2026-09-02
+  one_breath: The conditional expected shortfall was not conditional, so it read milder than the VaR beside it.
+  affected_sources: []
+  symptom: >
+    On the page for 2020-10-31 every expected-shortfall figure was less severe than the
+    value-at-risk printed next to it -- a 10-day 5 percent VaR of -0.0947 against an ES of
+    -0.0586 -- contradicting the sentence printed directly beneath, that ES is the average loss
+    given the VaR is breached and is therefore always the worse number. The same block was
+    correct at 2019-09-06, so it presented as date-specific rather than as a formula error.
+  why_it_parsed: >
+    The two quantities were different objects wearing one label. VaR was evaluated at today's
+    state; ES was the mean realised return below the in-sample fitted quantile across the whole
+    training set, which does not depend on today at all. Whenever the current state is more
+    extreme than the sample average the VaR moves and the ES does not, and the inequality
+    inverts. The field was named es_conditional and the docstring described what the code did
+    rather than what the name claimed, so reading either one in isolation looked consistent.
+  defence: >
+    Estimate the tail's MULTIPLICATIVE severity in-sample -- how much worse an exceedance is
+    than the quantile it breached -- and apply that ratio to today's VaR. The ratio is at least
+    one on the rows it averages, so the ES can no longer come out milder than the VaR. More
+    generally: when two numbers are printed side by side under a stated inequality, that
+    inequality is an assertion about the code and belongs in a test.
+
+- id: trp-82
+  found_on: 2026-09-02
+  one_breath: A result cache keyed on its inputs but not its estimator served stale numbers after the model was fixed.
+  affected_sources: []
+  symptom: >
+    After the conditional expected shortfall was repaired, the page reprinted the inverted
+    values byte-for-byte at both test dates. The severity stage caches to disk under a key
+    built from the as-of date, the input series and the horizon and quantile grid. The
+    estimator itself is not in the key, so changing the model produced no cache miss and the
+    old numbers were served indefinitely.
+  why_it_parsed: >
+    The fix appeared to have failed rather than to have been ignored, which sent the first
+    diagnosis toward the arithmetic rather than the cache. A cache hit is silent by design and
+    there is no output distinguishing a fresh computation from a replayed one; the stage does
+    set a from_cache flag on the record, but nothing prints it.
+  defence: >
+    Hash the estimator's source into the cache key, so any change to the model invalidates the
+    entry automatically. A cache that cannot notice a code change is a mechanism for publishing
+    a result the code no longer produces, which is the same failure as a stale committed
+    artifact and is harder to see because nothing on disk looks wrong.
+
+- id: trp-83
+  found_on: 2026-09-02
+  one_breath: A family-wise correction raised the pass rate to 100 percent, because the null was saturated.
+  affected_sources: []
+  symptom: >
+    The eight-series version of the concentration test cleared 108 of 108 month-ends. The first
+    implementation used the maximum PERCENTILE across series, which saturates: against 200 draws
+    a percentile has half-a-point resolution and the real book exceeds every placebo on at least
+    one of eight series essentially always, so the real book pinned at 100.0 on 107 of 108 dates
+    while each placebo capped at 99.5 by being included in its own comparison. Replacing it with
+    a continuous statistic, the maximum standardised distance with leave-one-out moments, fixed
+    the arithmetic and did not change the verdict: still 108 of 108, with a median maximum z of
+    22.8 against a threshold of 2.74.
+  why_it_parsed: >
+    A multiple-testing correction is expected to make a test HARDER, so a correction that raised
+    the pass rate from 76.6 percent on one series to 100 on eight should have been implausible
+    on sight. It was not caught by any check; it was caught by the round number. The deeper
+    cause is that the null is too weak for the statistic: the median date has SEVEN of eight
+    series above the family threshold and on 44 percent of dates all eight are, because a
+    momentum-sorted book differs from a random size-matched book on every macro axis at once.
+    A maximum over eight saturated quantities cannot discriminate.
+  defence: >
+    Read the direction of a correction before reading its result: a family-wise adjustment that
+    increases a pass rate is either a coding error or evidence the null is saturated, and both
+    need finding before the number is quoted. The single-series test discriminates at 76.6
+    percent partly by accident of which series was registered -- market beta carries the LOWEST
+    median z of the eight at 7.8 against 18.7 for the first principal component, so a different
+    registered series would have cleared near 100 percent as well. The informative null for a
+    concentration claim is not a random book but a book built by the same kind of rule: sorts on
+    other trailing-return windows, which this design already names as its live control and had
+    not run.
+
+- id: trp-84
+  found_on: 2026-09-03
+  one_breath: A sealed test deviated from its own registered sampling and produced a spurious failure.
+  affected_sources: []
+  symptom: >
+    The holdout's severity arm was registered with a power statement naming a 21-day forecast
+    step, roughly 40 forecasts and about 2 expected breaches. The script that read the seal used
+    DAILY forecasts instead, 865 of them, each a 10-day window overlapping the next by nine
+    days. On that sample the conditional model breached 16 times, a rate of 1.85 percent against
+    5 expected, and the coverage test rejected at p below 0.001 -- reported as FAIL. On the
+    registered 21-day step the same model breaches 2 times in 42, a rate of 4.76 percent at
+    p 0.943, which passes. The registered design passes and the deviation fails.
+  why_it_parsed: >
+    The deviation looked like more data rather than less: 865 forecasts reads as a larger and
+    therefore better sample than 42, and nothing in the code referenced the sampling the
+    registration had fixed. It is the same overlapping-windows error this project criticises
+    elsewhere, committed inside the one test whose entire value depends on being run exactly as
+    written. Had the direction of the artifact been flattering rather than damning it would
+    have been far harder to catch, because the instinct that saved it was disbelief at a
+    failure, not a rule.
+  defence: >
+    A pre-registration that fixes a sampling scheme has to be executed by the code, not
+    remembered by the person running it: the registered step belongs in the script as a constant
+    read from the registration, so a deviation is a diff rather than an oversight. And a sealed
+    test is exactly where post-hoc flexibility is least acceptable -- the defence for reporting
+    the 21-day result is that the step appears in a registration committed before the read, and
+    that defence would be worthless if the number had been chosen after seeing both.
+
+
+- id: trp-85
+  found_on: 2026-09-03
+  one_breath: "A registered secondary statistic compared a label against the variable that defines it."
+  affected_sources: []
+  symptom: >
+    The crash inventory's registration asked, as a secondary, whether the leg share separates
+    Route 1 from Route 2 episodes better than the market return does, on the reasoning that the
+    leg share is the discriminator this framework adds and the market return is the one it
+    inherits. The run returned an AUC of 1.000 for the leg share against 0.9986 for the market
+    return, which looks like a clean win and is arithmetic. Route 1 is DEFINED as loser share at
+    or above 0.60 and Route 2 as winner share at or above 0.60, which is loser share at or below
+    0.40, so the labels are a deterministic function of the variable being scored and the AUC
+    could not have been anything but 1.000. The market return's 0.9986 is nearly as circular,
+    since Route 1 requires the market to have risen.
+  why_it_parsed: >
+    The circularity is in the registration, not in the code, so every check that guards the code
+    passed: the statistic was pre-stated, the direction was fixed in advance, the computation is
+    correct. A pre-registered statistic carries an implicit warrant that someone checked it could
+    fail, and that check had not happened. The number is also the flattering kind, a perfect
+    score for the project's own contribution against the literature's, and a flattering number
+    gets read past.
+  defence: >
+    A statistic whose value can be derived from the definitions of the labels it scores is not a
+    test, and the registration review needs a step that asks, of every proposed comparison, what
+    input would make it fail. The number is reported with the void note attached rather than
+    deleted, because a registration that produced a meaningless statistic is part of the record
+    of how the registration was written.
+
+- id: trp-86
+  found_on: 2026-09-03
+  one_breath: "The page the memo says is machine-composed and numeral-checked is hand-typed."
+  affected_sources: []
+  symptom: >
+    Section 2.1 states as a principle that deterministic code produces every statistic on the
+    page and that a tokeniser rejects any page where a numeral in the prose fails to match a
+    computed field, and Appendix D gives the composer role a numeral canary whose one mismatch
+    fails the build. Neither exists in code. The example risk output carries 130 numerals in its
+    body, 84 of them distinct, and the composer computes about a dozen: the sector screen, two
+    volatility aggregates, four counts and the analogue table. Every headline number is a string
+    literal typed into the source -- the conditional and unconditional VaR, the expected
+    shortfall, both control rates, the comomentum reading and its percentile, the short-volume
+    and ETF-flow readings, the corpus and universe sizes, and the leg counts the percentages are
+    computed from. The numbers are correct, in that each was computed somewhere and transcribed;
+    what does not exist is the mechanism that would catch it when one of them stops being correct.
+  why_it_parsed: >
+    A transcribed number and a computed number render identically, and the page is the one
+    artifact nobody diffs against its own generator because reading it IS the check people
+    perform. The claim in the memo made it worse rather than better: a stated principle reads as
+    a description of the code, so the sentence about the tokeniser was itself the reason nobody
+    looked for the tokeniser. This is the same fault as the hand-typed percentiles logged
+    earlier in this register, committed in the deliverable rather than in a working note, and it is the fault the register
+    exists to catch: the claim was checkable at any point by grepping the composer for a literal.
+  defence: >
+    Compose the page over a field registry where every number carries its value, the file that
+    produced it, the command that reproduces it and, where it came from a document, the verbatim
+    span and the accession. Then run the tokeniser the memo describes: scan the rendered page,
+    match every numeral against a registered field or a declared definitional constant, and fail
+    the build on the first that matches neither. The registry then does a second job for free,
+    since a page whose every number knows its own provenance can be rendered so a reader clicks
+    a number and sees the field behind it.
+
+- id: trp-87
+  found_on: 2026-09-03
+  one_breath: "A market series divided by a hundred twice made a conditional model equal its own baseline."
+  affected_sources: [src-french]
+  symptom: >
+    The French loader already converts percentages to decimals, so a caller that divides the
+    market series by a hundred again scales it by a further hundred. Two callers did: the sealed
+    holdout script and the severity command line. A linear quantile fit is equivariant to
+    rescaling a regressor, so the fitted values are untouched and the bug is invisible in every
+    output that depends only on them. The bear-state indicator is not: it is a sign test on a
+    compounded trailing return, and it flips on 3.1 percent of days between the two scalings.
+    The consequence lands on a headline. On the sealed holdout at the registered forecast step
+    the conditional model breached 2 of 42 at a rate of 4.76 percent with an unconditional
+    coverage p of 0.943 -- numbers identical, to four decimal places and in both interval bounds,
+    to the UNCONDITIONAL baseline computed on the same dates. Under the corrected scaling the
+    conditional model breaches 1 of 42 at 2.38 percent with p 0.388, and the baseline still
+    breaches 2. The registered verdict is unchanged and the holdout still passes, because the
+    interval contains 0.05 either way. What changes is that the model is now distinguishable from
+    the baseline it is supposed to beat, where under the bug it was numerically identical to it.
+  why_it_parsed: >
+    Every consequence of the bug was either invisible or flattering. Scale-equivariance hid it
+    from the fitted values, which is most of what anyone inspects; the bear flag it did corrupt is
+    a binary column nobody reads directly; and the corrupted result was CLOSER to the nominal
+    rate than the correct one, so the pass looked stronger rather than weaker. The one signal that
+    something was wrong -- a conditional model reproducing its own baseline to four decimal places
+    -- is the kind of coincidence that reads as reassuring agreement rather than as a defect,
+    and it sat in a committed artifact through a full write-up.
+  defence: >
+    A loader that has already converted units should say so in a way a caller cannot miss, and
+    the conversion should happen once, at the boundary, rather than being reapplied on trust.
+    Beyond that: when a conditioned model and its unconditional baseline agree to four decimal
+    places on the same sample, that is a finding to chase and not a result to report. The
+    comparison is cheap, it is the whole point of printing a baseline, and nothing in the process
+    forced anyone to look at the two numbers side by side until a separate check made it
+    unavoidable.
+
+- id: trp-88
+  found_on: 2026-09-03
+  one_breath: "A headline market return was taken from the previous session, and it read as zero."
+  affected_sources: [src-french]
+  symptom: >
+    The example page and the memo body both state that on 9 November 2020 the market moved
+    +0.01 percent while the factor lost 14.39 percent in the session, and use the pairing to
+    argue that the loss was not the market term. The factor return is right. The market return
+    is the 6th of November's. On the 9th the total market return was +0.83 percent, and the day
+    was also a 6.73 percent value move, the largest in the sample. The claim survives and is
+    stronger once computed rather than asserted: the book's conferred market-beta spread at the
+    formation date was -0.300 winner minus loser, so the market term contributes -0.25 percent of
+    the -14.39 percent session, which is 1.7 percent of the loss. Ninety-eight percent of it sat
+    elsewhere, and that is a measurement where "the market did not move" was a flourish.
+  why_it_parsed: >
+    An adjacent trading day's value is the hardest kind of wrong number to see, because it is
+    the right order of magnitude, the right sign convention and the right series -- only the row
+    is wrong. It was also the number the argument wanted: +0.01 percent reads as "nothing
+    happened in the index", which is a cleaner story than +0.83 percent, so the figure that
+    flattered the point was the one that went unchecked. It survived into the memo body and onto
+    the deliverable page, and it was only found when the page was rebuilt to compute every number
+    it prints instead of carrying typed ones.
+  defence: >
+    The general defence is the one being built here: a page that computes its own numbers cannot
+    hold a value from an adjacent row, because the row is selected by the same code that prints
+    it. The specific lesson is that a decomposition claim should print the decomposition. Stating
+    a market return beside a factor return invites the reader to do the arithmetic in their head;
+    doing it on the page -- beta spread times market move, as a share of the loss -- would have
+    surfaced the error immediately, because -0.300 times +0.01 percent is not a quantity anyone
+    would bother to write down.
+
+- id: trp-89
+  found_on: 2026-09-03
+  one_breath: "A numeral highlighter rewrote the page it was meant to annotate, and the check said PASS."
+  affected_sources: []
+  symptom: >
+    The example output is composed over a field registry and gated by a tokeniser that fails the
+    build on any numeral matching no computed field. It reported PASS. The page a reader saw in
+    the browser opened with "MOMENTUM REVERSAL RISK - formation 2020--9.47%63-5.80%-31". The
+    viewer highlighted numerals by replacing each matched string throughout the document, so the
+    registered field for ten GICS sectors matched the 10 inside the date 2020-10-31, the field for
+    263 names matched inside other numbers, and the placeholder tokens used to stage the
+    replacements themselves contained digits that later keys matched in turn. Clicking the
+    resulting span returned a real provenance card for a number that was not there. Every headline
+    figure on the deliverable was corrupted, deterministically, in any browser.
+  why_it_parsed: >
+    The canary and the renderer read different things. The canary scanned the source text the
+    composer produced, which was correct; the reader looked at a DOM the renderer produced from
+    it, which was not, and nothing compared the two. The verification that was performed made it
+    worse: the span COUNT was checked and one span was clicked, and both passed, because the
+    corruption creates more spans rather than fewer and the distinctive keys resolve correctly.
+    Counting the output of a transform and inspecting one element of it is not the same as
+    checking the transform, and here the difference was the entire deliverable.
+  defence: >
+    Do not annotate text by string replacement. The server emits the page already split into
+    consecutive segments, each plain or carrying one traced field, and the renderer only wraps
+    them -- so offsets, not matches, decide what is highlighted. A test then asserts that
+    reassembling the segments reproduces the page character for character, which makes the fault
+    unrepresentable rather than fixed. And the general rule: a check that guards a rendering must
+    assert against the rendered artifact, not against the input to the renderer.
+
+- id: trp-90
+  found_on: 2026-09-03
+  one_breath: "A ratio was reported wherever it computed, including where its denominator was noise."
+  affected_sources: [src-french]
+  symptom: >
+    The crash inventory decomposes each episode's loss into a winner-leg and a loser-leg share.
+    Episodes are detected on the 2x3 momentum factor; the shares are computed from the
+    ten-portfolio decile file, which is a different construction. On two episodes the two
+    disagree sharply -- at 2011-08-08 the factor fell 4.68 percent while the decile spread fell
+    0.65, and at 2009-02-09 it fell 5.75 against 0.47 -- so the shares divide by a denominator
+    near zero and take values of -34.7 and +5.7. Both were assigned a route by the rule, on a
+    decomposition that carried no information. They sat unflagged in a 195-row table until an
+    independent reviewer reading the dashboard asked whether a loser share of -34.69 was real.
+  why_it_parsed: >
+    The quantity is a share, so a reader's prior is that it lies in [0, 1], and the two rows that
+    did not were two rows out of 195 in a table nobody was expected to read line by line. The
+    construction difference between the two French files is documented elsewhere in this project
+    and was treated as a caveat on agreement rather than as a live hazard to a ratio built across
+    them. And the guard that would have caught it is not a statistical test but arithmetic
+    hygiene: a ratio is interpretable only where its denominator is, and nothing in the pipeline
+    asked that question of this one.
+  defence: >
+    A computed ratio needs a stated validity condition on its denominator, and the condition
+    should be expressed relative to the quantity itself rather than as a new absolute constant.
+    Here the decile-based loss must be at least half the episode's own depth, which excludes two
+    of 195 and leaves the headline unchanged: the fits-none share moves from 44.1 to 44.6 percent
+    and the verdict stands. The excluded rows are labelled NO-DECOMPOSITION rather than dropped,
+    and the condition has its own planted control alongside the four route cases, so it is
+    checked rather than trusted. It is a post-hoc addition and is recorded as one.
+
+- id: trp-91
+  found_on: 2026-09-04
+  one_breath: "A published weight column rounds to zero, and dropping the zeros deletes the leg's whole point."
+  affected_sources: [src-iwv]
+  symptom: >
+    iShares reports each holding's weight to two decimal places, so every position under 0.005
+    percent of the fund is published as exactly 0.00. On a typical date that is 1,184 of 2,683
+    names. Building the reconstructed book's daily return series by cap-weighting within each leg
+    and dropping names with no weight therefore silently dropped sixty percent of the loser leg
+    and forty percent of the winner leg: the book was marked on 55 loser names out of 235 rather
+    than on all of them. The names removed were exactly the smallest and most distressed, which
+    is the half the short leg exists to hold, and the direction of the bias is the one this
+    project already documents and complains about elsewhere.
+    Weighting by quantity times price instead, which is unrounded and positive for every one of
+    those names, restores all 254 names per leg per day and raises the series' correlation with
+    the published factor from 0.860 to 0.877 daily and 0.792 to 0.828 monthly.
+  why_it_parsed: >
+    A weight of zero is a legitimate value, not a missing one, so nothing raised. The resulting
+    series had a plausible volatility and a high correlation with the published factor, and the
+    per-day coverage statistic that would have caught it -- the share of leg WEIGHT priced -- read
+    a reassuring 0.000 percent missing, because the dropped names carried no weight by
+    construction. The statistic was measuring the consequence of the bug rather than the bug. What
+    exposed it was a different number entirely: a mean of 55 loser names per day against a
+    membership of 235, printed beside the volatility for unrelated reasons.
+  defence: >
+    Prefer an unrounded quantity to a published percentage whenever both are available, and treat
+    a rounded field as censored rather than as measured. More generally, a coverage statistic
+    weighted by the same quantity that is broken cannot detect the break: coverage should be
+    reported by COUNT beside by weight, because the two disagree exactly when something is wrong.
+
+- id: trp-92
+  found_on: 2026-09-04
+  one_breath: "Every conferred-exposure result measures an equal-weighted book the design specifies as value-weighted."
+  affected_sources: [src-iwv]
+  symptom: >
+    The design states the book is "value-weighted within each leg, dollar-neutral, rebuilt
+    monthly", the memo describes it that way, and the daily book return series built this session
+    implements it that way. Every measurement path that produces a conferred-exposure number does
+    not: `current_book.py`, `gap01_family.py`, `build_reference_panel.py`, `same_rule_null.py` and
+    `factor/placebo.py` all aggregate a leg with `.mean(axis=1)`, which is equal weighting. The
+    results resting on that path include the live reading that the book is long index
+    concentration at z 15.4, the eight-series family test that cleared 108 of 108, the
+    single-series test at 105 of 137, and the same-rule null's 42.6 percent.
+    The choice is load-bearing rather than cosmetic. Re-scoring the identical names value-weighted
+    over 24 month-ends moves the concentration z from a median of 16.0 to 2.9 and its rank among
+    the eight series from first on 22 of 24 dates to first on 11. The real loading actually RISES
+    under value weighting, from 0.306 to 0.532; what changes is the placebo, whose mean rises
+    tenfold, because cap-matched random books value-weighted reproduce the concentration the real
+    book has. Equal-weighted, the real book sits at the 100th percentile of a placebo band of
+    [0.004, 0.058]; value-weighted it sits at the 84th of [0.022, 0.698].
+  why_it_parsed: >
+    The code is internally consistent and reproduces its own artifact to machine precision, so
+    nothing was broken in a way any test could see. The weighting appears nowhere in the output:
+    a z-score does not carry the aggregation that produced it, and the one place a reader would
+    look for it, the printed top-ten holdings, is labelled "by index weight" and so implies value
+    weighting while the returns behind the number are equally weighted. Both descriptions live in
+    prose -- the spec, the memo -- and the prose was never diffed against the aggregation.
+  defence: >
+    A construction that appears in a design document must be asserted in code at the point of
+    measurement, not restated in prose beside it. The aggregation belongs in the artifact: every
+    conferred-exposure record should carry the weighting it used and the weight norm of the leg,
+    so a reader can see which book produced the number. Until each of the four results above is
+    either re-run value-weighted or relabelled as equal-weighted, none of them should be quoted
+    as a property of "the book" without the weighting named in the same sentence.
+
+- id: trp-93
+  found_on: 2026-09-04
+  one_breath: "The placebo's capitalisation match was made on a column that is zero for half the universe."
+  affected_sources: [src-iwv]
+  symptom: >
+    `current_book.py` and `gap01_family.py` pass `weight_pct` as the capitalisation series to
+    `placebo.random_matched`, which buckets it with `pd.qcut(c.rank(method="first"), 10)`. The
+    column is exactly 0.00 for a median 52.7 percent of the universe and 48.2 percent of the
+    winner leg, because iShares publishes weights to two decimal places. Ranking with
+    `method="first"` breaks the resulting mass of ties by index order, so the bottom five
+    capitalisation buckets are an arbitrary alphabetical partition rather than a capitalisation
+    match. The null the headline z is measured against is therefore not matched on the dimension
+    it claims to be matched on, for half the universe.
+    Re-running the whole grid with capitalisation as market value from quantity times price does
+    not change the conclusion of the experiment it was found in, and the trap is recorded anyway
+    because the null is quoted elsewhere as cap-matched.
+  why_it_parsed: >
+    This is the same censored-column fault already logged for the book's weights, at a second
+    site nobody had looked at, and it is invisible for the same reason: zero is a legitimate
+    weight, so nothing raised, and the matching still produced ten buckets of the right size. A
+    tie-breaking rule that silently orders half the data alphabetically leaves no trace in any
+    summary statistic of the match.
+  defence: >
+    When a matching variable has ties, the count of tied values belongs in the match's own
+    diagnostics, and a match on a variable that is constant across half the sample should fail
+    loudly rather than partition on index order. More generally, once a censored column has been
+    found in one place, the fix is to grep every consumer of that column rather than to repair
+    the site where it was noticed.
+
+- id: trp-94
+  found_on: 2026-09-04
+  one_breath: "The page cited a calibration computed on its own future, then described it wrongly."
+  affected_sources: []
+  symptom: >
+    The example page for the 2020-10-30 formation printed the scaled line's coverage as 6 breaches
+    of 81 at a Kupiec p of 0.352 and the unconditional line's as 11.11 percent at 0.028, and
+    concluded in prose that the unconditional quantile is the miscalibrated one. Both figures are
+    computed over the whole design tier, which runs to December 2022. A page dated October 2020
+    cannot cite a statistic that uses two more years of its own future.
+    Recomputed on formations strictly before the page date the two lines are IDENTICAL: 5 breaches
+    of 54, 9.26 percent, Kupiec p 0.197, for both. They breach on the same formations. So the
+    sentence saying the unconditional line was miscalibrated was not merely unsupported at that
+    date, it was false; the divergence appears later in the tier and a reader standing on the page
+    date could not have known it.
+    The words "passes" and "fails" were also typed into the prose beside the numbers rather than
+    derived from them, which is how the contradiction survived being read.
+  why_it_parsed: >
+    The numeral canary passed the page, because every numeral on it did resolve to a registered
+    computed field -- the fields were simply computed over the wrong window. The canary checks
+    NUMBERS and not CLAIMS, and a verdict word is a claim: "fails" beside a p of 0.197 is a
+    hand-typed conclusion that no numeral check can see. The point-in-time discipline the project
+    applies rigorously to model inputs had not been applied to a statistic quoted on an output.
+  defence: >
+    Anything a page asserts about its own reliability must be computed on data available at the
+    page's date, exactly as its inputs are, and the register's later figure is a different claim
+    that has to be labelled as later. Verdict words must be derived from the statistic in code and
+    never written into prose, so a sentence cannot drift from the number beside it. And the canary
+    should be understood for what it is: a guarantee about provenance of numerals, not about the
+    truth of the sentences containing them.
+
+- id: trp-95
+  found_on: 2026-09-04
+  one_breath: "Market value was computed from split-adjusted prices times unadjusted share counts."
+  affected_sources: [src-iwv]
+  symptom: >
+    Position weights were built as price times quantity using the SPLIT-ADJUSTED price series.
+    Split adjustment rescales prices backwards through the history, so multiplying an adjusted
+    price by the unadjusted share count on the holdings file is not a market value and is not
+    anything: it is the market value scaled by the cumulative split factor since that date. On a
+    name that later reverse-split, the error is large and one way -- a single position took a
+    twentyfold weight. The weight norm at 2017-12-31 moves from 0.6748 to 0.3785 once caps and
+    weights are taken from raw prices while returns keep the adjusted series.
+    This is the same figure a reviewer had flagged as suspicious thin-panel concentration. It was
+    neither thin panels nor concentration; it was a units error inside the weight.
+  why_it_parsed: >
+    Both series are prices, both are positive, and the product has the right shape and roughly the
+    right order of magnitude for most names, because most names never split. The error is
+    invisible except on the minority that did, and there it looks like a genuinely concentrated
+    position rather than a mistake -- which is exactly how it was first diagnosed. Adjusted prices
+    are the correct input for RETURNS, so the series was right for the calculation next to it.
+  defence: >
+    Adjusted and raw price series are different quantities and should not share a variable name.
+    Returns take the adjusted series; capitalisations, weights and anything ranked by size take
+    the raw one. A weight whose norm moves by a factor approaching two when the price convention
+    changes is the diagnostic, and comparing the two conventions on the same date should be a
+    standing check wherever a weight is built.
+
+- id: trp-96
+  found_on: 2026-09-04
+  one_breath: "The news windows for each episode were mostly dated after the formation they informed."
+  affected_sources: [src-gdelt]
+  symptom: >
+    The stored GDELT episode files span roughly two months before the event to two weeks after it,
+    because they were assembled to describe episodes rather than to inform formation dates.
+    Between 60 and 94 percent of the titles in each file postdate the formation date the theme
+    pipeline was reading them for. Used unfiltered, the theme on a formation date would have been
+    built substantially from news published after it -- the cleanest possible look-ahead, inside
+    the one input whose whole justification is that it is timestamped.
+    Titles after the formation date are now dropped, which is what leaves several dates with too
+    few news statements for any cluster to reach the design's minimum membership.
+  why_it_parsed: >
+    The corpus was built for a different purpose and was correct for that purpose, so nothing
+    about the files was wrong. The point-in-time discipline this project applies rigorously to
+    prices, holdings and filings had not been applied to the news corpus, because the corpus was
+    inherited as an episode description rather than as a feature input. A window named after an
+    episode invites the assumption that it precedes the episode.
+  defence: >
+    Any corpus promoted from description to feature has to be re-dated against the date it will
+    inform, not against the event it was collected for, and the share of records that survive that
+    filter belongs in the record. The general rule this project already applies elsewhere is that
+    availability is a property of the use, not of the file.
+
+- id: trp-97
+  found_on: 2026-09-07
+  one_breath: The page's provenance labelled every repeated numeral with one field, so a reader clicking a number could be told the wrong thing about it.
+  affected_sources: []
+  symptom: >
+    `Registry.by_text()` returned one field per rendered string, so when several registered
+    fields render the same text the last one registered silently won. On the 2020-10-30 page
+    that put a single label on 30 of 67 numeral occurrences: both lines' 9.26% breach rate
+    carried the unconditional line's label, both Kupiec p values of 0.197 carried the
+    unconditional line's, and the two 263s -- names in the long leg and names in the short leg
+    -- carried the loser leg's. The printed values were all correct and the canary reported
+    PASS, because the canary asks whether a numeral matches a computed field and every one of
+    them did. What was wrong was the answer given to a reader who asked which field.
+  why_it_parsed: >
+    A dict keyed by rendered text always builds, and a collision is a silent overwrite rather
+    than an error. The page reads correctly, the check passes, and the defect is visible only
+    by clicking a number and reading a label that belongs to a different number. It is worse
+    than an unlabelled figure precisely because the provenance file is the artifact that makes
+    the page traceable: a wrong label there reads as traced.
+  defence: >
+    Nothing in the page's own text distinguishes one occurrence of `9.26%` from another, so the
+    matcher cannot resolve them and must not pretend to. `by_text()` now returns every
+    candidate field and `_resolve()` marks the occurrence AMBIGUOUS, listing each candidate
+    with its label and its reproduce command. Nine occurrences on the current page say so. The
+    general rule: where an index can collide, the collision is reported, not resolved by
+    registration order. A provenance layer may say "I cannot tell"; it may not guess.
+
+- id: trp-98
+  found_on: 2026-09-07
+  one_breath: A shipped deliverable quoted an extraction result from a scratch log, and the numbers belonged to no run that exists.
+  affected_sources: []
+  symptom: >
+    The package's AI-use log printed the model-versus-rule comparison as recall 21.7% against
+    60.0% and specificity 100.0% against 60.0%. Neither pair is in any committed file. The
+    registered arm, reports/poc/e4_summary.json, gives recall 19.2% against 54.2% and specificity
+    97.5% against 62.5%; the superseded incongruous-plant design gives 16.7% against 63.3% and
+    100% against 60%. So the specificity pair was the SUPERSEDED run exactly and the recall pair
+    was neither run -- the table had been copied from a scratch log of an intermediate execution
+    whose outputs were never committed. The direction of the finding survived, which is why it
+    read as plausible: the rule beats the model on recall and loses on specificity in every
+    version. A reader reconciling the deliverable against the artifacts found it, not any check
+    here.
+  why_it_parsed: >
+    Every other number in the package is rendered from a committed artifact at build time. This
+    document was written by hand as prose, so nothing rendered it and nothing checked it, and a
+    markdown table of plausible percentages looks identical whether or not the file it came from
+    still exists. The fault is worse for its location: it was committed INSIDE the document whose
+    subject is how each output was checked, in a package that has a section explaining that an
+    earlier README went stale for exactly this reason.
+  defence: >
+    A number in a shipped document is either rendered from an artifact at build time or it is a
+    hand-typed number waiting to go stale, and prose is not an exemption -- the numeral canary
+    covers the page and the README template covers the README, while this file had neither. The
+    AI-use log is now a template rendered from reports/poc/e4_summary.json like the README, so a
+    renamed or missing field stops the build. The second rule: where two runs of one experiment
+    exist, the artifact naming says which is registered and which is superseded, and the
+    rendered text names the file it came from so a reader can reconcile it in one step rather
+    than by pattern-matching percentages across two files.

@@ -1,0 +1,174 @@
+# Where the work stands. This is the file that goes stale fastest and matters most to an agent
+# landing cold, because everything else here describes what was LEARNED and this describes what
+# is HAPPENING. Update it in the same commit as the work it describes.
+
+- id: pha-0
+  label: Phase 0 — instrument repair
+  state: complete
+  as_of: 2026-08-26
+  covers: >
+    Everything that had to be true before a large text run could be bought. Six items, all closed.
+  items:
+    - {state: done, note: "Screen re-run carrying section identity in every record, so a selection can be traced to the section it came from."}
+    - {state: done, note: "Driver vocabularies rebuilt as taxonomy-v4. inflation_pricing reseeded on PHRASES rather than single words, because single-word seeds pulled polysemous matches across three drivers. Not dropped, because the 2022 inflation episode is a registered target."}
+    - {state: done, note: "Screen-count table re-run under v4. Selectivity moved from 94 percent of the corpus to 56, a 3.8x reduction in what a full run would cost."}
+    - {state: done, note: "Extraction prompt rewritten as a DUAL harvest -- open first, in the company's own words, then eight anchored themes -- and piloted three times on sixty passages across two tiers. Three schema versions; see clm-harvest-schema-honesty."}
+    - {state: done, note: "Miss-rate batch submitted across two strata, never-selected and dropped-by-threshold."}
+    - {state: done, note: "Severity-conditioning procedure CERTIFIED before either decisive test ran, then both tests run through it and BH-corrected. See pha-0-verdicts."}
+
+- id: pha-0-verdicts
+  label: The two decisive severity verdicts
+  state: complete
+  as_of: 2026-08-26
+  covers: >
+    Both were run through a procedure whose detection curve, false-alarm rate and null
+    construction were measured first, on the same population. Both returned underpowered.
+  items:
+    - {state: done, note: "CERTIFICATE: on 1,877 forward observations from 92 DESIGN-tier month-ends, false alarm 0.033 against a nominal 0.05, and a smallest detectable effect at 80 percent power of 1.30 sigma -- a 0.0558 gap between the two halves' 5 percent quantiles, against an unconditional 5 percent quantile of -0.0430. The conditioning would have to roughly DOUBLE the crash before this procedure could see it."}
+    - {state: done, note: "exp-051, conferred direction: statistic +0.0157, p_BH 0.983, underpowered. Opposite in sign to the registered direction and 28 percent of what the instrument can detect."}
+    - {state: done, note: "exp-049, short crowding: statistic -0.0433, p_BH 0.983, underpowered. Also opposite-signed. Its estimate is 78 percent of the MDE and would be nominally significant TWO-sided at 0.033 -- against a procedure whose false-alarm rate is 0.033. Recorded as an observation, carried to Phase 4 as its own registration, and deliberately NOT promoted."}
+    - {state: done, note: "Second inverted crowding intuition of the project, after the loser leg turning out more commonly co-owned than the winner. That pattern is worth one registration rather than two footnotes."}
+
+- id: pha-1
+  label: Phase 1 — the corpus run
+  state: superseded
+  as_of: 2026-08-27
+  covers: >
+    A roughly 47,000-passage dual harvest over the filing corpus, planned to power a
+    transmission test from what firms disclose to what the book does. SUPERSEDED on
+    2026-08-27: the adversarial-nulls result voided that rationale. Correlation-derived
+    clusters explain more than twice the cross-sectional variance that news themes do,
+    so no text corpus is going to earn its keep as a MEASUREMENT basis, at any size.
+    What survives is the legibility role, and that needs a bounded slice rather than a
+    full run. The user authorized a two-thousand-passage version at the sonnet tier on
+    2026-08-27; it is registered, submitted and awaiting results, and it measures
+    attribution coverage rather than transmission. The full run is not scheduled and
+    should not be revived without a rationale that survives the kill rule.
+  items:
+    - {state: done, note: "Schema fixed and re-measured twice. harvest-v3 beats v1 on agreement across a strictly finer partition."}
+    - {state: done, note: "Both tiers costed via Batch: opus $4,944 at ~22h, sonnet $1,592 at ~42h. The tiers converged under v3 -- detection agreement 0.917, direction 0.810, inversion screens 0.103 and 0.105 -- so the choice matters less than it did under v1."}
+    - {state: done, note: "SUPERSEDED, not authorized. The bounded two-thousand-passage slice at the sonnet tier was authorized instead on 2026-08-27 and submitted the same day at an estimated 37.84 dollars against a 40 dollar cap. The opus recommendation for the full run stands unused; the full run's own rationale is void."}
+    - {state: open, note: "During the run: commit every planned registration before its data exists."}
+    - {state: open, note: "NOT fixed, recorded instead: credit_refinancing is the one theme still below 0.825 agreement, at 0.684, because one label spans the company's own refinancing cost, its customers' ability to pay, and its investment portfolio's credit risk. A taxonomy question, not a schema one. A fourth pilot round would buy less than it costs."}
+
+- id: pha-2
+  label: Phase 2 — the panel and the transmission test
+  state: superseded
+  as_of: 2026-08-27
+  covers: >
+    Turning harvested records into a panel, and asking whether what firms disclose transmits
+    to what the book does. SUPERSEDED by the same result that superseded Phase 1: the
+    transmission question presumed disclosure text could measure book exposure, and the
+    adversarial nulls showed trailing return correlations do that better. The items below
+    are kept for the record of what was designed, not as work outstanding.
+  items:
+    - {state: open, note: "Firm-by-quarter panel with three-state missingness. harvest-v3 can now express this; harvest-v1 could not, which is why the schema was fixed first."}
+    - {state: open, note: "Validate the reader per section against public datasets and benchmarks."}
+    - {state: open, note: "The transmission test. A user decision point if it lands as a headline."}
+    - {state: open, note: "Distress reading."}
+    - {state: open, note: "Both benchmark pages complete."}
+    - {state: open, note: "Composing layer, carrying a machine-checkable falsification condition."}
+    - {state: open, note: "Frame audit."}
+
+- id: pha-3
+  label: Phase 3 — replay
+  state: superseded
+  as_of: 2026-08-27
+  covers: >
+    Superseded with Phases 1 and 2. One item shipped anyway, in the surviving legibility
+    role rather than the measurement one: the dynamic naming loop now exists as the 8-K
+    falsifier tripwire, demonstrated on two historical replays.
+  items:
+    - {state: open, note: "Frozen-parameter document."}
+    - {state: open, note: "Dynamic naming loop."}
+    - {state: open, note: "Decade replay, 2016 to 2022, quarterly."}
+
+- id: pha-text
+  label: The text program that actually shipped
+  state: complete
+  as_of: 2026-08-27
+  covers: >
+    Not in the original phase plan, and it is what produced the deliverables. A news
+    co-mention instrument over a decade of entity-matched GDELT, a fragility triple per
+    story, seven pre-registered episodes, and a construction study -- then six independent
+    refutations of every timing channel, and finally an adversarial test of its own
+    headline that it lost.
+  items:
+    - {state: done, note: "Identification validated: the momentum sort manufactures concentrated story bets, conferred story-beta near the 93rd percentile against within-book pseudo-themes."}
+    - {state: done, note: "Six timing refutations across independent designs: the seven-episode anatomy, tail-shape calibration, day-of classification, the construction study, mechanism-family analog retrieval, and cross-sectional exit-cost severity. Specificity was perfect throughout; sensitivity was zero."}
+    - {state: done, note: "The placebo factory turned the project's own attack discipline on the literature: comomentum, the momentum gap and the bear-state-by-vol indicator all SURVIVE autocorrelation-matched surrogate attack on a century of factor data. Our own saturation series does not."}
+    - {state: done, note: "ADVERSARIAL NULLS, the decisive one. Ward correlation clusters matched to the real themes' count and sizes explain 2.73 percent of cross-sectional variance against the news themes' 1.29 -- Newey-West t of -6.5 against the text, which wins 2 months of 120. The kill rule fired in the same commit: the covariance headline is void as a text claim, and every production-path claim premised on a text-specific measurement basis is withdrawn."}
+    - {state: done, note: "What survives is stated once and everywhere: prices measure the structure, text NAMES it, vol-scaling sizes the book, positioning contextualises it, and nothing times it."}
+
+- id: pha-review
+  label: Adversarial review and record repair
+  state: complete
+  as_of: 2026-08-27
+  covers: >
+    Four harsh evaluators against the brief, then a prosecutor over nine proposals for the
+    unused data. Their findings were executed rather than filed.
+  items:
+    - {state: done, note: "Registration timestamps corrected to version-control times after two hand-typed stamps were found postdating their own completion commits; standing rule adopted, then broken the same day by forty note dates written one day ahead, corrected with the failure disclosed rather than laundered."}
+    - {state: done, note: "One verdict amended from instrument_limited to refuted, because the observed outcome was verbatim its own registration's informative-failure branch and a fourth category was not the author's to invent."}
+    - {state: done, note: "Defect notes appended to five entries: a post-hoc interpretability floor, a near-vacuous pass gate, an entangled pair, a mis-computed registered readout, and an uncorrected t-statistic."}
+    - {state: done, note: "Holdout tiers reconciled in a dated document: the sealed-2023 split governs the severity line; the text program's discipline is the episode-registration protocol, and its 2024-2026 numbers are characterisation-tier, never presentable as sealed out-of-sample."}
+    - {state: done, note: "Three of nine unused-data proposals killed by the judge: a re-proposed market-wide correlation conditioner, a cross-book confirmation that would have been pseudo-replication on the same crash days, and a text-as-measurement severity design that walked back into the kill zone."}
+
+- id: pha-pack
+  label: Packaging — the live phase
+  state: in_progress
+  as_of: 2026-08-27
+  covers: >
+    The empirical program is closed. What remains is assembly, plus the integration work
+    that turns a system that works into one that answers the brief.
+  items:
+    - {state: done, note: "Option capture hardened after a silent scheduler outage lost three sessions: staleness alarm into could-not-measure, manifest self-checks, permanent gap ledger, derived per-session surface table."}
+    - {state: done, note: "The 8-K falsifier loop shipped: a model declares kill conditions once with a mandatory decline, deterministic code watches 52,527 filings and does all counting, every accepted item quote-gated. Two replays stood, including a vaccine control that correctly found issuer text carried nothing."}
+    - {state: open, note: "Element-6 unification: the nightly brief carries severity and probability with no named bet; the X-ray carries the named bet with no severity. Either alone is half the required output."}
+    - {state: open, note: "One canonical book and one declared horizon stated in every PM-facing artifact; three different answers are currently live."}
+    - {state: open, note: "Put the daily X-ray inside the nightly job so monitoring completes on calendar record rather than assertion."}
+    - {state: open, note: "Odds-conditioning panel from the three surviving published indicators; top-three named holders in the crowding panel."}
+    - {state: open, note: "The memo, the example output and the presentation. Parked by the user until the system was worth writing up; the system now is."}
+
+- id: pha-4
+  label: Phase 4 — freeze and the one look
+  state: not_started
+  as_of: 2026-08-26
+  covers: >
+    The only phase permitted to read the sealed years. Nothing before it may.
+  items:
+    - {state: open, note: "Freeze everything."}
+    - {state: open, note: "Write the judging criteria BEFORE looking."}
+    - {state: open, note: "One look at the held-out years. A user decision point."}
+    - {state: open, note: "Carried here from Phase 0: exp-049's opposite-signed estimate, to be registered in the direction it actually points with that direction fixed in advance."}
+
+- id: pha-rules
+  label: Standing rules
+  state: standing
+  as_of: 2026-08-26
+  covers: >
+    In force across every phase. These are constraints on conduct, not on code, which is why
+    they live here rather than in the validator -- though four of them are also enforced there.
+  items:
+    - {state: done, note: "One verdict-bearing test running at a time."}
+    - {state: done, note: "Any implausible number is presumed an INSTRUMENT BUG until verified. This has been right 64 times."}
+    - {state: done, note: "Nothing reads the held-out years before Phase 4. Violated once on 2026-08-26 by a power certification, because certifying is not testing and no guard watched it -- see trp-63."}
+    - {state: done, note: "Registrations precede runs, with hypothesis, prediction and method frozen at that point."}
+    - {state: done, note: "Every refutation carries its detectable-effect statement. Enforced by the validator."}
+    - {state: done, note: "The console's completeness is the standing progress metric."}
+    - {state: done, note: "Registration timestamps are version-control-derived, never hand-typed, and a registration carries an externally verifiable freeze-to-run gap. Adopted 2026-08-27 after the failure it names."}
+    - {state: done, note: "PANEL EXHAUSTION. The ninety-three-day crash panel has been read by the exit-door cells, two reactive certificate repairs and the adversarial re-intervalling. It generated the squeeze-cohort hypothesis and can therefore never confirm it. Future cells on that panel are adjudication only, join the spent cells in one correction family, and confirmation is reserved to forward accrual and the sealed years."}
+    - {state: done, note: "No text-specific measurement claim registers without a price-derived null arm. The price of admission set by the adversarial nulls."}
+
+- id: pha-decisions
+  label: Decisions reserved to the user
+  state: standing
+  as_of: 2026-08-26
+  covers: >
+    Named explicitly so an agent does not take one of them by default.
+  items:
+    - {state: done, note: "The corpus launch and its tier. Resolved 2026-08-27: the full 47,000-passage run was superseded rather than authorized, and a bounded two-thousand-passage slice at the sonnet tier was authorized in its place."}
+    - {state: done, note: "The transmission verdict. No longer reachable: its rationale was voided by the adversarial nulls before the test was built."}
+    - {state: open, note: "Ninety hand labels for the bounded harvest's gold set. Reserved to the user by construction -- labels produced by the assistant that wrote the extraction prompt are barred by code, so the honest interval cannot exist without them."}
+    - {state: done, note: "The two decisive-test verdicts, had either landed as a headline. Neither did -- both underpowered -- so no decision was required."}
+    - {state: open, note: "Phase 4 authorization."}

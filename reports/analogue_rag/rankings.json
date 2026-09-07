@@ -1,0 +1,4238 @@
+[
+  {
+    "query": "2020-05-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20191231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20191231",
+      "query": "2020-05-31",
+      "n_candidates": 4,
+      "n_records_in_pool": 94,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.3373,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.3637,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.7734,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.8156,
+          "rank": 4,
+          "n_records": 11
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2020-05-31",
+      "n_candidates": 4,
+      "n_records_in_pool": 94,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.5183,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.6234,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.7909,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.8833,
+          "rank": 4,
+          "n_records": 11
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 4,
+      "spearman": 1.0,
+      "p": 0.0,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "above 0.98: the constrained reader adds nothing the cheap one does not, and under the twin rule the seat is idle and retires"
+    }
+  },
+  {
+    "query": "2020-10-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20191231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20191231",
+      "query": "2020-10-31",
+      "n_candidates": 5,
+      "n_records_in_pool": 54,
+      "ranking": [
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.0724,
+          "rank": 1,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.073,
+          "rank": 2,
+          "n_records": 1
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.5762,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.6575,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.6704,
+          "rank": 5,
+          "n_records": 11
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2020-10-31",
+      "n_candidates": 5,
+      "n_records_in_pool": 54,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.234,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.3277,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.4585,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.7233,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.7685,
+          "rank": 5,
+          "n_records": 11
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 5,
+      "spearman": 0.9,
+      "p": 0.03738607346849874,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-01-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-01-31",
+      "n_candidates": 5,
+      "n_records_in_pool": 63,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.2919,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.3177,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.5799,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.7547,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.7771,
+          "rank": 5,
+          "n_records": 11
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-01-31",
+      "n_candidates": 5,
+      "n_records_in_pool": 63,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.3789,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.4842,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.6314,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.8031,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.821,
+          "rank": 5,
+          "n_records": 11
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 5,
+      "spearman": 0.9,
+      "p": 0.03738607346849874,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-02-28",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-02-28",
+      "n_candidates": 6,
+      "n_records_in_pool": 68,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.1983,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.2185,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": -0.3512,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.4252,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.6306,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.6446,
+          "rank": 6,
+          "n_records": 11
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-02-28",
+      "n_candidates": 6,
+      "n_records_in_pool": 68,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.2774,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.3443,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.4622,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": -0.4718,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.6673,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.7002,
+          "rank": 6,
+          "n_records": 11
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 6,
+      "spearman": 0.8857,
+      "p": 0.01884548104956266,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-03-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-03-31",
+      "n_candidates": 6,
+      "n_records_in_pool": 58,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.1028,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.1714,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.2805,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.288,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": -0.3104,
+          "rank": 5,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.3226,
+          "rank": 6,
+          "n_records": 11
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-03-31",
+      "n_candidates": 6,
+      "n_records_in_pool": 58,
+      "ranking": [
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.1573,
+          "rank": 1,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.2355,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.2785,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": -0.3551,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.3744,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.4367,
+          "rank": 6,
+          "n_records": 11
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 6,
+      "spearman": 0.8286,
+      "p": 0.04156268221574335,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-06-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-06-30",
+      "n_candidates": 7,
+      "n_records_in_pool": 124,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.6529,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4842,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.212,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2074,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0351,
+          "rank": 5,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.0298,
+          "rank": 6,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7784,
+          "rank": 7,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-06-30",
+      "n_candidates": 7,
+      "n_records_in_pool": 124,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5308,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5266,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3741,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2212,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1092,
+          "rank": 5,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1022,
+          "rank": 6,
+          "n_records": 1
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7625,
+          "rank": 7,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 7,
+      "spearman": 0.9286,
+      "p": 0.002519472403794688,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-07-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-07-31",
+      "n_candidates": 7,
+      "n_records_in_pool": 122,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5797,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5256,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2722,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2601,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1193,
+          "rank": 5,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1175,
+          "rank": 6,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7736,
+          "rank": 7,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-07-31",
+      "n_candidates": 7,
+      "n_records_in_pool": 122,
+      "ranking": [
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5778,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5406,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4674,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3244,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.0988,
+          "rank": 5,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0854,
+          "rank": 6,
+          "n_records": 1
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7724,
+          "rank": 7,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 7,
+      "spearman": 0.9286,
+      "p": 0.002519472403794688,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2021-10-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20201231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20201231",
+      "query": "2021-10-31",
+      "n_candidates": 8,
+      "n_records_in_pool": 136,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4372,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3852,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1739,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.1514,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.0054,
+          "rank": 5,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.0817,
+          "rank": 6,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3358,
+          "rank": 7,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5211,
+          "rank": 8,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2021-10-31",
+      "n_candidates": 8,
+      "n_records_in_pool": 136,
+      "ranking": [
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3242,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2869,
+          "rank": 2,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.2725,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1872,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0682,
+          "rank": 5,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.0291,
+          "rank": 6,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.2827,
+          "rank": 7,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4845,
+          "rank": 8,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 8,
+      "spearman": 0.881,
+      "p": 0.0038503204637324023,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2022-06-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20211231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20211231",
+      "query": "2022-06-30",
+      "n_candidates": 12,
+      "n_records_in_pool": 227,
+      "ranking": [
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.6152,
+          "rank": 1,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5532,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5179,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.4567,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2902,
+          "rank": 5,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.2675,
+          "rank": 6,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0703,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.0155,
+          "rank": 8,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3965,
+          "rank": 9,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5202,
+          "rank": 10,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.533,
+          "rank": 11,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5882,
+          "rank": 12,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2022-06-30",
+      "n_candidates": 12,
+      "n_records_in_pool": 227,
+      "ranking": [
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.6519,
+          "rank": 1,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4682,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4103,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3804,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3634,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.2809,
+          "rank": 6,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0154,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.0034,
+          "rank": 8,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4453,
+          "rank": 9,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4744,
+          "rank": 10,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4864,
+          "rank": 11,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.651,
+          "rank": 12,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 12,
+      "spearman": 0.993,
+      "p": 1.3016730560634414e-10,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "above 0.98: the constrained reader adds nothing the cheap one does not, and under the twin rule the seat is idle and retires"
+    }
+  },
+  {
+    "query": "2022-10-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20211231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20211231",
+      "query": "2022-10-31",
+      "n_candidates": 14,
+      "n_records_in_pool": 244,
+      "ranking": [
+        {
+          "formation": "2021-01-31",
+          "similarity": 0.3515,
+          "rank": 1,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": 0.3222,
+          "rank": 2,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.0437,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.016,
+          "rank": 4,
+          "n_records": 19
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.0209,
+          "rank": 5,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.0656,
+          "rank": 6,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": -0.0853,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.0934,
+          "rank": 8,
+          "n_records": 18
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.0964,
+          "rank": 9,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.11,
+          "rank": 10,
+          "n_records": 1
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.153,
+          "rank": 11,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": -0.1684,
+          "rank": 12,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.1783,
+          "rank": 13,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": -0.2153,
+          "rank": 14,
+          "n_records": 14
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2022-10-31",
+      "n_candidates": 14,
+      "n_records_in_pool": 244,
+      "ranking": [
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.1121,
+          "rank": 1,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.0827,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": 0.0453,
+          "rank": 3,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.0217,
+          "rank": 4,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.0198,
+          "rank": 5,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0012,
+          "rank": 6,
+          "n_records": 7
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.0009,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": -0.0255,
+          "rank": 8,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.0343,
+          "rank": 9,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.0383,
+          "rank": 10,
+          "n_records": 19
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": -0.0461,
+          "rank": 11,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.1012,
+          "rank": 12,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.1231,
+          "rank": 13,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.1592,
+          "rank": 14,
+          "n_records": 18
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 14,
+      "spearman": 0.0418,
+      "p": 0.8872869731890637,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2022-12-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20211231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20211231",
+      "query": "2022-12-31",
+      "n_candidates": 14,
+      "n_records_in_pool": 247,
+      "ranking": [
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3261,
+          "rank": 1,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3009,
+          "rank": 2,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2758,
+          "rank": 3,
+          "n_records": 1
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.2082,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.2022,
+          "rank": 5,
+          "n_records": 12
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.1661,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1298,
+          "rank": 7,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0951,
+          "rank": 8,
+          "n_records": 18
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.0864,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.0222,
+          "rank": 10,
+          "n_records": 14
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.1626,
+          "rank": 11,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.2745,
+          "rank": 12,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.299,
+          "rank": 13,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4061,
+          "rank": 14,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2022-12-31",
+      "n_candidates": 14,
+      "n_records_in_pool": 247,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4973,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3965,
+          "rank": 2,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3524,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.313,
+          "rank": 4,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3056,
+          "rank": 5,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2768,
+          "rank": 6,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2129,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1928,
+          "rank": 8,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1462,
+          "rank": 9,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0931,
+          "rank": 10,
+          "n_records": 18
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3951,
+          "rank": 11,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4308,
+          "rank": 12,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4499,
+          "rank": 13,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.473,
+          "rank": 14,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 14,
+      "spearman": 0.8022,
+      "p": 0.0005563056127922433,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2023-04-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20221231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20221231",
+      "query": "2023-04-30",
+      "n_candidates": 14,
+      "n_records_in_pool": 244,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4601,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3768,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3649,
+          "rank": 3,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.3438,
+          "rank": 4,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3384,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.314,
+          "rank": 6,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.3132,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2564,
+          "rank": 8,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1829,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.004,
+          "rank": 10,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.3159,
+          "rank": 11,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4194,
+          "rank": 12,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4475,
+          "rank": 13,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4858,
+          "rank": 14,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2023-04-30",
+      "n_candidates": 14,
+      "n_records_in_pool": 244,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5728,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5332,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4852,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4436,
+          "rank": 4,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.3934,
+          "rank": 5,
+          "n_records": 14
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3378,
+          "rank": 6,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3336,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.2275,
+          "rank": 8,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2263,
+          "rank": 9,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1937,
+          "rank": 10,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4582,
+          "rank": 11,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4733,
+          "rank": 12,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5952,
+          "rank": 13,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5996,
+          "rank": 14,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 14,
+      "spearman": 0.8549,
+      "p": 9.766040002967746e-05,
+      "same_top_match": true,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2023-10-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20221231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20221231",
+      "query": "2023-10-31",
+      "n_candidates": 16,
+      "n_records_in_pool": 262,
+      "ranking": [
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.3887,
+          "rank": 1,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3703,
+          "rank": 2,
+          "n_records": 12
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3619,
+          "rank": 3,
+          "n_records": 10
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3484,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.2257,
+          "rank": 5,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.212,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1936,
+          "rank": 7,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1477,
+          "rank": 8,
+          "n_records": 1
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1329,
+          "rank": 9,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.1048,
+          "rank": 10,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.0812,
+          "rank": 11,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.1429,
+          "rank": 12,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.2928,
+          "rank": 13,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.3878,
+          "rank": 14,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4134,
+          "rank": 15,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4316,
+          "rank": 16,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2023-10-31",
+      "n_candidates": 16,
+      "n_records_in_pool": 262,
+      "ranking": [
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.6153,
+          "rank": 1,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.5886,
+          "rank": 2,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.5049,
+          "rank": 3,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3661,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.3403,
+          "rank": 5,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3375,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3008,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1873,
+          "rank": 8,
+          "n_records": 18
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1769,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.067,
+          "rank": 10,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.053,
+          "rank": 11,
+          "n_records": 1
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.0465,
+          "rank": 12,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4902,
+          "rank": 13,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5081,
+          "rank": 14,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.5302,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5966,
+          "rank": 16,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 16,
+      "spearman": 0.8735,
+      "p": 9.869651666147373e-06,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2024-03-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20231231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20231231",
+      "query": "2024-03-31",
+      "n_candidates": 17,
+      "n_records_in_pool": 272,
+      "ranking": [
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.4526,
+          "rank": 1,
+          "n_records": 4
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.3699,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.3464,
+          "rank": 3,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3021,
+          "rank": 4,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2702,
+          "rank": 5,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.2646,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2063,
+          "rank": 7,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.1343,
+          "rank": 8,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0589,
+          "rank": 9,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.0434,
+          "rank": 10,
+          "n_records": 10
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.0105,
+          "rank": 11,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.0219,
+          "rank": 12,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.2063,
+          "rank": 13,
+          "n_records": 19
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.2133,
+          "rank": 14,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.2242,
+          "rank": 15,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.3713,
+          "rank": 16,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4507,
+          "rank": 17,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2024-03-31",
+      "n_candidates": 17,
+      "n_records_in_pool": 272,
+      "ranking": [
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.4838,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4476,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4198,
+          "rank": 3,
+          "n_records": 12
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4072,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.3701,
+          "rank": 5,
+          "n_records": 14
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3683,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3219,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3083,
+          "rank": 8,
+          "n_records": 10
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.2304,
+          "rank": 9,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1358,
+          "rank": 10,
+          "n_records": 18
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1283,
+          "rank": 11,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1215,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.0572,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.418,
+          "rank": 14,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4598,
+          "rank": 15,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5563,
+          "rank": 16,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5853,
+          "rank": 17,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 17,
+      "spearman": 0.7402,
+      "p": 0.0006799199079586354,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2024-04-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20231231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20231231",
+      "query": "2024-04-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 285,
+      "ranking": [
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.4325,
+          "rank": 1,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3782,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3634,
+          "rank": 3,
+          "n_records": 12
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3553,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.3373,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.3229,
+          "rank": 6,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2999,
+          "rank": 7,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.2285,
+          "rank": 8,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2066,
+          "rank": 9,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.2019,
+          "rank": 10,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.1142,
+          "rank": 11,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0618,
+          "rank": 12,
+          "n_records": 7
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.0226,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.2631,
+          "rank": 14,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3272,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.362,
+          "rank": 16,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4786,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.576,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2024-04-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 285,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4833,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4722,
+          "rank": 2,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.4599,
+          "rank": 3,
+          "n_records": 14
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.453,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4417,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.4086,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3506,
+          "rank": 7,
+          "n_records": 5
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3422,
+          "rank": 8,
+          "n_records": 10
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.254,
+          "rank": 9,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2533,
+          "rank": 10,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1878,
+          "rank": 11,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1643,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1609,
+          "rank": 13,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.0358,
+          "rank": 14,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4948,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5393,
+          "rank": 16,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.6371,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.6414,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 18,
+      "spearman": 0.8328,
+      "p": 1.7901901423159214e-05,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2024-05-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20231231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20231231",
+      "query": "2024-05-31",
+      "n_candidates": 18,
+      "n_records_in_pool": 286,
+      "ranking": [
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3662,
+          "rank": 1,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.3321,
+          "rank": 2,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.31,
+          "rank": 3,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3087,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.298,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.2142,
+          "rank": 6,
+          "n_records": 12
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.1293,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0507,
+          "rank": 8,
+          "n_records": 7
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.0342,
+          "rank": 9,
+          "n_records": 10
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.0268,
+          "rank": 10,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.0059,
+          "rank": 11,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.066,
+          "rank": 12,
+          "n_records": 18
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.1243,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.1992,
+          "rank": 14,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.2427,
+          "rank": 15,
+          "n_records": 70
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.4056,
+          "rank": 16,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4587,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4783,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2024-05-31",
+      "n_candidates": 18,
+      "n_records_in_pool": 286,
+      "ranking": [
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.3872,
+          "rank": 1,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3747,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3723,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3594,
+          "rank": 4,
+          "n_records": 4
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.3094,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2538,
+          "rank": 6,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2421,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.2279,
+          "rank": 8,
+          "n_records": 12
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2076,
+          "rank": 9,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2038,
+          "rank": 10,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1248,
+          "rank": 11,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.0406,
+          "rank": 12,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.035,
+          "rank": 13,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.0227,
+          "rank": 14,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.318,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.3613,
+          "rank": 16,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4905,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5153,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 18,
+      "spearman": 0.6801,
+      "p": 0.0018996026438905023,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2024-06-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20231231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20231231",
+      "query": "2024-06-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 279,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.2917,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2638,
+          "rank": 2,
+          "n_records": 14
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2521,
+          "rank": 3,
+          "n_records": 1
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.2355,
+          "rank": 4,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1837,
+          "rank": 5,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.1822,
+          "rank": 6,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1544,
+          "rank": 7,
+          "n_records": 7
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.0973,
+          "rank": 8,
+          "n_records": 10
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": -0.0104,
+          "rank": 9,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.0415,
+          "rank": 10,
+          "n_records": 18
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": -0.0599,
+          "rank": 11,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": -0.0599,
+          "rank": 12,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": -0.1454,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.1529,
+          "rank": 14,
+          "n_records": 70
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.1938,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.3093,
+          "rank": 16,
+          "n_records": 28
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.3498,
+          "rank": 17,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.3668,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2024-06-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 279,
+      "ranking": [
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.362,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3151,
+          "rank": 2,
+          "n_records": 12
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3108,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2733,
+          "rank": 4,
+          "n_records": 14
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.2515,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.2001,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.194,
+          "rank": 7,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1926,
+          "rank": 8,
+          "n_records": 18
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1892,
+          "rank": 9,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1652,
+          "rank": 10,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.1093,
+          "rank": 11,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.0891,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0788,
+          "rank": 13,
+          "n_records": 7
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0263,
+          "rank": 14,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.3148,
+          "rank": 15,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.384,
+          "rank": 16,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3987,
+          "rank": 17,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.4204,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 18,
+      "spearman": 0.6656,
+      "p": 0.00256832796029371,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2024-09-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20231231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20231231",
+      "query": "2024-09-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 283,
+      "ranking": [
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.4651,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3601,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.2877,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2845,
+          "rank": 4,
+          "n_records": 5
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.2507,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.2057,
+          "rank": 6,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1773,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1441,
+          "rank": 8,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1215,
+          "rank": 9,
+          "n_records": 18
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.077,
+          "rank": 10,
+          "n_records": 12
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.0267,
+          "rank": 11,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": -0.0475,
+          "rank": 12,
+          "n_records": 10
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.0946,
+          "rank": 13,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": -0.1094,
+          "rank": 14,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.157,
+          "rank": 15,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.1851,
+          "rank": 16,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.2654,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.3759,
+          "rank": 18,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2024-09-30",
+      "n_candidates": 18,
+      "n_records_in_pool": 283,
+      "ranking": [
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.4737,
+          "rank": 1,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.454,
+          "rank": 2,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4441,
+          "rank": 3,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.4164,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3898,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3663,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.3038,
+          "rank": 7,
+          "n_records": 1
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2748,
+          "rank": 8,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.2745,
+          "rank": 9,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.1655,
+          "rank": 10,
+          "n_records": 14
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.1241,
+          "rank": 11,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1047,
+          "rank": 12,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0193,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.042,
+          "rank": 14,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.321,
+          "rank": 15,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4817,
+          "rank": 16,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4929,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5152,
+          "rank": 18,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 18,
+      "spearman": 0.8369,
+      "p": 1.4859874205555093e-05,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2025-01-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20241231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20241231",
+      "query": "2025-01-31",
+      "n_candidates": 19,
+      "n_records_in_pool": 304,
+      "ranking": [
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.6514,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5286,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.496,
+          "rank": 3,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.4576,
+          "rank": 4,
+          "n_records": 14
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.4516,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4225,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.3847,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3552,
+          "rank": 8,
+          "n_records": 10
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.2971,
+          "rank": 9,
+          "n_records": 11
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1639,
+          "rank": 10,
+          "n_records": 4
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1634,
+          "rank": 11,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.1564,
+          "rank": 12,
+          "n_records": 18
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.136,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1343,
+          "rank": 14,
+          "n_records": 1
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.1168,
+          "rank": 15,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.5268,
+          "rank": 16,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5338,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.6691,
+          "rank": 18,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7409,
+          "rank": 19,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2025-01-31",
+      "n_candidates": 19,
+      "n_records_in_pool": 304,
+      "ranking": [
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.5908,
+          "rank": 1,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.5441,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.528,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4983,
+          "rank": 4,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.4591,
+          "rank": 5,
+          "n_records": 14
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4385,
+          "rank": 6,
+          "n_records": 5
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.4135,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.3678,
+          "rank": 8,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3651,
+          "rank": 9,
+          "n_records": 10
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.361,
+          "rank": 10,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3094,
+          "rank": 11,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2478,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0983,
+          "rank": 13,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0627,
+          "rank": 14,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0024,
+          "rank": 15,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.597,
+          "rank": 16,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.646,
+          "rank": 17,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.6797,
+          "rank": 18,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.6967,
+          "rank": 19,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 19,
+      "spearman": 0.914,
+      "p": 4.5006144611476505e-08,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "inside the band: the agreement bounds how much of the ranking is recognition, both are reported, and the constrained encoder's ranking is the one used"
+    }
+  },
+  {
+    "query": "2025-07-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20241231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20241231",
+      "query": "2025-07-31",
+      "n_candidates": 23,
+      "n_records_in_pool": 336,
+      "ranking": [
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4676,
+          "rank": 1,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.4152,
+          "rank": 2,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4111,
+          "rank": 3,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.4048,
+          "rank": 4,
+          "n_records": 14
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.3931,
+          "rank": 5,
+          "n_records": 10
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3402,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.3352,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.3057,
+          "rank": 8,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.2689,
+          "rank": 9,
+          "n_records": 7
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.2681,
+          "rank": 10,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.2519,
+          "rank": 11,
+          "n_records": 11
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.2483,
+          "rank": 12,
+          "n_records": 12
+        },
+        {
+          "formation": "2024-05-31",
+          "similarity": 0.1729,
+          "rank": 13,
+          "n_records": 13
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1419,
+          "rank": 14,
+          "n_records": 1
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.1034,
+          "rank": 15,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.0976,
+          "rank": 16,
+          "n_records": 4
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": 0.0404,
+          "rank": 17,
+          "n_records": 6
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.0671,
+          "rank": 18,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.1781,
+          "rank": 19,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.412,
+          "rank": 20,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4924,
+          "rank": 21,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5891,
+          "rank": 22,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.6262,
+          "rank": 23,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2025-07-31",
+      "n_candidates": 23,
+      "n_records_in_pool": 336,
+      "ranking": [
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.4813,
+          "rank": 1,
+          "n_records": 7
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.4493,
+          "rank": 2,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.4437,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.4176,
+          "rank": 4,
+          "n_records": 12
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.3901,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3888,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3791,
+          "rank": 7,
+          "n_records": 11
+        },
+        {
+          "formation": "2024-05-31",
+          "similarity": 0.371,
+          "rank": 8,
+          "n_records": 13
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.3085,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.2888,
+          "rank": 10,
+          "n_records": 10
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.2747,
+          "rank": 11,
+          "n_records": 12
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.2638,
+          "rank": 12,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2611,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.2307,
+          "rank": 14,
+          "n_records": 14
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1884,
+          "rank": 15,
+          "n_records": 1
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": 0.145,
+          "rank": 16,
+          "n_records": 6
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.0905,
+          "rank": 17,
+          "n_records": 7
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0712,
+          "rank": 18,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.1011,
+          "rank": 19,
+          "n_records": 18
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4177,
+          "rank": 20,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5651,
+          "rank": 21,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5678,
+          "rank": 22,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.583,
+          "rank": 23,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 23,
+      "spearman": 0.7016,
+      "p": 0.00019116785493432443,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2025-12-31",
+    "checkpoint": "manelalab/chrono-bert-v1-20241231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20241231",
+      "query": "2025-12-31",
+      "n_candidates": 24,
+      "n_records_in_pool": 355,
+      "ranking": [
+        {
+          "formation": "2024-05-31",
+          "similarity": 0.425,
+          "rank": 1,
+          "n_records": 13
+        },
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.4091,
+          "rank": 2,
+          "n_records": 7
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": 0.378,
+          "rank": 3,
+          "n_records": 6
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.3769,
+          "rank": 4,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.361,
+          "rank": 5,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.3547,
+          "rank": 6,
+          "n_records": 12
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.339,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3372,
+          "rank": 8,
+          "n_records": 11
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.3226,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.2666,
+          "rank": 10,
+          "n_records": 10
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2345,
+          "rank": 11,
+          "n_records": 5
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.2344,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.215,
+          "rank": 13,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.1962,
+          "rank": 14,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.1807,
+          "rank": 15,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.161,
+          "rank": 16,
+          "n_records": 11
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0475,
+          "rank": 17,
+          "n_records": 18
+        },
+        {
+          "formation": "2024-09-30",
+          "similarity": 0.0354,
+          "rank": 18,
+          "n_records": 10
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.0169,
+          "rank": 19,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.3357,
+          "rank": 20,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.3994,
+          "rank": 21,
+          "n_records": 19
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.5713,
+          "rank": 22,
+          "n_records": 70
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.5739,
+          "rank": 23,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.6629,
+          "rank": 24,
+          "n_records": 28
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2025-12-31",
+      "n_candidates": 24,
+      "n_records_in_pool": 355,
+      "ranking": [
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.4679,
+          "rank": 1,
+          "n_records": 12
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.4548,
+          "rank": 2,
+          "n_records": 8
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.4343,
+          "rank": 3,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.4322,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": 0.4297,
+          "rank": 5,
+          "n_records": 10
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3737,
+          "rank": 6,
+          "n_records": 11
+        },
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.3622,
+          "rank": 7,
+          "n_records": 7
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.3568,
+          "rank": 8,
+          "n_records": 12
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3561,
+          "rank": 9,
+          "n_records": 5
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.3556,
+          "rank": 10,
+          "n_records": 14
+        },
+        {
+          "formation": "2024-09-30",
+          "similarity": 0.3492,
+          "rank": 11,
+          "n_records": 10
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.3328,
+          "rank": 12,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2574,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2024-05-31",
+          "similarity": 0.2511,
+          "rank": 14,
+          "n_records": 13
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": 0.2308,
+          "rank": 15,
+          "n_records": 6
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": 0.2131,
+          "rank": 16,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.179,
+          "rank": 17,
+          "n_records": 4
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1181,
+          "rank": 18,
+          "n_records": 1
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": 0.0576,
+          "rank": 19,
+          "n_records": 18
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0874,
+          "rank": 20,
+          "n_records": 8
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.5484,
+          "rank": 21,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.6112,
+          "rank": 22,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.6528,
+          "rank": 23,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.7008,
+          "rank": 24,
+          "n_records": 70
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 24,
+      "spearman": 0.6739,
+      "p": 0.0003056600303861526,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  },
+  {
+    "query": "2026-04-30",
+    "checkpoint": "manelalab/chrono-bert-v1-20241231",
+    "constrained": {
+      "encoder": "chrono",
+      "encoder_id": "manelalab/chrono-bert-v1-20241231",
+      "query": "2026-04-30",
+      "n_candidates": 25,
+      "n_records_in_pool": 376,
+      "ranking": [
+        {
+          "formation": "2024-09-30",
+          "similarity": 0.5174,
+          "rank": 1,
+          "n_records": 10
+        },
+        {
+          "formation": "2025-01-31",
+          "similarity": 0.4297,
+          "rank": 2,
+          "n_records": 23
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.3955,
+          "rank": 3,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.3499,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.2967,
+          "rank": 5,
+          "n_records": 11
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.2662,
+          "rank": 6,
+          "n_records": 12
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.2659,
+          "rank": 7,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.2292,
+          "rank": 8,
+          "n_records": 4
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.2213,
+          "rank": 9,
+          "n_records": 8
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.2098,
+          "rank": 10,
+          "n_records": 11
+        },
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.1993,
+          "rank": 11,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1391,
+          "rank": 12,
+          "n_records": 1
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": 0.0524,
+          "rank": 13,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.0487,
+          "rank": 14,
+          "n_records": 12
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": -0.0221,
+          "rank": 15,
+          "n_records": 14
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.0604,
+          "rank": 16,
+          "n_records": 18
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": -0.0845,
+          "rank": 17,
+          "n_records": 8
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": -0.0942,
+          "rank": 18,
+          "n_records": 10
+        },
+        {
+          "formation": "2024-05-31",
+          "similarity": -0.097,
+          "rank": 19,
+          "n_records": 13
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.215,
+          "rank": 20,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.2846,
+          "rank": 21,
+          "n_records": 7
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.2909,
+          "rank": 22,
+          "n_records": 28
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": -0.3094,
+          "rank": 23,
+          "n_records": 6
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.3675,
+          "rank": 24,
+          "n_records": 28
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4821,
+          "rank": 25,
+          "n_records": 70
+        }
+      ]
+    },
+    "contemporary": {
+      "encoder": "mpnet",
+      "encoder_id": "sentence-transformers/all-mpnet-base-v2",
+      "query": "2026-04-30",
+      "n_candidates": 25,
+      "n_records_in_pool": 376,
+      "ranking": [
+        {
+          "formation": "2025-01-31",
+          "similarity": 0.4614,
+          "rank": 1,
+          "n_records": 23
+        },
+        {
+          "formation": "2024-04-30",
+          "similarity": 0.4102,
+          "rank": 2,
+          "n_records": 12
+        },
+        {
+          "formation": "2024-05-31",
+          "similarity": 0.3865,
+          "rank": 3,
+          "n_records": 13
+        },
+        {
+          "formation": "2019-08-31",
+          "similarity": 0.3722,
+          "rank": 4,
+          "n_records": 11
+        },
+        {
+          "formation": "2023-04-30",
+          "similarity": 0.3649,
+          "rank": 5,
+          "n_records": 8
+        },
+        {
+          "formation": "2024-09-30",
+          "similarity": 0.3496,
+          "rank": 6,
+          "n_records": 10
+        },
+        {
+          "formation": "2024-03-31",
+          "similarity": 0.3266,
+          "rank": 7,
+          "n_records": 7
+        },
+        {
+          "formation": "2018-12-31",
+          "similarity": 0.3005,
+          "rank": 8,
+          "n_records": 4
+        },
+        {
+          "formation": "2020-02-29",
+          "similarity": 0.2447,
+          "rank": 9,
+          "n_records": 5
+        },
+        {
+          "formation": "2019-03-31",
+          "similarity": 0.235,
+          "rank": 10,
+          "n_records": 11
+        },
+        {
+          "formation": "2022-12-31",
+          "similarity": 0.2066,
+          "rank": 11,
+          "n_records": 11
+        },
+        {
+          "formation": "2019-04-30",
+          "similarity": 0.1649,
+          "rank": 12,
+          "n_records": 8
+        },
+        {
+          "formation": "2018-09-30",
+          "similarity": 0.1493,
+          "rank": 13,
+          "n_records": 1
+        },
+        {
+          "formation": "2024-06-30",
+          "similarity": 0.1315,
+          "rank": 14,
+          "n_records": 6
+        },
+        {
+          "formation": "2021-06-30",
+          "similarity": 0.1237,
+          "rank": 15,
+          "n_records": 14
+        },
+        {
+          "formation": "2023-10-31",
+          "similarity": 0.0942,
+          "rank": 16,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-07-31",
+          "similarity": 0.083,
+          "rank": 17,
+          "n_records": 12
+        },
+        {
+          "formation": "2022-06-30",
+          "similarity": -0.0936,
+          "rank": 18,
+          "n_records": 10
+        },
+        {
+          "formation": "2022-10-31",
+          "similarity": -0.0952,
+          "rank": 19,
+          "n_records": 8
+        },
+        {
+          "formation": "2021-03-31",
+          "similarity": -0.1001,
+          "rank": 20,
+          "n_records": 18
+        },
+        {
+          "formation": "2021-10-31",
+          "similarity": -0.2387,
+          "rank": 21,
+          "n_records": 7
+        },
+        {
+          "formation": "2020-05-31",
+          "similarity": -0.4176,
+          "rank": 22,
+          "n_records": 70
+        },
+        {
+          "formation": "2020-10-31",
+          "similarity": -0.4232,
+          "rank": 23,
+          "n_records": 19
+        },
+        {
+          "formation": "2021-02-28",
+          "similarity": -0.4818,
+          "rank": 24,
+          "n_records": 28
+        },
+        {
+          "formation": "2021-01-31",
+          "similarity": -0.5093,
+          "rank": 25,
+          "n_records": 28
+        }
+      ]
+    },
+    "row09_agreement": {
+      "n": 25,
+      "spearman": 0.7546,
+      "p": 1.311112274247702e-05,
+      "same_top_match": false,
+      "registered_threshold": 0.8,
+      "verdict": "below the registered 0.80: the contemporary encoder ranks on something the constrained one cannot have, so the constrained encoder's ranking is the one that reaches the page and the gap is printed"
+    }
+  }
+]

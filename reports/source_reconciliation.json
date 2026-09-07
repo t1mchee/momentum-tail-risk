@@ -1,0 +1,162 @@
+[
+  {
+    "id": "src-iwv",
+    "status": "ok",
+    "measured_first": "2006-09-29",
+    "measured_last": "2026-08-19",
+    "claimed_first": "2006-09-29",
+    "claimed_last": "2026-08-19",
+    "distinct_dates": 3341,
+    "months": 232,
+    "months_span": 240,
+    "missing_months": 8,
+    "undeclared_missing": [],
+    "starts_before_claim": false,
+    "ends_after_claim": false
+  },
+  {
+    "id": "src-mtum",
+    "status": "ok",
+    "measured_first": "2013-04-22",
+    "measured_last": "2026-08-19",
+    "claimed_first": "2013-04-22",
+    "claimed_last": "2026-08-19",
+    "distinct_dates": 3218,
+    "months": 155,
+    "months_span": 161,
+    "missing_months": 6,
+    "undeclared_missing": [],
+    "starts_before_claim": false,
+    "ends_after_claim": false
+  },
+  {
+    "id": "src-french",
+    "status": "unreconciled",
+    "reason": "vintaged CSVs on disk; resolver not written"
+  },
+  {
+    "id": "src-cboe-index",
+    "status": "unreconciled",
+    "reason": "per-series CSVs; resolver not written"
+  },
+  {
+    "id": "src-finra",
+    "status": "unreconciled",
+    "reason": "daily short-volume files; resolver not written"
+  },
+  {
+    "id": "src-regsho",
+    "status": "unreconciled",
+    "reason": "daily threshold lists; resolver not written"
+  },
+  {
+    "id": "src-cboe-chains",
+    "status": "unreconciled",
+    "reason": "chain snapshots; resolver not written"
+  },
+  {
+    "id": "src-edgar",
+    "status": "unreconciled",
+    "reason": "filing index; resolver not written"
+  },
+  {
+    "id": "src-gdelt",
+    "status": "unverifiable",
+    "reason": "bulk lives in BigQuery, not on disk; reconciled by scripts/reconcile_gdelt.py"
+  },
+  {
+    "id": "src-fomc",
+    "status": "unreconciled",
+    "reason": "event-level calendar; resolver not written"
+  },
+  {
+    "id": "src-fred",
+    "status": "unreconciled",
+    "reason": "per-series CSVs; resolver not written"
+  },
+  {
+    "id": "src-bis",
+    "status": "unreconciled",
+    "reason": "quarterly bulletins; resolver not written"
+  },
+  {
+    "id": "src-13f",
+    "status": "unreconciled",
+    "reason": "bulk quarterly parquets; resolver not written"
+  },
+  {
+    "id": "src-short-interest",
+    "status": "ok",
+    "measured_first": "2018-01-12",
+    "measured_last": "2026-07-31",
+    "claimed_first": "2018-01-12",
+    "claimed_last": "2026-08-15",
+    "distinct_dates": 206,
+    "months": 103,
+    "months_span": 103,
+    "missing_months": 0,
+    "undeclared_missing": [],
+    "starts_before_claim": false,
+    "ends_after_claim": false
+  },
+  {
+    "id": "src-calls-curated",
+    "status": "unverifiable",
+    "reason": "registered as a data rung, not acquired"
+  },
+  {
+    "id": "src-edgar-8k",
+    "status": "unreconciled",
+    "reason": "52,527 indexed filings; resolver not written"
+  },
+  {
+    "id": "src-edgar-backfill",
+    "status": "unreconciled",
+    "reason": "backfill batch; resolver not written"
+  },
+  {
+    "id": "src-implied-moments",
+    "status": "unreconciled",
+    "reason": "derived panel; resolver not written"
+  },
+  {
+    "id": "src-epu",
+    "status": "unreconciled",
+    "reason": "monthly index; resolver not written"
+  },
+  {
+    "id": "src-finra-margin",
+    "status": "ok",
+    "measured_first": "1997-01-31",
+    "measured_last": "2026-07-31",
+    "claimed_first": "1997-01-31",
+    "claimed_last": "2026-07-31",
+    "distinct_dates": 355,
+    "months": 355,
+    "months_span": 355,
+    "missing_months": 0,
+    "undeclared_missing": [],
+    "starts_before_claim": false,
+    "ends_after_claim": false
+  },
+  {
+    "id": "src-ftd",
+    "status": "ok",
+    "measured_first": "2009-07-01",
+    "measured_last": "2022-12-30",
+    "claimed_first": "2009-07-01",
+    "claimed_last": "2022-12-30",
+    "distinct_dates": 3367,
+    "months": 162,
+    "months_span": 162,
+    "missing_months": 0,
+    "undeclared_missing": [],
+    "starts_before_claim": false,
+    "ends_after_claim": false
+  },
+  {
+    "id": "src-nport",
+    "status": "unverifiable",
+    "reason": "one quarter inspected only; the time-series test was declined on power"
+  }
+]

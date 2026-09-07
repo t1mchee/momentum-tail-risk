@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momentum reversal read-out</title>
+<style>
+:root{
+  --paper:#f6f7f8; --card:#ffffff; --ink:#15181d; --ink-2:#4a525c; --ink-3:#79838f;
+  --rule:#dde2e8; --rule-2:#eef1f4;
+  --r1:#8c2f39; --r2:#2f5d8c; --r3:#3f7a52; --none:#8e949c;
+  --warn:#a8541f; --ok:#2d6a4a;
+  --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased}
+a{color:var(--r2)}
+.wrap{display:grid;grid-template-columns:216px minmax(0,1fr);gap:0;min-height:100vh}
+
+/* rail */
+nav{position:sticky;top:0;align-self:start;height:100vh;padding:26px 18px;
+  border-right:1px solid var(--rule);background:var(--card)}
+nav h1{font:600 15px/1.3 var(--serif);margin:0 0 3px}
+nav .sub{font-size:11.5px;color:var(--ink-3);margin-bottom:24px;line-height:1.45}
+nav a{display:block;padding:6px 0;font-size:13px;color:var(--ink-2);text-decoration:none;
+  border-bottom:1px solid var(--rule-2)}
+nav a:hover{color:var(--ink)}
+nav a.on{color:var(--ink);font-weight:600}
+nav .foot{position:absolute;bottom:22px;left:18px;right:18px;font-size:11px;color:var(--ink-3)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+
+main{padding:34px 40px 90px;max-width:1080px}
+section{margin-bottom:56px;scroll-margin-top:20px}
+h2{font:600 22px/1.25 var(--serif);margin:0 0 4px}
+h2 + .lede{color:var(--ink-2);margin:0 0 22px;max-width:66ch}
+h3{font:600 13px/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin:28px 0 10px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:5px;padding:18px 20px}
+.grid{display:grid;gap:14px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* banner */
+.banner{display:flex;gap:26px;align-items:baseline;flex-wrap:wrap;
+  border-left:3px solid var(--r2);padding:14px 0 14px 16px;margin-bottom:20px}
+.banner .big{font:600 26px/1 var(--serif)}
+.banner .lab{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+
+/* bars */
+.bar-row{display:grid;grid-template-columns:170px 1fr 62px;gap:12px;align-items:center;
+  padding:5px 0;border-bottom:1px solid var(--rule-2)}
+.bar-row:last-child{border-bottom:0}
+.bar-row .nm{font-size:13px;color:var(--ink-2)}
+.bar-row.hi .nm{color:var(--ink);font-weight:600}
+.track{height:9px;background:var(--rule-2);border-radius:2px;overflow:hidden}
+.fill{height:100%;background:var(--r2);border-radius:2px}
+.bar-row.hi .fill{background:var(--r1)}
+.bar-row .v{text-align:right;font-family:var(--mono);font-size:12.5px;
+  font-variant-numeric:tabular-nums}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:5px;overflow:hidden}
+.stat{background:var(--card);padding:13px 15px}
+.stat .k{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font:600 20px/1.25 var(--mono);font-variant-numeric:tabular-nums;margin-top:3px}
+.stat .c{font-size:11.5px;color:var(--ink-3);margin-top:2px;line-height:1.4}
+.stat.alarm .v{color:var(--r1)}
+
+/* chips */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.chip{font-size:12px;padding:4px 11px;border:1px solid var(--rule);border-radius:20px;
+  background:var(--card);cursor:pointer;user-select:none;color:var(--ink-2)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip .n{font-family:var(--mono);opacity:.7;margin-left:5px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);padding:7px 9px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:6px 9px;border-bottom:1px solid var(--rule-2);font-variant-numeric:tabular-nums}
+td.n{font-family:var(--mono)}
+tbody tr:hover{background:#f9fafb}
+.scroll{overflow-x:auto;max-height:400px;overflow-y:auto}
+.route{font-weight:600;white-space:nowrap}
+.route.r1{color:var(--r1)} .route.r2{color:var(--r2)}
+.route.r3{color:var(--r3)} .route.rn{color:var(--none)}
+
+/* verdicts */
+.verdict{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;
+  padding:2px 8px;border-radius:3px;text-transform:uppercase}
+.verdict.pass{background:#e6f2ec;color:var(--ok)}
+.verdict.fail{background:#f7ece8;color:var(--r1)}
+.verdict.flat{background:#eef1f4;color:var(--ink-2)}
+
+.prov{background:#eef3f8;border-bottom:1px dotted var(--r2);cursor:pointer;border-radius:2px}
+.prov:hover{background:#dce7f2}
+.prov.on{background:var(--r2);color:#fff;border-bottom-color:transparent}
+pre.page{font-family:var(--mono);font-size:11.6px;line-height:1.5;white-space:pre;
+  overflow-x:auto;background:var(--card);border:1px solid var(--rule);border-radius:5px;
+  padding:18px;margin:0}
+
+/* live seat */
+.seat{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;align-items:start}
+select,button{font:13px var(--sans);padding:7px 10px;border:1px solid var(--rule);
+  border-radius:4px;background:var(--card);color:var(--ink)}
+select{width:100%}
+button{cursor:pointer;font-weight:600}
+button.go{background:var(--ink);color:#fff;border-color:var(--ink);width:100%;margin-top:9px}
+button.go:disabled{opacity:.45;cursor:not-allowed}
+.field{border-bottom:1px solid var(--rule-2);padding:9px 0}
+.field .k{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.field .v{margin-top:3px}
+.quote{font-family:var(--mono);font-size:12px;background:#fdf6e3;padding:8px 10px;
+  border-left:3px solid var(--warn);white-space:pre-wrap}
+.src{max-height:260px;overflow:auto;font-family:var(--mono);font-size:11.4px;
+  white-space:pre-wrap;background:var(--card);border:1px solid var(--rule);
+  border-radius:4px;padding:12px;color:var(--ink-2)}
+.src mark{background:#fdf0c8;color:var(--ink);padding:1px 0}
+.muted{color:var(--ink-3);font-size:12.5px}
+.warnbox{background:#fbf3ee;border:1px solid #ecd9cc;border-radius:5px;padding:12px 14px;
+  font-size:12.5px;color:var(--warn)}
+figure{margin:0} figure img{width:100%;border:1px solid var(--rule);border-radius:5px}
+figcaption{font-size:12px;color:var(--ink-3);margin-top:8px;line-height:1.5;max-width:78ch}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111418; --card:#171b21; --ink:#e8ecf1; --ink-2:#a8b2bd; --ink-3:#7c8792;
+    --rule:#252b33; --rule-2:#1e242b;
+    --r1:#d4707a; --r2:#7aa8d8; --r3:#6fb08a; --none:#8e949c;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111418; --card:#171b21; --ink:#e8ecf1; --ink-2:#a8b2bd; --ink-3:#7c8792;
+  --rule:#252b33; --rule-2:#1e242b;
+  --r1:#d4707a; --r2:#7aa8d8; --r3:#6fb08a; --none:#8e949c;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>Momentum reversal</h1>
+  <div class="sub">US equity 12-1 sort.<br>What it is carrying, how it has broken before, and what the loser leg is priced on.</div>
+  <a href="#book" class="on">The book today</a>
+  <a href="#inventory">The crash inventory</a>
+  <a href="#validation">Validation</a>
+  <a href="#output">Example output</a>
+  <a href="#analogue">The analogue engine</a>
+  <a href="#seat">The live seat</a>
+  <div class="foot"><span class="dot" id="keydot"></span><span id="keytext">checking…</span></div>
+</nav>
+
+<main>
+
+<section id="book">
+  <h2>The book today</h2>
+  <p class="lede">The 12-1 sort rebuilt on point-in-time index membership, then the winner-minus-loser
+  loading on each of eight reference series, standardised against 500 random books matched on leg
+  size and capitalisation. The sort is the only thing that differs between the real book and the
+  null, so the z-score is attributable to the momentum sort and not to the universe.</p>
+  <div class="banner" id="banner"></div>
+  <div class="card"><div id="bars"></div></div>
+  <h3>Winner leg, ten largest by index weight</h3>
+  <div class="card num" id="top10"></div>
+</section>
+
+<section id="inventory">
+  <h2>The crash inventory</h2>
+  <p class="lede">Every reversal the registered event definitions admit from 1926, typed by a rule
+  fixed before the census ran. The registered band for episodes fitting no route was 5 to 30 per
+  cent. Click a route to filter.</p>
+  <div class="stats" id="invstats"></div>
+  <div class="chips" id="chips"></div>
+  <p class="muted" id="inv-legend"><b>depth</b> the loss, peak to trough ·
+  <b>mkt through</b> the market's return over the same window ·
+  <b>2y mkt</b> the trailing two-year market return at the peak, which is what the bear-state
+  clause tests · <b>loser share</b> / <b>winner share</b> each leg's share of the loss; they sum
+  to one, and a negative share means that leg <i>helped</i> ·
+  <b>retrace 20d</b> how much of the loss came back within twenty sessions ·
+  <b>crash days</b> sessions at or below −933bp, of which there are three in a century.</p>
+  <div class="card scroll"><table>
+    <thead><tr><th>trough</th><th>rule</th><th>depth</th><th>mkt through</th>
+      <th>2y mkt</th><th>loser share</th><th>winner share</th><th>retrace 20d</th>
+      <th>crash days</th><th>route</th></tr></thead>
+    <tbody id="invrows"></tbody>
+  </table></div>
+  <p class="muted" id="inv-more"></p>
+  <h3>The residue has one shape</h3>
+  <div class="card" id="residue"></div>
+  <h3>The same 195 episodes, drawn</h3>
+  <figure>
+    <img src="/figures/crash_inventory.png" alt="Two scatter panels of 195 momentum reversal episodes">
+    <figcaption>Left: winner-leg share of the loss against the depth, coloured by the rule. Two
+    clusters where the framework predicted three, with the unassigned episodes interleaved through
+    both. Right: the trailing two-year market return against the market return through the episode.
+    Route 1 sits left of the bear-state clause, Route 2 right and below zero, and the residue
+    occupies a third region the rule does not name.</figcaption>
+  </figure>
+</section>
+
+<section id="validation">
+  <h2>Validation</h2>
+  <p class="lede">Three results, in the order they should be weighed. Each was registered with its
+  pass condition and both outcome sentences written before the test ran.</p>
+  <div id="val"></div>
+</section>
+
+<section id="output">
+  <h2>Example output</h2>
+  <p class="lede">The PM page for the 2020-10-31 formation. Every number on it is produced by a
+  registered field that carries its own source and reproduce command, and the numeral canary
+  fails the build on any numeral in the prose that matches neither a computed field nor a
+  declared definitional constant. <b>Click any highlighted number</b> to see what produced it.</p>
+  <div id="page-audit"></div>
+  <pre class="page" id="page">loading…</pre>
+  <div class="card" id="page-prov" style="margin-top:14px"><p class="muted">Click a number in the
+  page above.</p></div>
+</section>
+
+<section id="analogue">
+  <h2>The analogue engine</h2>
+  <p class="lede">Four stages, and you can watch each one. A numerical retrieval finds the nearest
+  historical <em>states</em>; a date-constrained text encoder finds the nearest episodes by
+  <em>what the loser leg was priced on</em>; three model roles argue over the merged record behind
+  two gates; a verdict comes out. The engine's own limits are in the record, so the panel can
+  refuse to rule rather than guess.</p>
+  <div id="an-head"></div>
+
+  <h3>Stage 1 · statistical match <span class="muted" style="text-transform:none;letter-spacing:0">— covariance-aware distance over the state vector. Arithmetic. No model.</span></h3>
+  <div class="card scroll"><table>
+    <thead><tr><th>rank</th><th>date</th><th>distance</th><th>forward 21d</th><th>conditions on file</th></tr></thead>
+    <tbody id="an-state"></tbody></table></div>
+
+  <h3>Stage 2 · retrieval <span class="muted" style="text-transform:none;letter-spacing:0">— nearest by stated condition, read by a checkpoint whose cutoff precedes the query</span></h3>
+  <div class="card scroll"><table>
+    <thead><tr><th>rank</th><th>date</th><th>similarity</th><th>forward 21d</th><th>records</th><th>what it was priced on</th></tr></thead>
+    <tbody id="an-cond"></tbody></table></div>
+  <p class="muted" id="an-simnote"></p>
+
+  <h3>The gate, checked before it is trusted</h3>
+  <div class="card" id="an-control"></div>
+
+  <h3>Stage 3 · comparison <span class="muted" style="text-transform:none;letter-spacing:0">— proponent, dissent, adjudicator; every claim gated twice</span></h3>
+  <div id="an-panelwarn"></div>
+  <button class="go" id="an-run" style="width:auto;padding:8px 18px">Run the panel live</button>
+  <div class="card" id="an-panel" style="margin-top:14px"><p class="muted">Stages 1 and 2 above are
+  deterministic. This calls the model three times, behind both gates, and needs a key.</p></div>
+
+  <h3>Register row 09 · how much of the ranking is reading, and how much is recognition</h3>
+  <div class="card" id="an-row09"></div>
+</section>
+
+<section id="seat">
+  <h2>The live seat</h2>
+  <p class="lede">One model seat, run live against the Anthropic API on a filing you pick. Same
+  schema, same system prompt, same 18,000-character window and the same quote gate as the proof of
+  concept. The schema has no numeric field, so the model cannot return a number; the decline path
+  is a first-class answer; and every accepted record carries a verbatim span that is string-matched
+  against the source before it is kept.</p>
+  <div id="seatwarn"></div>
+  <div class="seat">
+    <div class="card">
+      <div class="field"><div class="k">Formation date</div><div class="v num">2020-10-31 · loser leg</div></div>
+      <div class="field" style="border:0"><div class="k">Filing</div>
+        <div class="v"><select id="pick"><option>loading…</option></select></div></div>
+      <button class="go" id="run">Read this filing</button>
+      <p class="muted" style="margin:10px 0 0">The stored reading from the committed run is shown
+      beside the live one, so a disagreement between them is visible rather than hidden.</p>
+    </div>
+    <div class="card" id="result"><p class="muted">Pick a filing and press the button.</p></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmt = (x, n=2) => (x === null || x === undefined || Number.isNaN(x)) ? "—" : Number(x).toFixed(n);
+const pct = (x, n=1) => (x === null || x === undefined) ? "—" : (100*x).toFixed(n) + "%";
+const cls = r => r === "Route 1" ? "r1" : r === "Route 2" ? "r2" : r === "Route 3" ? "r3" : "rn";
+
+async function get(u){ const r = await fetch(u); if(!r.ok) throw new Error((await r.json()).detail || r.status); return r.json(); }
+
+/* ---- nav ---- */
+const links = [...document.querySelectorAll("nav a")];
+addEventListener("scroll", () => {
+  let cur = links[0];
+  for (const a of links){
+    const el = document.querySelector(a.getAttribute("href"));
+    if (el && el.getBoundingClientRect().top < 160) cur = a;
+  }
+  links.forEach(a => a.classList.toggle("on", a === cur));
+});
+
+/* ---- health ---- */
+get("/api/health").then(h => {
+  const live = h.live_seat;
+  $("#keydot").style.background = live ? "var(--ok)" : "var(--none)";
+  $("#keytext").textContent = live ? "live seat armed" : "live seat off — no API key";
+  if (!live) $("#seatwarn").innerHTML =
+    '<div class="warnbox"><b>No <span class="num">ANTHROPIC_API_KEY</span> in the environment.</b> ' +
+    'The two live model panels are off: the analogue panel cannot be run, and the live seat ' +
+    'shows the committed run\'s reading instead of a fresh one. Every deterministic panel — the ' +
+    'book, the inventory, the validation results, the example output and its provenance, and ' +
+    'the analogue engine\'s retrieval stages — is served from committed artifacts and works as ' +
+    'it does with a key. Export a key and restart the server to arm the other two.</div>';
+});
+
+/* ---- book ---- */
+get("/api/book").then(b => {
+  const top = b.series[0];
+  $("#banner").innerHTML = `
+    <div><div class="lab">as of</div><div class="big num">${b.as_of}</div></div>
+    <div><div class="lab">dominant bet</div><div class="big">${b.direction} ${top.label}</div></div>
+    <div><div class="lab">standardised against 500 matched books</div>
+      <div class="big num">z ${fmt(top.z)}</div></div>`;
+  const max = Math.max(...b.series.map(s => Math.abs(s.z)));
+  $("#bars").innerHTML = b.series.map(s => `
+    <div class="bar-row ${s.dominant ? "hi" : ""}">
+      <div class="nm">${s.label}</div>
+      <div class="track"><div class="fill" style="width:${100*Math.abs(s.z)/max}%"></div></div>
+      <div class="v">${fmt(s.z)}</div>
+    </div>`).join("");
+  $("#top10").textContent = b.winner_top10.join("   ");
+  const cx = b.context;
+  if (cx) $("#bars").insertAdjacentHTML("afterend", `
+    <p class="muted" style="margin-top:12px"><b>Read the ordering, not the level.</b>
+    ${cx.n_series_above_family_threshold} of 8 series clear the family threshold here, which is
+    the saturation that retired the eight-series test — a momentum book differs from a random
+    size-matched book on every macro axis at once, so clearing is uninformative.
+    ${cx.median_max_z_12_1 ? `Against the same-rule null, this sort's median maximum across
+    108 month-ends is <b class="num">${fmt(cx.median_max_z_12_1,2)}</b>; today's maximum is
+    <b class="num">${fmt(cx.max_z_today,2)}</b>, so the book is
+    <b>${cx.quieter_than_typical ? "less concentrated than a typical month" : "more concentrated than a typical month"}</b>.` : ""}
+    What carries information is which series is on top and how far it sits above the rest —
+    concentration and the dollar against credit at ${fmt(b.series[b.series.length-1].z,2)}.</p>`);
+}).catch(e => $("#bars").textContent = "book unavailable: " + e.message);
+
+/* ---- inventory ---- */
+let INV = null, FILTER = null;
+get("/api/inventory").then(d => {
+  INV = d;
+  const s = d.summary, r = s.residue, c3 = r.route3_clauses_over_full_inventory;
+  $("#invstats").innerHTML = `
+    <div class="stat"><div class="k">episodes</div><div class="v">${s.n}</div>
+      <div class="c">1926 to 2026, both registered definitions</div></div>
+    <div class="stat alarm"><div class="k">fit no route</div><div class="v">${pct(s.fits_none_share)}</div>
+      <div class="c">[${pct(s.fits_none_ci[0])}, ${pct(s.fits_none_ci[1])}] against a registered band of 5–30%</div></div>
+    <div class="stat"><div class="k">Route 1 / 2 / 3</div>
+      <div class="v">${s.routes["Route 1"]||0} · ${s.routes["Route 2"]||0} · ${s.routes["Route 3"]||0}</div>
+      <div class="c">Route 3 never fires anywhere in the record</div></div>
+    <div class="stat"><div class="k">residue, one shape</div><div class="v">${r.failure_modes["R1:no-bear | R2:winner-share"]} of ${r.n}</div>
+      <div class="c">loser-driven, market up, no bear state</div></div>
+    <div class="stat"><div class="k">planted controls</div>
+      <div class="v">${s.planted.all_recovered ? "4 of 4" : "FAILED"}</div>
+      <div class="c">every route recovered, so the zeros are about the record</div></div>`;
+  const counts = s.routes;
+  const order = ["Route 1", "Route 2", "Route 3", "FITS-NONE"];
+  $("#chips").innerHTML = `<div class="chip on" data-r="">all<span class="n">${s.n}</span></div>` +
+    order.map(r => `<div class="chip" data-r="${r}">${r}<span class="n">${counts[r]||0}</span></div>`).join("");
+  $("#chips").onclick = e => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    FILTER = c.dataset.r || null;
+    [...$("#chips").children].forEach(x => x.classList.toggle("on", x === c));
+    rows();
+  };
+  $("#residue").innerHTML = `
+    <p>${r.failure_modes["R1:no-bear | R2:winner-search"] || r.failure_modes["R1:no-bear | R2:winner-share"]}
+    of the ${r.n} unassigned episodes — ${pct(r.modal_mode_share)} of them — fail in exactly the same
+    way: the loser leg drove the loss (median share ${fmt(r.loser_share_median)}), the market
+    <b>rose</b> through the window (${r.market_rose} of ${r.n}), and there was no bear state.
+    <b>${r.counterfactual_drop_bear_clause.would_become_route_1} of those
+    ${r.counterfactual_drop_bear_clause.n_no_bear_loser_driven}</b> would be Route 1 if the
+    bear-state clause were dropped. That counterfactual is reported and <b>not applied</b>: a rule
+    amended after seeing which clause failed is fitted, not registered.</p>
+    <p class="muted">Route 3's three clauses never co-occur. Flat market ${c3.flat_market},
+    both shares in band ${c3.both_shares_in_band}, retraced at least half ${c3.retraced_half};
+    flat and in-band ${c3.flat_and_band}, flat and retraced ${c3.flat_and_retrace},
+    all three <b>${c3.all_three}</b>.</p>`;
+  rows();
+}).catch(e => $("#invstats").textContent = "inventory unavailable: " + e.message);
+
+let SHOW_ALL = false;
+function rows(){
+  let eps = INV.episodes.filter(e => !FILTER || e.route === FILTER)
+    .sort((a,b) => a.depth - b.depth);
+  const total = eps.length;
+  // The full census is the finding; the full TABLE is a data dump. Show the rows that carry the
+  // argument -- the deepest, and the ones the named episodes sit in -- and put the rest behind a
+  // toggle. The chips still filter the whole 195.
+  if (!SHOW_ALL && !FILTER && total > 24) eps = eps.slice(0, 24);
+  $("#inv-more").innerHTML = (total > eps.length || SHOW_ALL)
+    ? `Showing <b>${eps.length}</b> of ${total}, deepest first.
+       <a href="#" id="inv-toggle">${SHOW_ALL ? "show fewer" : "show all " + total}</a>.
+       The census is the finding; the table is here to be checked, not read.`
+    : `All <b>${total}</b> rows in this filter.`;
+  const tog = $("#inv-toggle");
+  if (tog) tog.onclick = ev => { ev.preventDefault(); SHOW_ALL = !SHOW_ALL; rows(); };
+  $("#invrows").innerHTML = eps.map(e => `
+    <tr>
+      <td class="n">${e.trough_at}</td>
+      <td class="muted">${e.definition}</td>
+      <td class="n">${pct(e.depth)}</td>
+      <td class="n">${pct(e.mkt_during)}</td>
+      <td class="n">${pct(e.mkt_prior_2y)}</td>
+      <td class="n">${fmt(e.loser_share)}</td>
+      <td class="n">${fmt(e.winner_share)}</td>
+      <td class="n">${e.retrace_20d === null ? "—" : pct(e.retrace_20d, 0)}</td>
+      <td class="n">${e.crash_days || ""}</td>
+      <td class="route ${cls(e.route)}">${e.route === "NO-DECOMPOSITION"
+        ? '<span title="the decile file barely registers this episode, so the leg shares divide by noise">no decomposition</span>'
+        : e.route}</td>
+    </tr>`).join("");
+}
+
+/* ---- validation ---- */
+get("/api/validation").then(v => {
+  const s = v.sealed_severity.registered_step, d = v.sealed_severity.as_run_deviation;
+  const t = v.sealed_text, m = v.same_rule_null, f = v.family_saturation;
+  $("#val").innerHTML = `
+  <div class="card" style="margin-bottom:14px">
+    <h3 style="margin-top:0">1 · The sealed holdout, severity arm
+      <span class="verdict pass">passes</span></h3>
+    <p>At the ${s.step_days}-day forecast step the power statement fixed before the read, the
+    conditional model breaches <b class="num">${s.breaches} of ${s.n}</b> sealed-era forecasts — a
+    rate of <b class="num">${pct(s.rate, 2)}</b> against 5% expected, unconditional-coverage
+    <span class="num">p = ${fmt(s.p_uc,3)}</span>, interval
+    <span class="num">[${pct(s.ci[0],2)}, ${pct(s.ci[1],1)}]</span> containing 5%. On the same
+    dates the unconditional baseline breaches
+    <b class="num">${v.sealed_severity.baseline_same_dates.breaches} of ${v.sealed_severity.baseline_same_dates.n}</b>,
+    so the model is distinguishable from the thing it exists to beat.</p>
+    <p class="muted"><b>Corrected.</b> First reported as 2 of 42 — which was, to four decimal
+    places, its own baseline's coverage. A market series was converted from percentages twice,
+    which leaves the fit untouched but flips the bear-state flag on 3.1% of days. The verdict is
+    unchanged; what changed is that the model stopped being numerically identical to the thing it
+    exists to beat, and that identity was the defect. Full account: trp-87 in the ledger.</p>
+    <p class="muted">The pass is weak and the registration said so in advance: an interval spanning
+    0.6% to 16% would also have passed. Two things make it worth more than the interval suggests.
+    The sealed era was the <b>wilder</b> one, 15.7% annualised against 12.4%, and the model tracked
+    that rather than under-forecasting into it. And the first implementation deviated from its own
+    registration, using ${d.n} daily overlapping forecasts instead of the registered step and
+    reporting a spurious failure at a ${pct(d.rate,2)} breach rate. That is trp-84; the registered
+    design is what is reported.</p>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <h3 style="margin-top:0">2 · The sealed holdout, text arm
+      <span class="verdict fail">did not reproduce</span></h3>
+    <p>Across six sealed episodes and six matched sealed controls the loser leg's stated-condition
+    rate has a median of <b class="num">11.0%</b> against <b class="num">10.4%</b> — a gap of
+    0.6 points where the design tier gave 6.3 — with a one-sided rank test of
+    <b class="num">p = ${t.p_one_sided}</b> against ${t.design_tier_p} at design tier.</p>
+    <p class="muted">The direction is nominally the same and the effect is gone. This is stronger
+    evidence against than an underpowered null would be: an underpowered test shows a large point
+    estimate with a wide interval, and this shows no point estimate at all. The design-tier result
+    is recorded as design tier only, and it is not deleted.</p>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <h3 style="margin-top:0">3 · The null that discriminates
+      <span class="verdict flat">split</span></h3>
+    <p>The eight-series family test cleared <b class="num">${f.clears_family} of ${f.n_dates}</b>
+    month-ends — saturated, and therefore uninformative. Replaced by a null built the same way: the
+    12-1 book against 6-1 and 24-13 sorts on the same dates. The 12-1 sort is the most concentrated
+    on <b class="num">${pct(m.win_rate_12_1)}</b> of dates against the 33.3% a three-way tie would
+    give, sign test <span class="num">p = ${fmt(m.sign_test_p, 4)}</span>; median maximum
+    concentration <span class="num">${fmt(m.median_z["12-1"])}</span> against
+    <span class="num">${fmt(m.median_z["6-1"])}</span> and
+    <span class="num">${fmt(m.median_z["24-13"])}</span>.</p>
+    <p class="muted">The honest reading is that most of the concentration is generic to return
+    sorting: a nine-point edge over the tie rate means the other two windows are the most
+    concentrated on 57% of dates between them. That is a weaker result for the headline instrument
+    than the saturated test appeared to give, and it is the real one.</p>
+  </div>
+  ${!v.detectors ? "" : `<div class="card">
+    <h3 style="margin-top:0">4 · The detectors, read before the event
+      <span class="verdict flat">settles neither branch</span></h3>
+    <p>The census established what each episode turned out to be. This asks whether the three
+    detectors, read at the <b>formation date</b>, recover it beforehand. They agree on
+    <b class="num">${v.detectors.hits} of ${v.detectors.n_scorable}</b> — an agreement of
+    <b class="num">${fmt(v.detectors.agreement, 3)}</b> against a one-in-three null,
+    <span class="num">p = ${fmt(v.detectors.p_one_sided_exact, 3)}</span>.
+    ${v.detectors.hits_needed_for_p05} of ${v.detectors.n_scorable} would have cleared p = 0.05
+    and the registered pass level was ${v.detectors.registered_pass_level}.</p>
+    <p class="muted">The sample is itself the finding: of
+    ${v.detectors.n_reconstructed_episodes} episodes in the reconstructed era only
+    ${v.detectors.n_typed} carry a route, one of those predates the filing corpus, and Route 3
+    has no instances anywhere — so a three-class argmax was scored against
+    ${v.detectors.classes_present_in_truth.length} classes. Two by-products carry more than the
+    headline. The registration predicted Route 1 would be recovered best; it came back 1 of 3
+    while Route 2 came back 3 of 4. And Route 3's detector reads <b>below its own trailing band
+    on every one of the seven dates</b>, which is the second independent measurement, after the
+    census's zero, that within-leg co-movement read at formation carries no signal that a
+    crowded exit is building.</p>
+  </div>`}`;
+}).catch(e => $("#val").textContent = "validation unavailable: " + e.message);
+
+/* ---- example page, made traceable ---- */
+let FIELDS = {};
+get("/api/page").then(p => {
+  const prov = p.provenance;
+  if (!prov) { $("#page").textContent = p.text; return; }
+  $("#page-audit").innerHTML = `<div class="stats" style="margin-bottom:14px">
+    <div class="stat"><div class="k">numerals on the page</div><div class="v">${prov.numerals}</div>
+      <div class="c">${prov.distinct} distinct</div></div>
+    <div class="stat"><div class="k">registered fields</div><div class="v">${prov.registered_fields}</div>
+      <div class="c">each with a source and a reproduce command</div></div>
+    <div class="stat"><div class="k">numeral canary</div>
+      <div class="v" style="font-size:15px">${prov.passes ? "PASS" : "FAIL"}</div>
+      <div class="c">an unmatched numeral fails the build, not the review</div></div>
+  </div>`;
+  // Render from server-emitted offsets. An earlier version highlighted by replacing each
+  // matched string throughout the document, which put a span on the 10 inside 2020-10-31 and
+  // then on digits inside its own placeholder tokens: the page rendered as garbage while the
+  // canary reported PASS, because the canary checked the source and the reader saw the DOM.
+  // Segments cannot do that -- the server asserts they reassemble the page exactly.
+  const segs = prov.segments || [];
+  const marks = prov.document_marks || [];
+  let html = "", pos = 0;
+  const markAt = new Map(marks.map(m => [m.start, m]));
+  segs.forEach(sg => {
+    if (sg.field && sg.field.key !== "definitional") {
+      html += `<span class="prov" data-k="${esc(sg.field.key)}">${esc(sg.text)}</span>`;
+    } else {
+      // Evidence tickers sit in plain segments; splice them in by offset.
+      let t = sg.text, local = "", off = pos;
+      for (let i = 0; i < t.length; i++) {
+        const m = markAt.get(off + i);
+        if (m && t.substr(i, m.end - m.start) === m.ticker) {
+          local += `<span class="prov doc" data-d="${marks.indexOf(m)}">${esc(m.ticker)}</span>`;
+          i += m.ticker.length - 1;
+        } else { local += esc(t[i]); }
+      }
+      html += local;
+    }
+    pos += sg.text.length;
+  });
+  $("#page").innerHTML = html;
+  FIELDS = Object.fromEntries(segs.filter(x => x.field).map(x => [x.field.key, x.field]));
+  $("#page").onclick = e => {
+    const el = e.target.closest(".prov"); if (!el) return;
+    document.querySelectorAll("#page .prov.on").forEach(x => x.classList.remove("on"));
+    el.classList.add("on");
+    if (el.dataset.d !== undefined) {
+      const d = prov.documents[Number(el.dataset.d)];
+      $("#page-prov").innerHTML = `
+        <div class="field"><div class="k">document</div>
+          <div class="v num">${esc(d.ticker)} · ${esc(d.accession)}</div></div>
+        <div class="field"><div class="k">accepted by the regulator</div>
+          <div class="v num">${esc(d.accepted_at)}</div>
+          <div class="muted" style="margin-top:4px">Before the formation date. Nothing read here
+          could postdate the book it describes.</div></div>
+        <div class="field"><div class="k">condition the model extracted</div>
+          <div class="v">${esc(d.condition)}</div></div>
+        <div class="field" style="border:0"><div class="k">verbatim span, string-matched against the source</div>
+          <div class="quote" style="margin-top:6px">${esc(d.quote)}</div></div>`;
+      return;
+    }
+    const f = FIELDS[el.dataset.k];
+    $("#page-prov").innerHTML = `
+      <div class="field"><div class="k">field</div><div class="v num">${esc(f.key)}</div></div>
+      <div class="field"><div class="k">what it is</div><div class="v">${esc(f.label)}</div></div>
+      <div class="field"><div class="k">value</div><div class="v num">${esc(String(f.value))}</div></div>
+      <div class="field"><div class="k">produced by</div><div class="v num">${esc(f.source)}</div></div>
+      <div class="field ${f.span ? "" : "\u0022"}" style="${f.span ? "" : "border:0"}">
+        <div class="k">reproduce</div><div class="v num">${esc(f.reproduce)}</div></div>
+      ${!f.span ? "" : `<div class="field" style="border:0"><div class="k">the document behind it</div>
+        <div class="v num">${esc(f.span.ticker)} · ${esc(f.span.accession)} · accepted ${esc(f.span.accepted_at)}</div>
+        <div class="quote" style="margin-top:6px">${esc(f.span.quote)}</div></div>`}`;
+  };
+}).catch(e => $("#page").textContent = "page unavailable: " + e.message);
+
+/* ---- analogue engine ---- */
+let AN = null;
+const AN_DATE = "2020-10-31";
+get("/api/analogue/record?date=" + AN_DATE).then(d => {
+  AN = d; const r = d.record, c = d.corpus, k = d.planted_control;
+  $("#an-head").innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="k">query</div><div class="v">${r.query.date}</div>
+        <div class="c">${r.query.n_records} grounded conditions across ${r.query.n_names} names</div></div>
+      <div class="stat"><div class="k">condition corpus</div><div class="v">${c.records}</div>
+        <div class="c">grounded records over ${c.dates} formation dates, ${c.first} to ${c.last}</div></div>
+      <div class="stat"><div class="k">encoder</div><div class="v" style="font-size:13px">${(r.encoder||"").split("/").pop()}</div>
+        <div class="c">cutoff precedes the query date, so it cannot know what followed</div></div>
+      <div class="stat"><div class="k">candidates after embargo</div><div class="v">${r.n_candidates_after_embargo}</div>
+        <div class="c">outcome window closed at least a year before the query</div></div>
+    </div>`;
+  $("#an-state").innerHTML = r.state_matches.map(a => `
+    <tr><td class="n">#${a.rank}</td><td class="n">${a.date}</td><td class="n">${fmt(a.distance,4)}</td>
+      <td class="n">${pct(a.forward_21d_return)}</td>
+      <td>${a.condition_record_status === "present"
+            ? `<span class="verdict pass">present</span>`
+            : `<span class="verdict fail">no record</span>`}</td></tr>`).join("");
+  $("#an-cond").innerHTML = r.condition_matches.map(a => {
+    const cs = (a.condition_record?.conditions || []).slice(0,2)
+      .map(x => `${x.ticker}: ${esc(x.condition)}`).join("; ");
+    return `<tr><td class="n">#${a.rank}</td><td class="n">${a.date}</td>
+      <td class="n">${fmt(a.condition_similarity,3)}</td>
+      <td class="n">${pct(a.forward_21d_return)}</td>
+      <td class="n">${a.condition_record?.n_records ?? "—"}</td>
+      <td class="muted">${cs}</td></tr>`;}).join("");
+  $("#an-simnote").textContent = r.similarity_note || "";
+  if (k && k.planted) {
+    $("#an-control").innerHTML = `
+      <p>An unfired gate demonstrates nothing, so it is tested before it is trusted.
+      <b>${k.planted}</b> claims were planted, each asserting what a month was priced on:
+      ${k.expected_kept} about episodes that <b>have</b> a condition record, with a span lifted
+      verbatim from it, and ${k.planted - k.expected_kept} about episodes that do not.
+      The gate kept <b class="num">${k.actually_kept}</b> —
+      <span class="verdict ${k.correct ? "pass" : "fail"}">${k.correct ? "exactly the right ones" : "wrong"}</span></p>
+      <div class="scroll"><table><thead><tr><th>about</th><th>expected</th><th>gate did</th><th>claim</th></tr></thead>
+      <tbody>${k.detail.map(x => `<tr><td class="n">${x.about}</td>
+        <td>${x.expected ? "keep" : "drop"}</td>
+        <td class="${x.expected === x.kept ? "" : "route r1"}">${x.kept ? "keep" : "drop"}</td>
+        <td class="muted">${esc(x.claim)}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+}).catch(e => $("#an-head").innerHTML = `<div class="warnbox">analogue record unavailable: ${e.message}</div>`);
+
+get("/api/analogue/row09").then(d => {
+  $("#an-row09").innerHTML = `
+    <p>The same condition corpus is read twice: once by a checkpoint whose training cutoff
+    <b>precedes the query date</b>, once by a contemporary encoder that has seen everything.
+    Their rank agreement bounds how much of the ordering is reading rather than recognition —
+    this project has already measured that stripping dates does not hide the date, a model placing
+    the exact year in 40 of 40 anonymised cases.</p>
+    <div class="stats">
+      <div class="stat"><div class="k">median Spearman</div><div class="v">${fmt(d.median_spearman,3)}</div>
+        <div class="c">across ${d.n_query_dates} query dates, range ${fmt(d.min,2)}–${fmt(d.max,2)}</div></div>
+      <div class="stat"><div class="k">at or above 0.80</div><div class="v">${pct(d["share_at_or_above_0.80"],0)}</div>
+        <div class="c">the threshold registered in advance</div></div>
+      <div class="stat"><div class="k">above 0.98</div><div class="v">${pct(d["share_above_0.98"],0)}</div>
+        <div class="c">where the constrained seat would be idle and retire</div></div>
+      <div class="stat alarm"><div class="k">same top match</div><div class="v">${pct(d.top_match_agreement,0)}</div>
+        <div class="c">14% at pools of twelve or more; the nearest one is what reaches the page</div></div>
+    </div>
+    <p class="muted" style="margin-top:12px">The bootstrap interval on the median is
+    [0.771, 0.900] and it <b>crosses</b> the registered 0.80. The power statement committed in
+    advance to reporting a crossing interval as the row staying open rather than as a pass, so
+    <b>row 09 does not close</b>.</p>
+    ${!d.cutoff_ablation ? "" : (() => { const a = d.cutoff_ablation; return `
+    <h3>And then the instrument was checked, and it is confounded</h3>
+    <p>The two encoders differ in architecture and training corpus as well as in cutoff, so this
+    disagreement is equally consistent with lookahead and with them being different models. Read
+    twice by the <b>same</b> architecture at two cutoffs — nothing varying but what the encoder was
+    allowed to have seen — they agree at <b class="num">${fmt(a.median_same_architecture_two_cutoffs,3)}</b>
+    against <b class="num">${fmt(a.median_constrained_vs_contemporary,3)}</b> across models, on
+    ${a.architecture_wins} of ${a.n_query_dates} dates, sign test p = ${fmt(a.sign_test_p_one_sided,4)}.
+    <b>Almost all of what row 09 measured is architecture.</b> The conclusion is a measurement, not
+    an assumption: on a noun phrase and one verbatim span, moving the cutoff two to three years does
+    not change the ranking, so the leakage the constrained encoder was adopted to prevent is not
+    detectable in this feature. It stays because its cost is near zero and its guarantee is
+    structural.</p>
+    <details style="margin-top:10px"><summary class="muted" style="cursor:pointer">the ablation, date by date</summary>
+    <div class="stats" style="margin-top:12px">
+      <div class="stat"><div class="k">architecture beats cutoff</div>
+        <div class="v">${a.architecture_wins} of ${a.n_query_dates}</div>
+        <div class="c">sign test p = ${fmt(a.sign_test_p_one_sided,4)}; ${a.hits_needed_for_p05} of ${a.n_query_dates} was the registered floor</div></div>
+      <div class="stat"><div class="k">two cutoffs, one architecture</div>
+        <div class="v">${fmt(a.median_same_architecture_two_cutoffs,3)}</div>
+        <div class="c">checkpoints two to three years apart, same pool</div></div>
+      <div class="stat"><div class="k">across models</div>
+        <div class="v">${fmt(a.median_constrained_vs_contemporary,3)}</div>
+        <div class="c">what row 09 was measuring; the gap is ${fmt(a.median_gap,3)}</div></div>
+      <div class="stat"><div class="k">lookahead signature</div><div class="v" style="font-size:15px">absent</div>
+        <div class="c">later-vs-contemporary ${fmt(a.median_later_vs_contemporary,3)} is <b>lower</b> than ${fmt(a.median_constrained_vs_contemporary,3)}</div></div>
+    </div>
+    <div class="scroll" style="margin-top:12px"><table>
+      <thead><tr><th>query</th><th>n</th><th>checkpoint</th><th>same architecture, two cutoffs</th><th>across models</th><th>later vs contemporary</th></tr></thead>
+      <tbody>${(a.per_query||[]).map(r => `<tr><td class="n">${r.query}</td><td class="n">${r.n}</td>
+        <td class="n muted">${r.correct_checkpoint}</td>
+        <td class="n"><b>${fmt(r.correct_vs_later,3)}</b></td>
+        <td class="n">${fmt(r.correct_vs_mpnet,3)}</td>
+        <td class="n muted">${fmt(r.later_vs_mpnet,3)}</td></tr>`).join("")}</tbody></table></div>
+    <p class="muted" style="margin-top:10px"><b>2022-10-31 carries it.</b> That date was row 09's
+    outlier at 0.042 — near-independence, the number that most looked like an encoder ranking on
+    knowledge the constrained one could not have. Two cutoffs of the same architecture agree on
+    that same date at <b>0.890</b>. Row 09 re-registers onto the within-architecture comparison,
+    where agreement is 0.977 — just under the 0.98 at which the constrained seat retires as
+    idle.</p></details>`; })()}`;
+}).catch(e => $("#an-row09").innerHTML = `<p class="muted">row 09 not yet computed: ${e.message}</p>`);
+
+$("#an-run").onclick = async () => {
+  $("#an-run").disabled = true;
+  $("#an-panel").innerHTML = `<p class="muted">three model calls, both gates running…</p>`;
+  try {
+    const r = await fetch("/api/analogue/panel", {method:"POST",
+      headers:{"Content-Type":"application/json"}, body: JSON.stringify({date: AN_DATE})});
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.detail || "request failed");
+    const side = (name, s) => `
+      <h3 style="margin-top:14px">${name} · ${s.kept.length} kept, ${s.dropped.length} dropped</h3>
+      ${s.kept.map(c => `<div class="field"><div class="k">${c.about} · ${c.field}</div>
+        <div class="v">${esc(c.claim)}</div>
+        ${c.quote ? `<div class="quote" style="margin-top:6px">${esc(c.quote)}</div>` : ""}</div>`).join("")}
+      ${s.dropped.map(c => `<div class="field"><div class="k">${c.about} · ${c.field}
+        <span class="verdict fail" style="margin-left:6px">dropped</span></div>
+        <div class="v muted">${esc(c.claim)}</div>
+        <div class="muted" style="margin-top:4px">${esc(c.reason)}</div></div>`).join("")}`;
+    const v = j.verdict;
+    $("#an-panel").innerHTML = side("Proponent", j.proponent) + side("Dissent", j.dissent) + `
+      <h3 style="margin-top:18px">Stage 4 · the verdict</h3>
+      <p><span class="verdict ${v.state_match_is_apt ? "pass" : "fail"}">state match ${v.state_match_is_apt ? "apt" : "not apt"}</span>
+      <span class="verdict ${v.mechanism_is_rulable ? "pass" : "flat"}" style="margin-left:6px">mechanism ${v.mechanism_is_rulable ? "rulable" : "not rulable"}</span>
+      ${v.fails_on ? `<span class="num muted" style="margin-left:8px">fails on ${esc(v.fails_on)}</span>` : ""}</p>
+      <p>${esc(v.reasoning)}</p>`;
+  } catch (e) { $("#an-panel").innerHTML = `<div class="warnbox">${e.message}</div>`; }
+  $("#an-run").disabled = false;
+};
+
+/* ---- live seat ---- */
+let FILINGS = [];
+get("/api/filings").then(d => {
+  // Filings that the committed run found a condition in come first and are labelled, so the
+  // picker is a short list of interesting documents rather than 112 accession numbers, and so
+  // the panel demonstrates its mechanism with no API key at all.
+  FILINGS = d.filings.map((f, i) => ({...f, i}))
+    .sort((a, b) => (b.stored_condition ? 1 : 0) - (a.stored_condition ? 1 : 0));
+  $("#pick").innerHTML = FILINGS.map((f, i) =>
+    `<option value="${i}">${f.stored_condition ? "◆ " : "   "}${f.ticker} · ${f.accepted_at.slice(0,10)}`
+    + `${f.stored_condition ? " · " + f.stored_condition.slice(0,44) : " · declined"}</option>`).join("");
+  $("#pick").onchange = showStored; showStored();
+}).catch(e => $("#pick").innerHTML = `<option>unavailable: ${e.message}</option>`);
+
+function showStored(){
+  const f = FILINGS[Number($("#pick").value)];
+  if (!f) return;
+  $("#result").innerHTML = `
+    <div class="field"><div class="k">the committed run's reading</div>
+      <div class="v">${f.stored_condition ? esc(f.stored_condition)
+        : "<b>declined</b> — no external survival condition stated"}</div>
+      <div class="muted" style="margin-top:5px">${f.stored_condition
+        ? "Extracted under the schema, with a verbatim span the quote gate matched against the source."
+        : "The decline path is a first-class answer and fired on 82.1% of loser-leg filings. A reader that never declines is guessing."}</div></div>
+    <div class="field" style="border:0"><div class="k">live</div>
+      <div class="v muted">Press the button to run the same extractor now, against the API, and
+      compare. Needs a key; everything above does not.</div></div>`;
+}
+
+$("#run").onclick = async () => {
+  const f = FILINGS[Number($("#pick").value)];
+  if (!f) return;
+  $("#run").disabled = true;
+  $("#result").innerHTML = `<p class="muted">reading ${f.ticker}'s filing…</p>`;
+  try {
+    const r = await fetch("/api/extract", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({accession: f.accession})
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.detail || "request failed");
+    render(j, f);
+  } catch (e) {
+    $("#result").innerHTML = `<div class="warnbox">${e.message}</div>`;
+  }
+  $("#run").disabled = false;
+};
+
+function render(j, f){
+  const rec = j.record, g = j.gate;
+  const stored = f.stored_condition;
+  const agree = stored ? (rec.condition && rec.states_a_condition) : !rec.states_a_condition;
+  $("#result").innerHTML = `
+    <div class="field"><div class="k">model · characters read</div>
+      <div class="v num">${j.model} · ${j.chars_read.toLocaleString()}</div></div>
+    <div class="field"><div class="k">states an external survival condition</div>
+      <div class="v"><b>${rec.states_a_condition ? "YES" : "NO — declined"}</b></div></div>
+    ${rec.states_a_condition ? `
+      <div class="field"><div class="k">condition</div><div class="v">${esc(rec.condition)}</div></div>
+      <div class="field"><div class="k">verbatim span</div>
+        <div class="v quote">${esc(rec.quote)}</div></div>
+      <div class="field"><div class="k">quote gate</div><div class="v">
+        <span class="verdict ${g.grounded ? "pass" : "fail"}">${g.grounded ? "grounded" : "not in source — record dropped"}</span>
+        <div class="muted" style="margin-top:5px">${g.rule}</div></div></div>`
+    : `<div class="field"><div class="k">decline reason</div>
+        <div class="v">${esc(rec.decline_reason)}</div>
+        <div class="muted" style="margin-top:5px">A reader that never declines is guessing. On the
+        committed run the decline path fired on 82.1% of loser-leg filings.</div></div>`}
+    <div class="field" style="border:0"><div class="k">the committed run's reading</div>
+      <div class="v">${stored ? esc(stored) : "declined"}
+        <span class="verdict ${agree ? "pass" : "flat"}" style="margin-left:8px">${agree ? "agrees" : "differs"}</span>
+        ${agree ? "" : `<div class="muted" style="margin-top:5px">Same prompt, same window, same
+        model, different call. Run-to-run variation on one filing is expected and is exactly why
+        no single record is load-bearing: the statistic the design tests is a RATE over a leg, and
+        the seat's twin, its decline rate and its quote gate are all measured over the whole run
+        rather than trusted on one reading.</div>`}</div></div>
+    <div style="margin-top:14px"><div class="k" style="font-size:11px;letter-spacing:.05em;
+      text-transform:uppercase;color:var(--ink-3);margin-bottom:6px">the source, with the span marked</div>
+      <div class="src" id="src">loading…</div></div>`;
+  get("/api/filing/" + f.accession).then(d => {
+    let t = esc(d.text);
+    if (rec.quote && g.grounded){
+      const q = esc(rec.quote);
+      const i = t.indexOf(q);
+      if (i >= 0) t = t.slice(0, i) + "<mark>" + q + "</mark>" + t.slice(i + q.length);
+    }
+    $("#src").innerHTML = t;
+    const m = $("#src mark"); if (m) m.scrollIntoView({block: "center"});
+  }).catch(() => $("#src").textContent = "source unavailable");
+}
+
+function esc(s){ return String(s ?? "").replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+</script>
+</body>
+</html>

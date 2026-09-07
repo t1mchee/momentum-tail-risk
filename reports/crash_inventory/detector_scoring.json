@@ -1,0 +1,99 @@
+{
+  "n_reconstructed_episodes": 30,
+  "n_typed": 8,
+  "n_scorable": 7,
+  "hits": 4,
+  "agreement": 0.5714285714285714,
+  "registered_pass_level": 0.67,
+  "null": 0.3333333333333333,
+  "p_one_sided_exact": 0.1732967535436671,
+  "hits_needed_for_p05": 5,
+  "classes_present_in_truth": [
+    "Route 1",
+    "Route 2"
+  ],
+  "rows": [
+    {
+      "formation_at": "2021-01-31",
+      "trough_at": "2021-03-05",
+      "true_route": "Route 2",
+      "argmax": "Route 1",
+      "hit": false,
+      "z_route1": 1.162,
+      "z_route2": -1.333,
+      "z_route3": -0.276
+    },
+    {
+      "formation_at": "2021-03-31",
+      "trough_at": "2021-05-12",
+      "true_route": "Route 2",
+      "argmax": "Route 2",
+      "hit": true,
+      "z_route1": -0.588,
+      "z_route2": 1.415,
+      "z_route3": -0.636
+    },
+    {
+      "formation_at": "2021-06-30",
+      "trough_at": "2021-07-16",
+      "true_route": "Route 2",
+      "argmax": "Route 2",
+      "hit": true,
+      "z_route1": -0.469,
+      "z_route2": 2.364,
+      "z_route3": -0.999
+    },
+    {
+      "formation_at": "2022-12-31",
+      "trough_at": "2023-02-02",
+      "true_route": "Route 1",
+      "argmax": "Route 2",
+      "hit": false,
+      "z_route1": -0.106,
+      "z_route2": 1.254,
+      "z_route3": -0.228
+    },
+    {
+      "formation_at": "2023-04-30",
+      "trough_at": "2023-07-26",
+      "true_route": "Route 1",
+      "argmax": "Route 1",
+      "hit": true,
+      "z_route1": 0.674,
+      "z_route2": 0.491,
+      "z_route3": -0.628
+    },
+    {
+      "formation_at": "2023-10-31",
+      "trough_at": "2023-12-14",
+      "true_route": "Route 1",
+      "argmax": "Route 2",
+      "hit": false,
+      "z_route1": -0.196,
+      "z_route2": 0.204,
+      "z_route3": -0.657
+    },
+    {
+      "formation_at": "2025-01-31",
+      "trough_at": "2025-03-10",
+      "true_route": "Route 2",
+      "argmax": "Route 2",
+      "hit": true,
+      "z_route1": -0.634,
+      "z_route2": 0.718,
+      "z_route3": -1.771
+    }
+  ],
+  "skipped_for_missing_detector": [
+    {
+      "formation_at": "2014-03-31",
+      "trough_at": "2014-04-15",
+      "route": "Route 2",
+      "missing": [
+        "Route 1",
+        "Route 3"
+      ]
+    }
+  ],
+  "standardisation": "full-sample per detector; not point-in-time; bias runs toward agreement"
+}

@@ -1,0 +1,1965 @@
+{
+  "as_of": "2020-10-31",
+  "theme_source": "fallback_pipeline_null",
+  "numerals": 74,
+  "distinct": 52,
+  "registered_fields": 55,
+  "passes": true,
+  "provenance": {
+    "10": {
+      "key": "loser_leg_sectors",
+      "value": 10,
+      "text": "10",
+      "label": "GICS sectors it spans",
+      "source": "data/raw/ishares/IWV/panel",
+      "reproduce": "uv run python scripts/gate2_nov2020.py",
+      "span": null,
+      "note": ""
+    },
+    "5%": {
+      "key": "definitional",
+      "text": "5%",
+      "label": "the quantile the severity is reported at, fixed in the registration",
+      "source": "the registration",
+      "reproduce": "",
+      "value": "5%"
+    },
+    "-19.29%": {
+      "key": "var_scaled_10d",
+      "value": -0.1928610960987851,
+      "text": "-19.29%",
+      "label": "10-day 5% VaR, scaled line",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "-7.57%": {
+      "key": "var_uncond_10d",
+      "value": -0.0757313590618727,
+      "text": "-7.57%",
+      "label": "the unconditional quantile beside it",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "2.5": {
+      "key": "var_ratio",
+      "value": 2.5466477624047013,
+      "text": "2.5",
+      "label": "how much more alarmed the scaled line is",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "-31.93%": {
+      "key": "es_scaled_10d",
+      "value": -0.3193146823588078,
+      "text": "-31.93%",
+      "label": "10-day 5% expected shortfall",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "60.9%": {
+      "key": "trailing_vol",
+      "value": 0.6087042459449683,
+      "text": "60.9%",
+      "label": "the book's trailing volatility, annualised",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "20.6%": {
+      "key": "prob_below_own_var",
+      "value": 0.2055674518201284,
+      "text": "20.6%",
+      "label": "share of past scaled returns below the book's own unconditional quantile",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "-4.32%": {
+      "key": "registered_event_level",
+      "value": -0.0432,
+      "text": "-4.32%",
+      "label": "the registered reversal level, frozen in the contract",
+      "source": "src/unstructured_momentum/pipeline/contract.py",
+      "reproduce": "frozen; not computed here",
+      "span": null,
+      "note": ""
+    },
+    "29.3%": {
+      "key": "prob_below_french_ref",
+      "value": 0.2933618843683083,
+      "text": "29.3%",
+      "label": "the same at French's long-run reference level",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "5": {
+      "key": "cov_scaled_breaches",
+      "value": 5,
+      "text": "5",
+      "label": "breaches of the scaled line",
+      "source": "reports/poc/e8_tail_final.json",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "54,": {
+      "key": "cov_n",
+      "value": 54,
+      "text": "54",
+      "label": "formations the coverage rests on",
+      "source": "reports/poc/e8_tail_final.json",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "9.26%": {
+      "key": "cov_scaled_rate",
+      "value": 0.09259259259259259,
+      "text": "9.26%",
+      "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+      "source": "reports/poc/e8_tail_final.json",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": "",
+      "ambiguous": true,
+      "candidates": [
+        {
+          "key": "cov_scaled_rate",
+          "label": "its breach rate",
+          "value": 0.09259259259259259,
+          "source": "reports/poc/e8_tail_final.json",
+          "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+        },
+        {
+          "key": "cov_uncond_rate",
+          "label": "the unconditional line's breach rate",
+          "value": 0.09259259259259259,
+          "source": "reports/poc/e8_tail_final.json",
+          "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+        }
+      ]
+    },
+    "0.197": {
+      "key": "cov_scaled_p",
+      "value": 0.19672034525782345,
+      "text": "0.197",
+      "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+      "source": "reports/poc/e8_tail_final.json",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": "",
+      "ambiguous": true,
+      "candidates": [
+        {
+          "key": "cov_scaled_p",
+          "label": "Kupiec p for the scaled line",
+          "value": 0.19672034525782345,
+          "source": "reports/poc/e8_tail_final.json",
+          "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+        },
+        {
+          "key": "cov_uncond_p",
+          "label": "Kupiec p for the unconditional line",
+          "value": 0.19672034525782345,
+          "source": "reports/poc/e8_tail_final.json",
+          "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+        }
+      ]
+    },
+    "263": {
+      "key": "long_names",
+      "value": "263",
+      "text": "263",
+      "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+      "source": "reports/poc/e8_concentration_by_leg.csv",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": "",
+      "ambiguous": true,
+      "candidates": [
+        {
+          "key": "long_names",
+          "label": "names in the long leg",
+          "value": "263",
+          "source": "reports/poc/e8_concentration_by_leg.csv",
+          "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+        },
+        {
+          "key": "loser_leg_names",
+          "label": "names in the loser leg",
+          "value": 263,
+          "source": "data/raw/ishares/IWV/panel",
+          "reproduce": "uv run python scripts/gate2_nov2020.py"
+        }
+      ]
+    },
+    "8.0": {
+      "key": "long_effective_n",
+      "value": 8.039283476723366,
+      "text": "8.0",
+      "label": "effective number of names, long leg",
+      "source": "reports/poc/e8_concentration_by_leg.csv",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "27%": {
+      "key": "long_top1",
+      "value": 0.2730937360674388,
+      "text": "27%",
+      "label": "largest single weight in the long leg",
+      "source": "reports/poc/e8_concentration_by_leg.csv",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "60%": {
+      "key": "long_top5",
+      "value": 0.5978029189110042,
+      "text": "60%",
+      "label": "the five largest together",
+      "source": "reports/poc/e8_concentration_by_leg.csv",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "11.7": {
+      "key": "short_effective_n",
+      "value": 11.704254635776532,
+      "text": "11.7",
+      "label": "effective names, short leg",
+      "source": "reports/poc/e8_concentration_by_leg.csv",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    },
+    "0.146": {
+      "key": "sector_hhi",
+      "value": 0.14562882216021628,
+      "text": "0.146",
+      "label": "sector Herfindahl",
+      "source": "data/raw/ishares/IWV/panel",
+      "reproduce": "uv run python scripts/gate2_nov2020.py",
+      "span": null,
+      "note": ""
+    },
+    "23%": {
+      "key": "top_sector_share",
+      "value": 0.23193916349809887,
+      "text": "23%",
+      "label": "share in Energy",
+      "source": "data/raw/ishares/IWV/panel",
+      "reproduce": "uv run python scripts/gate2_nov2020.py",
+      "span": null,
+      "note": ""
+    },
+    "38.0": {
+      "key": "vix",
+      "value": 38.02,
+      "text": "38.0",
+      "label": "VIX close",
+      "source": "data/raw/cboe",
+      "reproduce": "uv run python scripts/gate2_nov2020.py",
+      "span": null,
+      "note": ""
+    },
+    "96.8%": {
+      "key": "vix_pctile",
+      "value": 0.9684562894296382,
+      "text": "96.8%",
+      "label": "its percentile",
+      "source": "data/raw/cboe",
+      "reproduce": "uv run python scripts/gate2_nov2020.py",
+      "span": null,
+      "note": ""
+    },
+    "8": {
+      "key": "pipeline_episode_dates",
+      "value": 8,
+      "text": "8",
+      "label": "episode dates the theme pipeline ran on",
+      "source": "reports/poc/e7_summary.json",
+      "reproduce": "uv run python scripts/poc_e7_theme.py",
+      "span": null,
+      "note": ""
+    },
+    "2": {
+      "key": "pipeline_themes_risen",
+      "value": 2,
+      "text": "2",
+      "label": "of those, dates where a theme rose above the placebo",
+      "source": "reports/poc/e7_summary.json",
+      "reproduce": "uv run python scripts/poc_e7_theme.py",
+      "span": null,
+      "note": ""
+    },
+    "3": {
+      "key": "pipeline_dates_labelled",
+      "value": 3,
+      "text": "3",
+      "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+      "source": "reports/poc/e7_summary.json",
+      "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+      "span": null,
+      "note": "",
+      "ambiguous": true,
+      "candidates": [
+        {
+          "key": "pipeline_dates_labelled",
+          "label": "episode dates carrying an expected label written into exp-091 before the run",
+          "value": 3,
+          "source": "reports/poc/e7_summary.json",
+          "reproduce": "uv run python scripts/poc_e7_expected_labels.py"
+        },
+        {
+          "key": "analogue_blocks",
+          "label": "state-space blocks the distance used",
+          "value": 3,
+          "source": "reports/analogue_rag/panel_2020-10-31.json",
+          "reproduce": "uv run python scripts/analogue_panel_rag.py"
+        }
+      ]
+    },
+    "0": {
+      "key": "pipeline_label_matches",
+      "value": 0,
+      "text": "0",
+      "label": "of those, dates whose label matched the registered expected label",
+      "source": "reports/poc/e7_summary.json",
+      "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+      "span": null,
+      "note": ""
+    },
+    "19": {
+      "key": "loser_stated",
+      "value": 19,
+      "text": "19",
+      "label": "loser filings stating a condition",
+      "source": "reports/gate2/nov2020_extractions.parquet",
+      "reproduce": "uv run python scripts/gate2_extract.py loser",
+      "span": null,
+      "note": ""
+    },
+    "112": {
+      "key": "loser_read",
+      "value": 112,
+      "text": "112",
+      "label": "loser filings read",
+      "source": "reports/gate2/nov2020_extractions.parquet",
+      "reproduce": "uv run python scripts/gate2_extract.py loser",
+      "span": null,
+      "note": ""
+    },
+    "17.0%": {
+      "key": "loser_rate",
+      "value": 0.16964285714285715,
+      "text": "17.0%",
+      "label": "the rate",
+      "source": "reports/gate2/nov2020_extractions.parquet",
+      "reproduce": "uv run python scripts/gate2_extract.py loser",
+      "span": null,
+      "note": ""
+    },
+    "9": {
+      "key": "condition_names",
+      "value": 9,
+      "text": "9",
+      "label": "names carrying a condition",
+      "source": "reports/gate2/nov2020_extractions.parquet",
+      "reproduce": "uv run python scripts/gate2_extract.py loser",
+      "span": null,
+      "note": ""
+    },
+    "1": {
+      "key": "panel_claims_dropped",
+      "value": 1,
+      "text": "1",
+      "label": "claims the gate dropped",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "0.039": {
+      "key": "analogue_1_dist",
+      "value": 0.0391,
+      "text": "0.039",
+      "label": "distance to the #1 nearest state",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "21": {
+      "key": "definitional",
+      "text": "21",
+      "label": "the second horizon printed beside the first, fixed in the registration",
+      "source": "the registration",
+      "reproduce": "",
+      "value": "21"
+    },
+    "-4.03%": {
+      "key": "analogue_1_fwd",
+      "value": -0.0403,
+      "text": "-4.03%",
+      "label": "what followed the #1 match over 21 days",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "0.070": {
+      "key": "analogue_2_dist",
+      "value": 0.0698,
+      "text": "0.070",
+      "label": "distance to the #2 nearest state",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "+3.91%": {
+      "key": "analogue_2_fwd",
+      "value": 0.0391,
+      "text": "+3.91%",
+      "label": "what followed the #2 match over 21 days",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "0.085": {
+      "key": "analogue_3_dist",
+      "value": 0.0852,
+      "text": "0.085",
+      "label": "distance to the #3 nearest state",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "+11.24%": {
+      "key": "analogue_3_fwd",
+      "value": 0.1124,
+      "text": "+11.24%",
+      "label": "what followed the #3 match over 21 days",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "4": {
+      "key": "definitional",
+      "text": "4",
+      "label": "ordinal, as in a ranked list position",
+      "source": "the registration",
+      "reproduce": "",
+      "value": "4"
+    },
+    "0.088": {
+      "key": "analogue_4_dist",
+      "value": 0.0883,
+      "text": "0.088",
+      "label": "distance to the #4 nearest state",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "+6.33%": {
+      "key": "analogue_4_fwd",
+      "value": 0.0633,
+      "text": "+6.33%",
+      "label": "what followed the #4 match over 21 days",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "0.110": {
+      "key": "analogue_5_dist",
+      "value": 0.1102,
+      "text": "0.110",
+      "label": "distance to the #5 nearest state",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "+16.09%": {
+      "key": "analogue_5_fwd",
+      "value": 0.1609,
+      "text": "+16.09%",
+      "label": "what followed the #5 match over 21 days",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "7": {
+      "key": "panel_claims_kept",
+      "value": 7,
+      "text": "7",
+      "label": "claims that survived the gate",
+      "source": "reports/analogue_rag/panel_2020-10-31.json",
+      "reproduce": "uv run python scripts/analogue_panel_rag.py",
+      "span": null,
+      "note": ""
+    },
+    "3.2%": {
+      "key": "earnings_weight_in_window",
+      "value": 0.0319880473382998,
+      "text": "3.2%",
+      "label": "gross book weight reporting earnings in the window",
+      "source": "reports/poc/e5_book_tail.csv",
+      "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+      "span": null,
+      "note": ""
+    },
+    "-14.58%": {
+      "key": "outcome_realised",
+      "value": -0.14578936557250055,
+      "text": "-14.58%",
+      "label": "the book's realised 10-day return from this formation",
+      "source": "reports/poc/realised_2020-10-30.json",
+      "reproduce": "uv run python scripts/poc_e10_realised.py",
+      "span": null,
+      "note": ""
+    },
+    "-20.21%": {
+      "key": "outcome_worst_session",
+      "value": -0.2021117576197973,
+      "text": "-20.21%",
+      "label": "the book's worst single session in the window",
+      "source": "reports/poc/realised_2020-10-30.json",
+      "reproduce": "uv run python scripts/poc_e10_realised.py",
+      "span": null,
+      "note": ""
+    },
+    "-4.18%": {
+      "key": "outcome_worst_winner_leg",
+      "value": -0.04183708423657229,
+      "text": "-4.18%",
+      "label": "the winner leg's return on that session",
+      "source": "reports/poc/realised_2020-10-30.json",
+      "reproduce": "uv run python scripts/poc_e10_realised.py",
+      "span": null,
+      "note": ""
+    },
+    "+16.03%": {
+      "key": "outcome_worst_loser_leg",
+      "value": 0.160274673383225,
+      "text": "+16.03%",
+      "label": "the loser leg's return on that session",
+      "source": "reports/poc/realised_2020-10-30.json",
+      "reproduce": "uv run python scripts/poc_e10_realised.py",
+      "span": null,
+      "note": ""
+    },
+    "-9.56%": {
+      "key": "outcome_french",
+      "value": -0.09562655776248818,
+      "text": "-9.56%",
+      "label": "Ken French's published momentum factor over the same window",
+      "source": "reports/poc/realised_2020-10-30.json",
+      "reproduce": "uv run python scripts/poc_e10_realised.py",
+      "span": null,
+      "note": ""
+    },
+    "54": {
+      "key": "cov_n",
+      "value": 54,
+      "text": "54",
+      "label": "formations the coverage rests on",
+      "source": "reports/poc/e8_tail_final.json",
+      "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+      "span": null,
+      "note": ""
+    }
+  },
+  "segments": [
+    {
+      "text": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nMOMENTUM REVERSAL RISK \u2014 formation 2020-10-31 (last session 2020-10-30)\nUS equity cross-sectional momentum, the reconstructed 12-1 book:\ntop and bottom deciles of the Russell 3000, VALUE-WEIGHTED within each leg.\nHorizon: "
+    },
+    {
+      "text": "10",
+      "field": {
+        "key": "loser_leg_sectors",
+        "value": 10,
+        "text": "10",
+        "label": "GICS sectors it spans",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " trading days at the "
+    },
+    {
+      "text": "5%",
+      "field": {
+        "key": "definitional",
+        "text": "5%",
+        "value": "5%",
+        "label": "the quantile the severity is reported at, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": " quantile. The probability line below is the VaR\nrestated at the event threshold, not a forecast of a reversal's timing.\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nSEVERITY   [the parameter-free scaled quantile; no conditioning state]\n  "
+    },
+    {
+      "text": "10",
+      "field": {
+        "key": "loser_leg_sectors",
+        "value": 10,
+        "text": "10",
+        "label": "GICS sectors it spans",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "-day "
+    },
+    {
+      "text": "5%",
+      "field": {
+        "key": "definitional",
+        "text": "5%",
+        "value": "5%",
+        "label": "the quantile the severity is reported at, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": " VaR      "
+    },
+    {
+      "text": "-19.29%",
+      "field": {
+        "key": "var_scaled_10d",
+        "value": -0.1928610960987851,
+        "text": "-19.29%",
+        "label": "10-day 5% VaR, scaled line",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "     against an unconditional "
+    },
+    {
+      "text": "-7.57%",
+      "field": {
+        "key": "var_uncond_10d",
+        "value": -0.0757313590618727,
+        "text": "-7.57%",
+        "label": "the unconditional quantile beside it",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   ("
+    },
+    {
+      "text": "2.5",
+      "field": {
+        "key": "var_ratio",
+        "value": 2.5466477624047013,
+        "text": "2.5",
+        "label": "how much more alarmed the scaled line is",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "x)\n  "
+    },
+    {
+      "text": "10",
+      "field": {
+        "key": "loser_leg_sectors",
+        "value": 10,
+        "text": "10",
+        "label": "GICS sectors it spans",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "-day "
+    },
+    {
+      "text": "5%",
+      "field": {
+        "key": "definitional",
+        "text": "5%",
+        "value": "5%",
+        "label": "the quantile the severity is reported at, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": " ES      "
+    },
+    {
+      "text": "-31.93%",
+      "field": {
+        "key": "es_scaled_10d",
+        "value": -0.3193146823588078,
+        "text": "-31.93%",
+        "label": "10-day 5% expected shortfall",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "\n  the book's trailing volatility is "
+    },
+    {
+      "text": "60.9%",
+      "field": {
+        "key": "trailing_vol",
+        "value": 0.6087042459449683,
+        "text": "60.9%",
+        "label": "the book's trailing volatility, annualised",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " annualised, and the estimator is today's\n  volatility times the "
+    },
+    {
+      "text": "5%",
+      "field": {
+        "key": "definitional",
+        "text": "5%",
+        "value": "5%",
+        "label": "the quantile the severity is reported at, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": " quantile of past scaled returns. Nothing is fitted.\n  P("
+    },
+    {
+      "text": "10",
+      "field": {
+        "key": "loser_leg_sectors",
+        "value": 10,
+        "text": "10",
+        "label": "GICS sectors it spans",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "-day return at or below the book's own unconditional "
+    },
+    {
+      "text": "-7.57%",
+      "field": {
+        "key": "var_uncond_10d",
+        "value": -0.0757313590618727,
+        "text": "-7.57%",
+        "label": "the unconditional quantile beside it",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "): "
+    },
+    {
+      "text": "20.6%",
+      "field": {
+        "key": "prob_below_own_var",
+        "value": 0.2055674518201284,
+        "text": "20.6%",
+        "label": "share of past scaled returns below the book's own unconditional quantile",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ".\n  At French's long-run reference of "
+    },
+    {
+      "text": "-4.32%",
+      "field": {
+        "key": "registered_event_level",
+        "value": -0.0432,
+        "text": "-4.32%",
+        "label": "the registered reversal level, frozen in the contract",
+        "source": "src/unstructured_momentum/pipeline/contract.py",
+        "reproduce": "frozen; not computed here",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ", which is a different and lower bar for a\n  book this volatile, the same figure is "
+    },
+    {
+      "text": "29.3%",
+      "field": {
+        "key": "prob_below_french_ref",
+        "value": 0.2933618843683083,
+        "text": "29.3%",
+        "label": "the same at French's long-run reference level",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ".\n\n  Three conditioning variables were tested and none is used: the bear state, which\n  made the forecast worse; the calendar state; and the volatility tercile. Their\n  ratios and intervals are in the register.\n\nIS THIS LINE CALIBRATED   [out of sample, on the book, formations BEFORE this date]\n  scaled line          "
+    },
+    {
+      "text": "5",
+      "field": {
+        "key": "cov_scaled_breaches",
+        "value": 5,
+        "text": "5",
+        "label": "breaches of the scaled line",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " breaches of "
+    },
+    {
+      "text": "54,",
+      "field": {
+        "key": "cov_n",
+        "value": 54,
+        "text": "54",
+        "label": "formations the coverage rests on",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "9.26%",
+      "field": {
+        "key": "cov_scaled_rate",
+        "value": 0.09259259259259259,
+        "text": "9.26%",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "cov_scaled_rate",
+            "label": "its breach rate",
+            "value": 0.09259259259259259,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "cov_uncond_rate",
+            "label": "the unconditional line's breach rate",
+            "value": 0.09259259259259259,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": ", Kupiec p "
+    },
+    {
+      "text": "0.197",
+      "field": {
+        "key": "cov_scaled_p",
+        "value": 0.19672034525782345,
+        "text": "0.197",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "cov_scaled_p",
+            "label": "Kupiec p for the scaled line",
+            "value": 0.19672034525782345,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "cov_uncond_p",
+            "label": "Kupiec p for the unconditional line",
+            "value": 0.19672034525782345,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": "  -> passes\n  unconditional        "
+    },
+    {
+      "text": "9.26%",
+      "field": {
+        "key": "cov_scaled_rate",
+        "value": 0.09259259259259259,
+        "text": "9.26%",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "cov_scaled_rate",
+            "label": "its breach rate",
+            "value": 0.09259259259259259,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "cov_uncond_rate",
+            "label": "the unconditional line's breach rate",
+            "value": 0.09259259259259259,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": ", Kupiec p "
+    },
+    {
+      "text": "0.197",
+      "field": {
+        "key": "cov_scaled_p",
+        "value": 0.19672034525782345,
+        "text": "0.197",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "cov_scaled_p",
+            "label": "Kupiec p for the scaled line",
+            "value": 0.19672034525782345,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "cov_uncond_p",
+            "label": "Kupiec p for the unconditional line",
+            "value": 0.19672034525782345,
+            "source": "reports/poc/e8_tail_final.json",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": "  -> passes\n  At this date the two lines cannot be told apart: they breach on the same\n  formations and Kupiec says the same of both. The divergence that makes the\n  scaled line the better calibrated one appears later in the tier, and a reader\n  standing here could not know it. The register carries the full-tier figures.\n\nWHAT THE BOOK IS   [value-weighted, as the design specifies]\n  long leg            "
+    },
+    {
+      "text": "263",
+      "field": {
+        "key": "long_names",
+        "value": "263",
+        "text": "263",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "long_names",
+            "label": "names in the long leg",
+            "value": "263",
+            "source": "reports/poc/e8_concentration_by_leg.csv",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "loser_leg_names",
+            "label": "names in the loser leg",
+            "value": 263,
+            "source": "data/raw/ishares/IWV/panel",
+            "reproduce": "uv run python scripts/gate2_nov2020.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": " names, but an effective "
+    },
+    {
+      "text": "8.0",
+      "field": {
+        "key": "long_effective_n",
+        "value": 8.039283476723366,
+        "text": "8.0",
+        "label": "effective number of names, long leg",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " of them; the largest is "
+    },
+    {
+      "text": "27%",
+      "field": {
+        "key": "long_top1",
+        "value": 0.2730937360674388,
+        "text": "27%",
+        "label": "largest single weight in the long leg",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "\n                     of the leg and the five largest "
+    },
+    {
+      "text": "60%",
+      "field": {
+        "key": "long_top5",
+        "value": 0.5978029189110042,
+        "text": "60%",
+        "label": "the five largest together",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "\n  short leg          an effective "
+    },
+    {
+      "text": "11.7",
+      "field": {
+        "key": "short_effective_n",
+        "value": 11.704254635776532,
+        "text": "11.7",
+        "label": "effective names, short leg",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " names\n  This is what value-weighting inside a decile produces. It is a property of the\n  construction and is printed, not corrected.\n\nWHAT THE READER'S EXISTING SCREENS SAY\n  Sector screen      "
+    },
+    {
+      "text": "263",
+      "field": {
+        "key": "long_names",
+        "value": "263",
+        "text": "263",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e8_concentration_by_leg.csv",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "long_names",
+            "label": "names in the long leg",
+            "value": "263",
+            "source": "reports/poc/e8_concentration_by_leg.csv",
+            "reproduce": "uv run python scripts/poc_e8_tail_final.py"
+          },
+          {
+            "key": "loser_leg_names",
+            "label": "names in the loser leg",
+            "value": 263,
+            "source": "data/raw/ishares/IWV/panel",
+            "reproduce": "uv run python scripts/gate2_nov2020.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": " names across "
+    },
+    {
+      "text": "10",
+      "field": {
+        "key": "loser_leg_sectors",
+        "value": 10,
+        "text": "10",
+        "label": "GICS sectors it spans",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " GICS sectors, Herfindahl "
+    },
+    {
+      "text": "0.146",
+      "field": {
+        "key": "sector_hhi",
+        "value": 0.14562882216021628,
+        "text": "0.146",
+        "label": "sector Herfindahl",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "\n                     largest Energy at "
+    },
+    {
+      "text": "23%",
+      "field": {
+        "key": "top_sector_share",
+        "value": 0.23193916349809887,
+        "text": "23%",
+        "label": "share in Energy",
+        "source": "data/raw/ishares/IWV/panel",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "  ->  reads DIVERSIFIED\n  VIX                "
+    },
+    {
+      "text": "38.0",
+      "field": {
+        "key": "vix",
+        "value": 38.02,
+        "text": "38.0",
+        "label": "VIX close",
+        "source": "data/raw/cboe",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ", "
+    },
+    {
+      "text": "96.8%",
+      "field": {
+        "key": "vix_pctile",
+        "value": 0.9684562894296382,
+        "text": "96.8%",
+        "label": "its percentile",
+        "source": "data/raw/cboe",
+        "reproduce": "uv run python scripts/gate2_nov2020.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " of its own history  ->  high, no direction\n\nWHAT THE LOSER LEG IS PRICED ON   [8-K filings, gated on acceptance time]\n  The theme below is the 8-K survival-condition reading, by the fallback rule\n  registered before either result was seen. The theme pipeline ran on this date\n  and produced no theme above the placebo. Across "
+    },
+    {
+      "text": "8",
+      "field": {
+        "key": "pipeline_episode_dates",
+        "value": 8,
+        "text": "8",
+        "label": "episode dates the theme pipeline ran on",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_theme.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " episode dates it raised a\n  theme on "
+    },
+    {
+      "text": "2",
+      "field": {
+        "key": "pipeline_themes_risen",
+        "value": 2,
+        "text": "2",
+        "label": "of those, dates where a theme rose above the placebo",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_theme.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ". The registration named an expected label in advance for "
+    },
+    {
+      "text": "3",
+      "field": {
+        "key": "pipeline_dates_labelled",
+        "value": 3,
+        "text": "3",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "pipeline_dates_labelled",
+            "label": "episode dates carrying an expected label written into exp-091 before the run",
+            "value": 3,
+            "source": "reports/poc/e7_summary.json",
+            "reproduce": "uv run python scripts/poc_e7_expected_labels.py"
+          },
+          {
+            "key": "analogue_blocks",
+            "label": "state-space blocks the distance used",
+            "value": 3,
+            "source": "reports/analogue_rag/panel_2020-10-31.json",
+            "reproduce": "uv run python scripts/analogue_panel_rag.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": " of\n  those dates, and "
+    },
+    {
+      "text": "0",
+      "field": {
+        "key": "pipeline_label_matches",
+        "value": 0,
+        "text": "0",
+        "label": "of those, dates whose label matched the registered expected label",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " matched -- but no match was reachable, because the dates\n  where a theme rose are not among the dates that carry an expected label. That\n  zero is a property of which dates were labelled, not evidence about the labels.\n  The reason is coverage, not the placebo: on the dates where something did\n  rise, the excess weight rested on a handful of companies with Item 1A text\n  out of a set of about a hundred and thirty. That is reported rather than\n  omitted, and it is why the classifier run is listed as not built.\n\n  Stated an external survival condition: "
+    },
+    {
+      "text": "19",
+      "field": {
+        "key": "loser_stated",
+        "value": 19,
+        "text": "19",
+        "label": "loser filings stating a condition",
+        "source": "reports/gate2/nov2020_extractions.parquet",
+        "reproduce": "uv run python scripts/gate2_extract.py loser",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " of "
+    },
+    {
+      "text": "112",
+      "field": {
+        "key": "loser_read",
+        "value": 112,
+        "text": "112",
+        "label": "loser filings read",
+        "source": "reports/gate2/nov2020_extractions.parquet",
+        "reproduce": "uv run python scripts/gate2_extract.py loser",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " filings ("
+    },
+    {
+      "text": "17.0%",
+      "field": {
+        "key": "loser_rate",
+        "value": 0.16964285714285715,
+        "text": "17.0%",
+        "label": "the rate",
+        "source": "reports/gate2/nov2020_extractions.parquet",
+        "reproduce": "uv run python scripts/gate2_extract.py loser",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ")\n  "
+    },
+    {
+      "text": "9",
+      "field": {
+        "key": "condition_names",
+        "value": 9,
+        "text": "9",
+        "label": "names carrying a condition",
+        "source": "reports/gate2/nov2020_extractions.parquet",
+        "reproduce": "uv run python scripts/gate2_extract.py loser",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " names carry one, and they name the same thing: the resumption of normal\n  demand after COVID-19. The sector screen above sees ten sectors. The filings see\n  one bet.\n\n  Evidence, verbatim, with the date it became public:\n    UAL  accepted 2020-09-09\n        \"expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine ...\"\n    CCL  accepted 2020-08-07\n        \"As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near...\"\n    AMC  accepted 2020-09-24\n        \"We currently estimate that unless theatre attendance levels improve significantly from the third quarter of 2020 to the fourth quarter of 2020 and ...\"\n\nWHEN DID THIS LAST HAPPEN   [live-only; not backtestable; run on a historical date]\n  Five nearest dates by the deterministic distance rule, and what followed each:\n    #"
+    },
+    {
+      "text": "1",
+      "field": {
+        "key": "panel_claims_dropped",
+        "value": 1,
+        "text": "1",
+        "label": "claims the gate dropped",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " 2009-08-31   distance "
+    },
+    {
+      "text": "0.039",
+      "field": {
+        "key": "analogue_1_dist",
+        "value": 0.0391,
+        "text": "0.039",
+        "label": "distance to the #1 nearest state",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   forward "
+    },
+    {
+      "text": "21",
+      "field": {
+        "key": "definitional",
+        "text": "21",
+        "value": "21",
+        "label": "the second horizon printed beside the first, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": "d "
+    },
+    {
+      "text": "-4.03%",
+      "field": {
+        "key": "analogue_1_fwd",
+        "value": -0.0403,
+        "text": "-4.03%",
+        "label": "what followed the #1 match over 21 days",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   conditions: NO RECORD\n    #"
+    },
+    {
+      "text": "2",
+      "field": {
+        "key": "pipeline_themes_risen",
+        "value": 2,
+        "text": "2",
+        "label": "of those, dates where a theme rose above the placebo",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_theme.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " 2009-05-31   distance "
+    },
+    {
+      "text": "0.070",
+      "field": {
+        "key": "analogue_2_dist",
+        "value": 0.0698,
+        "text": "0.070",
+        "label": "distance to the #2 nearest state",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   forward "
+    },
+    {
+      "text": "21",
+      "field": {
+        "key": "definitional",
+        "text": "21",
+        "value": "21",
+        "label": "the second horizon printed beside the first, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": "d "
+    },
+    {
+      "text": "+3.91%",
+      "field": {
+        "key": "analogue_2_fwd",
+        "value": 0.0391,
+        "text": "+3.91%",
+        "label": "what followed the #2 match over 21 days",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   conditions: NO RECORD\n    #"
+    },
+    {
+      "text": "3",
+      "field": {
+        "key": "pipeline_dates_labelled",
+        "value": 3,
+        "text": "3",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "pipeline_dates_labelled",
+            "label": "episode dates carrying an expected label written into exp-091 before the run",
+            "value": 3,
+            "source": "reports/poc/e7_summary.json",
+            "reproduce": "uv run python scripts/poc_e7_expected_labels.py"
+          },
+          {
+            "key": "analogue_blocks",
+            "label": "state-space blocks the distance used",
+            "value": 3,
+            "source": "reports/analogue_rag/panel_2020-10-31.json",
+            "reproduce": "uv run python scripts/analogue_panel_rag.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": " 2009-01-31   distance "
+    },
+    {
+      "text": "0.085",
+      "field": {
+        "key": "analogue_3_dist",
+        "value": 0.0852,
+        "text": "0.085",
+        "label": "distance to the #3 nearest state",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   forward "
+    },
+    {
+      "text": "21",
+      "field": {
+        "key": "definitional",
+        "text": "21",
+        "value": "21",
+        "label": "the second horizon printed beside the first, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": "d "
+    },
+    {
+      "text": "+11.24%",
+      "field": {
+        "key": "analogue_3_fwd",
+        "value": 0.1124,
+        "text": "+11.24%",
+        "label": "what followed the #3 match over 21 days",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   conditions: NO RECORD\n    #"
+    },
+    {
+      "text": "4",
+      "field": {
+        "key": "definitional",
+        "text": "4",
+        "value": "4",
+        "label": "ordinal, as in a ranked list position",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": " 2008-10-31   distance "
+    },
+    {
+      "text": "0.088",
+      "field": {
+        "key": "analogue_4_dist",
+        "value": 0.0883,
+        "text": "0.088",
+        "label": "distance to the #4 nearest state",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   forward "
+    },
+    {
+      "text": "21",
+      "field": {
+        "key": "definitional",
+        "text": "21",
+        "value": "21",
+        "label": "the second horizon printed beside the first, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": "d "
+    },
+    {
+      "text": "+6.33%",
+      "field": {
+        "key": "analogue_4_fwd",
+        "value": 0.0633,
+        "text": "+6.33%",
+        "label": "what followed the #4 match over 21 days",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   conditions: NO RECORD\n    #"
+    },
+    {
+      "text": "5",
+      "field": {
+        "key": "cov_scaled_breaches",
+        "value": 5,
+        "text": "5",
+        "label": "breaches of the scaled line",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " 2000-05-31   distance "
+    },
+    {
+      "text": "0.110",
+      "field": {
+        "key": "analogue_5_dist",
+        "value": 0.1102,
+        "text": "0.110",
+        "label": "distance to the #5 nearest state",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   forward "
+    },
+    {
+      "text": "21",
+      "field": {
+        "key": "definitional",
+        "text": "21",
+        "value": "21",
+        "label": "the second horizon printed beside the first, fixed in the registration",
+        "source": "the registration",
+        "reproduce": "",
+        "span": null
+      }
+    },
+    {
+      "text": "d "
+    },
+    {
+      "text": "+16.09%",
+      "field": {
+        "key": "analogue_5_fwd",
+        "value": 0.1609,
+        "text": "+16.09%",
+        "label": "what followed the #5 match over 21 days",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "   conditions: NO RECORD\n  Four of the five were followed by gains. Retrieval alone would reassure.\n\n  A three-role panel argued over that record. "
+    },
+    {
+      "text": "7",
+      "field": {
+        "key": "panel_claims_kept",
+        "value": 7,
+        "text": "7",
+        "label": "claims that survived the gate",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " claims survived the gate and\n  "
+    },
+    {
+      "text": "1",
+      "field": {
+        "key": "panel_claims_dropped",
+        "value": 1,
+        "text": "1",
+        "label": "claims the gate dropped",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " was dropped: a mechanism claim about a date whose condition record could not\n  support it. The gate keeps a mechanism claim only with a verbatim span from a\n  condition record for that date, and counts what it drops.\n  Adjudicator: the match is NOT APT and mechanism CANNOT BE RULED ON, deciding on\n  the field condition_record_status -- every one of the five predates the condition corpus,\n  so what they were priced on is unknown rather than different.\n\n  Two limits, both real. This step is LIVE-ONLY: it is the design's one agentic\n  component, a production system would use it, and it cannot be backtested, so its\n  contribution here is shown and not measured. And the distance used "
+    },
+    {
+      "text": "3",
+      "field": {
+        "key": "pipeline_dates_labelled",
+        "value": 3,
+        "text": "3",
+        "label": "AMBIGUOUS: 2 registered fields render this text; the page's wording cannot tell this occurrence apart from the others",
+        "source": "reports/poc/e7_summary.json",
+        "reproduce": "uv run python scripts/poc_e7_expected_labels.py",
+        "span": null,
+        "note": "",
+        "ambiguous": true,
+        "candidates": [
+          {
+            "key": "pipeline_dates_labelled",
+            "label": "episode dates carrying an expected label written into exp-091 before the run",
+            "value": 3,
+            "source": "reports/poc/e7_summary.json",
+            "reproduce": "uv run python scripts/poc_e7_expected_labels.py"
+          },
+          {
+            "key": "analogue_blocks",
+            "label": "state-space blocks the distance used",
+            "value": 3,
+            "source": "reports/analogue_rag/panel_2020-10-31.json",
+            "reproduce": "uv run python scripts/analogue_panel_rag.py"
+          }
+        ]
+      }
+    },
+    {
+      "text": " blocks of\n  the v"
+    },
+    {
+      "text": "1",
+      "field": {
+        "key": "panel_claims_dropped",
+        "value": 1,
+        "text": "1",
+        "label": "claims the gate dropped",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " engine's state space, not the design's exposures, so these are the v"
+    },
+    {
+      "text": "1",
+      "field": {
+        "key": "panel_claims_dropped",
+        "value": 1,
+        "text": "1",
+        "label": "claims the gate dropped",
+        "source": "reports/analogue_rag/panel_2020-10-31.json",
+        "reproduce": "uv run python scripts/analogue_panel_rag.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": "\n  engine's neighbours.\n\nCATALYST DAYS IN THE WINDOW   [fields, not a model input]\n  An FOMC decision day falls in the next ten sessions. Companies holding "
+    },
+    {
+      "text": "3.2%",
+      "field": {
+        "key": "earnings_weight_in_window",
+        "value": 0.0319880473382998,
+        "text": "3.2%",
+        "label": "gross book weight reporting earnings in the window",
+        "source": "reports/poc/e5_book_tail.csv",
+        "reproduce": "uv run python scripts/poc_e5_book_tail.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " of\n  gross book weight report earnings in it. These are printed so the reader can see\n  what is scheduled; they are NOT inputs to the severity line above, because\n  conditioning on them did not improve it.\n\nWHAT WOULD CHANGE THIS READING\n  A vaccine or treatment readout resolves the shared condition, the loser leg reprices\n  upward together, and the short half takes the loss. Named by the filings, not by a\n  model: UAL states it as the condition on 2020-09-09.\n\nDESIGNED AND NOT BUILT   [named rather than given a number]\n  Positioning and crowding, the vulnerable-name lists, the catalyst agent, and the\n  theme pipeline's classifier run. None appears above as a figure.\n\nWHAT HAPPENED NEXT   [NOT part of the page: outside the information set of 2020-10-30]\n  Realised over the ten sessions 2020-11-02 to 2020-11-13: "
+    },
+    {
+      "text": "-14.58%",
+      "field": {
+        "key": "outcome_realised",
+        "value": -0.14578936557250055,
+        "text": "-14.58%",
+        "label": "the book's realised 10-day return from this formation",
+        "source": "reports/poc/realised_2020-10-30.json",
+        "reproduce": "uv run python scripts/poc_e10_realised.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ".\n  That is beyond the unconditional line and inside the volatility-scaled one.\n  2020-11-09 alone was "
+    },
+    {
+      "text": "-20.21%",
+      "field": {
+        "key": "outcome_worst_session",
+        "value": -0.2021117576197973,
+        "text": "-20.21%",
+        "label": "the book's worst single session in the window",
+        "source": "reports/poc/realised_2020-10-30.json",
+        "reproduce": "uv run python scripts/poc_e10_realised.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ": the winner leg "
+    },
+    {
+      "text": "-4.18%",
+      "field": {
+        "key": "outcome_worst_winner_leg",
+        "value": -0.04183708423657229,
+        "text": "-4.18%",
+        "label": "the winner leg's return on that session",
+        "source": "reports/poc/realised_2020-10-30.json",
+        "reproduce": "uv run python scripts/poc_e10_realised.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ", the loser leg "
+    },
+    {
+      "text": "+16.03%",
+      "field": {
+        "key": "outcome_worst_loser_leg",
+        "value": 0.160274673383225,
+        "text": "+16.03%",
+        "label": "the loser leg's return on that session",
+        "source": "reports/poc/realised_2020-10-30.json",
+        "reproduce": "uv run python scripts/poc_e10_realised.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ". The loss\n  is the short half, which is the mechanism this page named in advance under WHAT\n  WOULD CHANGE THIS READING -- a vaccine readout resolving the shared condition and\n  repricing the loser leg upward together.\n  French's published factor over the same window: "
+    },
+    {
+      "text": "-9.56%",
+      "field": {
+        "key": "outcome_french",
+        "value": -0.09562655776248818,
+        "text": "-9.56%",
+        "label": "Ken French's published momentum factor over the same window",
+        "source": "reports/poc/realised_2020-10-30.json",
+        "reproduce": "uv run python scripts/poc_e10_realised.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": ". This book is the more\n  concentrated portfolio and falls further.\n  One formation is one observation. It does not make the scaled line right; the\n  coverage tests over "
+    },
+    {
+      "text": "54",
+      "field": {
+        "key": "cov_n",
+        "value": 54,
+        "text": "54",
+        "label": "formations the coverage rests on",
+        "source": "reports/poc/e8_tail_final.json",
+        "reproduce": "uv run python scripts/poc_e8_tail_final.py",
+        "span": null,
+        "note": ""
+      }
+    },
+    {
+      "text": " prior formations do that, and they are printed above.\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+    }
+  ],
+  "document_marks": [
+    {
+      "start": 3650,
+      "end": 3653,
+      "ticker": "UAL",
+      "document": {
+        "ticker": "UAL",
+        "accession": "0001104659-20-103243",
+        "quote": "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine for COVID-19 is widely available",
+        "rendered": "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine ...",
+        "accepted_at": "2020-09-09 11:00:27",
+        "condition": "widely accepted treatment and/or vaccine for COVID-19"
+      }
+    },
+    {
+      "start": 3840,
+      "end": 3843,
+      "ticker": "CCL",
+      "document": {
+        "ticker": "CCL",
+        "accession": "0000950142-20-001938",
+        "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021",
+        "rendered": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near...",
+        "accepted_at": "2020-08-07 23:21:54",
+        "condition": "ability to re-commence normal cruise operations in the near-term"
+      }
+    },
+    {
+      "start": 4030,
+      "end": 4033,
+      "ticker": "AMC",
+      "document": {
+        "ticker": "AMC",
+        "accession": "0001104659-20-108129",
+        "quote": "We currently estimate that unless theatre attendance levels improve significantly from the third quarter of 2020 to the fourth quarter of 2020 and again into 2021 and we achieve levels of attendance approaching approximately three-quarters of normalized levels, we will continue to require additional sources of liquidity to meet our obligations as they become due",
+        "rendered": "We currently estimate that unless theatre attendance levels improve significantly from the third quarter of 2020 to the fourth quarter of 2020 and ...",
+        "accepted_at": "2020-09-24 12:25:53",
+        "condition": "theatre attendance levels approaching approximately three-quarters of normalized levels"
+      }
+    }
+  ]
+}

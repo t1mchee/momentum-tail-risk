@@ -1,0 +1,32 @@
+{
+  "as_of": "2020-10-31",
+  "quantile": 0.05,
+  "by_horizon": {
+    "10": {
+      "quantile": 0.05,
+      "var_conditional": -0.0947313218616376,
+      "es_conditional": -0.14545177781902235,
+      "var_unconditional": -0.042374784445288076,
+      "es_unconditional": -0.07328468346273746,
+      "var_pctile_of_history": 4.834057764959175,
+      "n_train": 24617.0
+    },
+    "21": {
+      "quantile": 0.05,
+      "var_conditional": -0.13548221828777668,
+      "es_conditional": -0.20492351377707146,
+      "var_unconditional": -0.058018824490029486,
+      "es_unconditional": -0.10659841013316027,
+      "var_pctile_of_history": 4.87685930260912,
+      "n_train": 24606.0
+    }
+  },
+  "parameter_free": {
+    "as_of_row": "2020-10-30",
+    "var_scaled_10d": -0.1368549150442406,
+    "var_unconditional_10d": -0.04237300105540339,
+    "realised_10d": -0.09562655776248818,
+    "note": "the estimator the design specifies and exp-084 validated; the fitted regression above and this line score identically over 1,047 dates and disagree by four points here"
+  },
+  "ratio_10d": 2.2355587904865764
+}

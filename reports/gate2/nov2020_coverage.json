@@ -1,0 +1,25 @@
+{
+  "formation": "2020-10-31",
+  "window": [
+    "2020-08-01",
+    "2020-10-31"
+  ],
+  "coverage": [
+    {
+      "leg": "loser",
+      "constituents": 263,
+      "filings": 112,
+      "names_with_a_filing": 36,
+      "coverage": 0.1369,
+      "median_filings_per_covered_name": 2.5
+    },
+    {
+      "leg": "winner",
+      "constituents": 263,
+      "filings": 206,
+      "names_with_a_filing": 84,
+      "coverage": 0.3194,
+      "median_filings_per_covered_name": 2.0
+    }
+  ]
+}

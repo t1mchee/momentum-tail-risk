@@ -1,0 +1,902 @@
+{
+ "date": "2020-10-31",
+ "kind": "episode",
+ "built": true,
+ "reasons": [],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 126,
+  "start": "2020-05-05",
+  "end": "2020-10-30"
+ },
+ "constant_series_dropped": {
+  "n": 1,
+  "tickers": [
+   "GTXI"
+  ]
+ },
+ "market_check": {
+  "series": "capitalisation-weighted point-in-time IWV universe",
+  "corr_with_fama_french_mkt_rf": 0.9952,
+  "ff_days_available": 126
+ },
+ "book": {
+  "winners_registered": 263,
+  "losers_registered": 263,
+  "winners_used": 263,
+  "losers_used": 263,
+  "universe": 2689,
+  "caps_snapshot": "2020-10-30"
+ },
+ "random_books": {
+  "n": 200,
+  "cells_short_total": 0
+ },
+ "components": [
+  {
+   "k": 1,
+   "VS_k": 0.8400882060270756,
+   "VS_k_placebo_q95": 0.8027962516796675,
+   "VS_k_percentile_vs_random": 1.0,
+   "above_noise": true,
+   "g_k": 0.06613383959681955,
+   "sigma_k": 0.4362490648514194,
+   "set_size": 132,
+   "bridge": {
+    "instrument": "sector_financials",
+    "r2": 0.7602027898525686,
+    "b_k": -23.001938898083772,
+    "beta_H": 1.3195781890560785,
+    "source": "panel: equally-weighted Financials members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_financials",
+      "r2": 0.7602
+     },
+     {
+      "instrument": "sector_energy",
+      "r2": 0.7521
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.7469
+     },
+     {
+      "instrument": "sector_real_estate",
+      "r2": 0.6911
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.68
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "VS_k": 0.01661967290459496,
+   "VS_k_placebo_q95": 0.06689495766754763,
+   "VS_k_percentile_vs_random": 0.185,
+   "above_noise": false,
+   "g_k": 0.017186345877714504,
+   "sigma_k": 0.22004736438936942,
+   "set_size": 132,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.7140967173535431,
+    "b_k": 16.211591098191317,
+    "beta_H": 1.002410040547748,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.7141
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.2203
+     },
+     {
+      "instrument": "sector_real_estate",
+      "r2": 0.0471
+     },
+     {
+      "instrument": "sector_financials",
+      "r2": 0.0328
+     },
+     {
+      "instrument": "sector_utilities",
+      "r2": 0.0327
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "VS_k": 0.0008656588386794199,
+   "VS_k_placebo_q95": 0.023682458459133325,
+   "VS_k_percentile_vs_random": 0.195,
+   "above_noise": false,
+   "g_k": 0.0051508028596701436,
+   "sigma_k": 0.1787392483494507,
+   "set_size": 132,
+   "bridge": {
+    "instrument": "sector_energy",
+    "r2": 0.16693298717927663,
+    "b_k": -2.5655140881323892,
+    "beta_H": 1.9849298255946148,
+    "source": "panel: equally-weighted Energy members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_energy",
+      "r2": 0.1669
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.1053
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.0641
+     },
+     {
+      "instrument": "sector_communication",
+      "r2": 0.0553
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.0503
+     }
+    ]
+   }
+  }
+ ],
+ "decomposition": {
+  "shrinkage": 0.23342911373533523,
+  "condition_number": 68336.19167514039,
+  "w_norm_l2": 0.4580700940594328,
+  "n_names": 526,
+  "w_norm_l2_convention": "spec node `sort`: value-weighted within each leg, dollar-neutral across them, from RAW price * quantity",
+  "w_norm_l2_exp089_joint_convention": 0.32205381218980295,
+  "leg_concentration": {
+   "winner": {
+    "n": 263,
+    "top1_share": 0.27309373606743886,
+    "effective_n": 8.039283476723366,
+    "largest": "AAPL"
+   },
+   "loser": {
+    "n": 263,
+    "top1_share": 0.2173114153719209,
+    "effective_n": 11.704254635776532,
+    "largest": "XOM"
+   }
+  }
+ },
+ "news": {
+  "file": "2020-11_vaccine.parquet",
+  "titles_total": 22650,
+  "titles_kept": 9150,
+  "titles_unique_kept": 5351,
+  "share_before_formation": 0.404,
+  "risk_statements_rule_b": 453,
+  "risk_statements_rule_a_exp085": 0
+ },
+ "filings": {
+  "tickers_in_any_component_set": 1496,
+  "tickers_with_item_1a_as_of_date": 226,
+  "tickers_used": 64,
+  "sentences_total": 5037,
+  "risk_statements_rule_b": 2397,
+  "risk_statements_rule_a_exp085": 49,
+  "excerpt_chars": 18000
+ },
+ "population": {
+  "n": 2850,
+  "news": 453,
+  "filing": 2397
+ },
+ "clustering_variants": {
+  "umap10_min_samples_5": {
+   "variant": "umap10_min_samples_5",
+   "min_samples": 5,
+   "reducer": "umap n_components=10 metric=cosine seed=0",
+   "clusters": {
+    "n": 2,
+    "noise_share": 0.005614035087719298,
+    "largest_cluster_share": 0.9782456140350877,
+    "degenerate": true,
+    "d_star": 2.9353790283203125,
+    "d_star_c": 5.609817981719971,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 1,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 2788,
+      "news_members": 449,
+      "company_specific": false,
+      "boilerplate_excluded": true,
+      "label": [
+       "business",
+       "results",
+       "operations",
+       "products",
+       "financial",
+       "market"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 46,
+      "news_members": 2,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "nuplazid",
+       "psychosis",
+       "approval",
+       "studies",
+       "fda",
+       "treatment"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": true,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.9782456140350877,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": true,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "studies",
+      "fda",
+      "treatment"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 2,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 11,
+      "set_coverage_share": 0.0833,
+      "share_of_set_absolute_loading_covered": 0.0795
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "studies",
+      "fda",
+      "treatment"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.004842157944704088,
+     "E_e": -0.004842157944704088,
+     "placebo_q95_of_random_max": 0.007068237174252085,
+     "risen": false,
+     "news_members": 2,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 5,
+      "set_coverage_share": 0.0379,
+      "share_of_set_absolute_loading_covered": 0.0267
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "studies",
+      "fda",
+      "treatment"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.00044705198237692353,
+     "E_e": -0.00044705198237692353,
+     "placebo_q95_of_random_max": 0.0045877633112520935,
+     "risen": false,
+     "news_members": 2,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 9,
+      "set_coverage_share": 0.0682,
+      "share_of_set_absolute_loading_covered": 0.062
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  },
+  "registered": {
+   "variant": "registered",
+   "min_samples": null,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [registered] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  },
+  "min_samples_5": {
+   "variant": "min_samples_5",
+   "min_samples": 5,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 2,
+    "noise_share": 0.863859649122807,
+    "largest_cluster_share": 0.1256140350877193,
+    "degenerate": false,
+    "d_star": 0.8568412065505981,
+    "d_star_c": 0.8077413439750671,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 1,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 358,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "business",
+       "results",
+       "operations",
+       "financial",
+       "risks",
+       "condition"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 30,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "nuplazid",
+       "psychosis",
+       "approval",
+       "approved",
+       "treatment",
+       "fda"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.1256140350877193,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": true,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 11,
+      "set_coverage_share": 0.0833,
+      "share_of_set_absolute_loading_covered": 0.0795
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0031312940271707016,
+     "E_e": -0.0031312940271707016,
+     "placebo_q95_of_random_max": 0.004154658952253413,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 5,
+      "set_coverage_share": 0.0379,
+      "share_of_set_absolute_loading_covered": 0.0267
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.00044705198237692353,
+     "E_e": -0.00044705198237692353,
+     "placebo_q95_of_random_max": 0.0045877633112520935,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 132,
+      "set_companies_with_item_1a": 9,
+      "set_coverage_share": 0.0682,
+      "share_of_set_absolute_loading_covered": 0.062
+     },
+     "runner_up": null,
+     "expected_label_terms": [
+      "vaccine",
+      "treatment",
+      "timing",
+      "trial"
+     ],
+     "label_matches_expected": true,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  }
+ },
+ "primary_variant": "umap10_min_samples_5",
+ "clusters": {
+  "n": 2,
+  "noise_share": 0.005614035087719298,
+  "largest_cluster_share": 0.9782456140350877,
+  "degenerate": true,
+  "d_star": 2.9353790283203125,
+  "d_star_c": 5.609817981719971,
+  "min_cluster_size": 25,
+  "n_boilerplate_excluded": 1,
+  "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+  "boilerplate_vocabulary": [
+   "ability",
+   "additional",
+   "adverse",
+   "adversely",
+   "affect",
+   "affected",
+   "affecting",
+   "business",
+   "businesses",
+   "cash",
+   "certain",
+   "companies",
+   "company",
+   "condition",
+   "conditions",
+   "could",
+   "customer",
+   "customers",
+   "finances",
+   "financial",
+   "flows",
+   "future",
+   "harm",
+   "harmed",
+   "impact",
+   "impacted",
+   "including",
+   "material",
+   "materially",
+   "may",
+   "operate",
+   "operating",
+   "operations",
+   "product",
+   "products",
+   "result",
+   "results",
+   "revenue",
+   "revenues",
+   "risk",
+   "risks",
+   "service",
+   "services",
+   "significant",
+   "significantly"
+  ],
+  "detail": [
+   {
+    "id": 0,
+    "size": 2788,
+    "news_members": 449,
+    "company_specific": false,
+    "boilerplate_excluded": true,
+    "label": [
+     "business",
+     "results",
+     "operations",
+     "products",
+     "financial",
+     "market"
+    ]
+   },
+   {
+    "id": 1,
+    "size": 46,
+    "news_members": 2,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "nuplazid",
+     "psychosis",
+     "approval",
+     "studies",
+     "fda",
+     "treatment"
+    ]
+   }
+  ]
+ },
+ "themes": [
+  {
+   "k": 1,
+   "above_noise": true,
+   "theme_cluster": 1,
+   "theme_label": [
+    "nuplazid",
+    "psychosis",
+    "approval",
+    "studies",
+    "fda",
+    "treatment"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.0,
+   "E_e": 0.0,
+   "placebo_q95_of_random_max": 0.0,
+   "risen": false,
+   "news_members": 2,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 132,
+    "set_companies_with_item_1a": 11,
+    "set_coverage_share": 0.0833,
+    "share_of_set_absolute_loading_covered": 0.0795
+   },
+   "runner_up": null,
+   "expected_label_terms": [
+    "vaccine",
+    "treatment",
+    "timing",
+    "trial"
+   ],
+   "label_matches_expected": true,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": true,
+   "quotes": [
+    "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+   ]
+  },
+  {
+   "k": 2,
+   "above_noise": false,
+   "theme_cluster": 1,
+   "theme_label": [
+    "nuplazid",
+    "psychosis",
+    "approval",
+    "studies",
+    "fda",
+    "treatment"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.004842157944704088,
+   "E_e": -0.004842157944704088,
+   "placebo_q95_of_random_max": 0.007068237174252085,
+   "risen": false,
+   "news_members": 2,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 132,
+    "set_companies_with_item_1a": 5,
+    "set_coverage_share": 0.0379,
+    "share_of_set_absolute_loading_covered": 0.0267
+   },
+   "runner_up": null,
+   "expected_label_terms": [
+    "vaccine",
+    "treatment",
+    "timing",
+    "trial"
+   ],
+   "label_matches_expected": true,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": true,
+   "quotes": [
+    "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+   ]
+  },
+  {
+   "k": 3,
+   "above_noise": false,
+   "theme_cluster": 1,
+   "theme_label": [
+    "nuplazid",
+    "psychosis",
+    "approval",
+    "studies",
+    "fda",
+    "treatment"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.00044705198237692353,
+   "E_e": -0.00044705198237692353,
+   "placebo_q95_of_random_max": 0.0045877633112520935,
+   "risen": false,
+   "news_members": 2,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 132,
+    "set_companies_with_item_1a": 9,
+    "set_coverage_share": 0.0682,
+    "share_of_set_absolute_loading_covered": 0.062
+   },
+   "runner_up": null,
+   "expected_label_terms": [
+    "vaccine",
+    "treatment",
+    "timing",
+    "trial"
+   ],
+   "label_matches_expected": true,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": true,
+   "quotes": [
+    "NUPLAZID is our only drug that has been approved for sale by any regulatory body, and it became available for prescription in the United States in May 2016."
+   ]
+  }
+ ],
+ "named_component": null,
+ "any_theme_risen": false,
+ "risen_on_component_above_noise": false,
+ "numeric_built": true,
+ "expected_label_terms": [
+  "vaccine",
+  "treatment",
+  "timing"
+ ],
+ "expected_label_phrase": "vaccine or treatment timing",
+ "expected_label_source": "exp-091 registration, registered_at 2026-09-04, commit fef25f9a4",
+ "label_matches_expected": false,
+ "label_match_basis": "no theme rose above the 95th percentile of the random books' maximum, so the registered rule has nothing to match",
+ "expected_terms_in_top_theme_label": [
+  "treatment"
+ ],
+ "expected_label_carried_at": "2026-09-07T10:27:42.581156+00:00"
+}

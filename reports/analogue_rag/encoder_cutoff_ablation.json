@@ -1,0 +1,10 @@
+{
+  "n_query_dates": 10,
+  "architecture_wins": 9,
+  "sign_test_p_one_sided": 0.0107421875,
+  "hits_needed_for_p05": 9,
+  "median_same_architecture_two_cutoffs": 0.9772000000000001,
+  "median_constrained_vs_contemporary": 0.8175,
+  "median_later_vs_contemporary": 0.78045,
+  "median_gap": 0.174
+}

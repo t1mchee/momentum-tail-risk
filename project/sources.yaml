@@ -1,0 +1,603 @@
+# Where the data comes from, what it covers, and where the holes are.
+# Coverage figures are read off the files on disk, not off memory.
+
+- id: src-iwv
+  label: iShares Russell 3000 holdings
+  one_breath: >
+    Daily list of what the broad US index held, which is how the book gets rebuilt
+    historically without survivorship bias.
+  access: free-api
+  module: data/ishares.py
+  coverage:
+    - {from: 2006-09-29, to: 2013-03-31, grain: month-end, rows: 3341}
+    - {from: 2013-04-01, to: 2026-08-19, grain: daily}
+  gaps:
+    - {from: 2010-05-01, to: 2010-05-31, cause: 'upstream archive is missing this month; found by scripts/reconcile_sources.py, not by inspection. Month-end era, so one absent file is a whole month.'}
+    - {from: 2017-01-01, to: 2017-07-31, cause: 'upstream archive is missing these files; 0 raw files present. Leg membership carries the 2016-12-31 sort across all seven months byte-identically, Jaccard 1.000 against a 0.5-0.6 month-to-month norm, so those month-ends are a frozen book presented as if re-struck. The conferred placebo panel drops 2017 entirely, so two consumers of the same gap disagree. Gate 0 audit item 3.'}
+  vintage: 2026-08-19
+  note: >
+    Carries price, weight and sector per holding, including companies that later delisted.
+    Several market-data surveys assert a free stock-level panel of this kind does not
+    exist. It does, and it is the foundation the whole book reconstruction sits on.
+  used_by: [exp-001, exp-002, exp-008, exp-013, exp-014, exp-020]
+  traps: [trp-01, trp-02, trp-03, trp-04, trp-05, trp-06, trp-09]
+  wishlist: false
+
+- id: src-mtum
+  label: iShares momentum ETF holdings
+  one_breath: >
+    Daily holdings and share count for the largest US momentum fund, which reveals both
+    its positions and money flowing in or out.
+  access: free-api
+  module: data/ishares.py
+  coverage:
+    - {from: 2013-04-22, to: 2026-08-19, grain: daily, rows: 3218}
+  gaps:
+    - {from: 2017-01-01, to: 2017-06-30, cause: 'upstream archive is missing these files; 0 raw files present. The same upstream outage as the IWV gap but SIX months rather than seven. Undeclared until scripts/reconcile_sources.py measured it.'}
+  vintage: 2026-08-19
+  note: >
+    Shares outstanding differenced against price gives implied creation and redemption
+    flow. The fund also rebalances on a published schedule with a contractual emergency
+    trigger in volatile markets, which makes its future trading partly knowable in advance.
+  used_by: [exp-015]
+  traps: []
+  wishlist: false
+
+- id: src-french
+  label: Fama-French daily factor returns
+  one_breath: >
+    The academic reference series for momentum and the other standard factors, published
+    free by Dartmouth.
+  access: free-file
+  module: data/french.py
+  coverage:
+    - {from: 1926-07-01, to: 2026-06-30, grain: daily}
+  gaps: []
+  vintage: 2026-08-01
+  note: >
+    Published 34 to 65 days after the fact, so it cannot drive a live monitor and is used
+    for research and calibration only. History gets quietly restated and no version numbers
+    are issued, so each download is hashed and kept.
+  used_by: [exp-003, exp-004, exp-005, exp-006, exp-007]
+  traps: []
+  wishlist: false
+
+- id: src-cboe-index
+  label: Cboe volatility and correlation indices
+  one_breath: >
+    Free daily history of what options markets charge for volatility and for the tendency
+    of stocks to move together.
+  access: free-file
+  module: data/cboe.py
+  coverage:
+    - {from: 1990-01-02, to: 2026-08-19, grain: daily, series: volatility index}
+    - {from: 2004-01-02, to: 2026-08-19, grain: daily, series: long bond volatility}
+    - {from: 2006-01-03, to: 2026-08-19, grain: daily, series: one- and three-month implied correlation}
+    - {from: 2009-01-02, to: 2026-08-19, grain: daily, series: small-cap and Nasdaq volatility}
+    - {from: 2011-01-03, to: 2026-08-19, grain: daily, series: single-name volatility}
+  gaps: []
+  vintage: 2026-08-19
+  note: >
+    Some series were discontinued upstream and simply stop; the loader carries an explicit
+    list so a flat tail is never mistaken for calm markets.
+  used_by: [exp-012]
+  traps: [trp-07]
+  wishlist: false
+
+- id: src-finra
+  label: FINRA daily short volume
+  one_breath: >
+    Daily count of shares sold short on each stock, published free with a short delay.
+  access: free-file
+  module: data/shortside.py
+  coverage:
+    - {from: 2018-08-01, to: 2026-08-20, grain: daily, rows: 2024}
+  gaps: []
+  vintage: 2026-08-20
+  note: >
+    Roughly half of all reported volume is short by construction, because market makers
+    hedge, so only changes carry information and never the level. The short-exempt subset
+    is the cleaner marker. Total volume here is about 48 percent of the consolidated tape.
+  used_by: [exp-016, exp-019, exp-021]
+  traps: [trp-08]
+  wishlist: false
+
+- id: src-regsho
+  label: Regulation SHO threshold securities lists
+  one_breath: >
+    Daily list of stocks with persistent settlement failures, the closest free proxy for
+    a stock being impossible to borrow.
+  access: free-file
+  module: data/shortside.py
+  coverage:
+    - {from: 2018-08-01, to: 2026-08-19, grain: daily, rows: 2023}
+  gaps: []
+  vintage: 2026-08-19
+  note: >
+    Tested and found unusable for a large-company book. Kept because the negative result
+    is itself worth reporting.
+  used_by: [exp-011]
+  traps: []
+  wishlist: false
+
+- id: src-cboe-chains
+  label: Cboe option chain snapshots
+  one_breath: >
+    Full daily option prices and sensitivities for every stock in the book, captured
+    forward from today because no free history exists.
+  access: free-api
+  module: data/options.py
+  coverage:
+    - {from: 2026-08-20, to: 2026-08-20, grain: daily, rows: 1}
+  gaps: []
+  vintage: 2026-08-20
+  note: >
+    One trading session so far, not two. Two folders exist, named for two dates, and both
+    hold the 20 August close because both runs fired within two minutes of each other after
+    midnight. Counting folders would have counted the same session twice. Both sides of the
+    book, 126 companies, about 10 megabytes a session. From now the job runs after the
+    close so the folder date and the session agree, and a manifest recording the session,
+    the universe asked for and any misses is written every run.
+  used_by: [exp-017, exp-019, exp-021]
+  traps: [trp-13, trp-14, trp-15, trp-16]
+  wishlist: false
+
+- id: src-edgar
+  label: SEC EDGAR company filings
+  one_breath: >
+    Every filing US companies make, stamped to the second at the moment the regulator
+    accepted it.
+  access: free-api
+  module: data/earnings.py
+  coverage:
+    - {from: 2001-01-01, to: 2026-08-21, grain: filing-level, rows: 2519}
+  gaps: []
+  vintage: 2026-08-21
+  note: >
+    The second-level acceptance timestamp is the most precise availability marker in the
+    whole project. Used here to date earnings releases for the companies actually held.
+  used_by: [exp-014]
+  traps: [trp-21, trp-25, trp-26]
+  wishlist: false
+
+- id: src-gdelt
+  label: GDELT global news index
+  one_breath: >
+    A free index of worldwide news coverage, searchable by topic and stamped with when
+    the crawler saw each article.
+  access: free-api
+  module: data/gdelt.py
+  coverage:
+    - {from: 2015-02-17, to: 2026-08-26, grain: article-level, rows: 122266705}
+  gaps: []
+  vintage: 2026-08-21
+  note: >
+    THE BULK IS NOT ON DISK. The authoritative store is the BigQuery table momentum.gkg_matched:
+    122,266,705 rows over 139 monthly partitions, 2015-02 through 2026-08, with 4,191 distinct
+    days and no missing month -- continuous, not sparse. The local directory holds only four
+    cached Aug-13-to-Sep-06 windows from 2016 to 2019 that were pulled down as seasonal controls
+    for the September 2019 episode, and a Gate 0 audit that inspected the disk alone mistook that
+    cache for the source and briefly rewrote this coverage as four narrow windows. The registry's
+    real and only error was its start date: it claimed 2017-01-01 where the table begins
+    2015-02-17, understating the corpus by two years. The derived attention panel confirms the
+    table rather than the cache: 139 of 139 months, 4,191 distinct days, same span.
+
+    Capped at 250 records per query and rate-limited to roughly one request every twelve
+    seconds in practice, so results are cached to disk. The crawl time lags true
+    publication, which makes it a conservative availability stamp that cannot leak.
+  used_by: [exp-009, exp-010, exp-020]
+  traps: [trp-10, trp-17, trp-18, trp-19]
+  wishlist: false
+
+- id: src-fomc
+  label: Federal Reserve meeting calendar
+  one_breath: Dates and exact release times of US central bank policy decisions since 1996.
+  access: free-scrape
+  module: data/fedcal.py
+  coverage:
+    - {from: 1996-01-01, to: 2026-12-31, grain: event-level, rows: 255}
+  gaps: []
+  vintage: 2026-08-15
+  note: >
+    Four different address schemes across four eras of the website, each needing its own
+    parser.
+  used_by: [exp-013]
+  traps: []
+  wishlist: false
+
+- id: src-fred
+  label: Federal Reserve economic data
+  one_breath: Free macroeconomic and credit series used as background conditions for the book.
+  access: free-api
+  module: data/fred.py
+  coverage:
+    - {from: 1990-01-01, to: 2026-08-21, grain: daily}
+  gaps: []
+  vintage: 2026-08-21
+  note: >
+    The corporate bond spread series is usable in full; the index-provider spread series
+    are truncated to a rolling three years and cannot support long history.
+  used_by: [exp-008]
+  traps: []
+  wishlist: false
+
+- id: src-bis
+  label: Bank for International Settlements quarterly review
+  one_breath: >
+    Official-sector commentary on financial conditions, published on a fixed quarterly
+    schedule since 1996.
+  access: free-file
+  module: data/official.py
+  coverage:
+    - {from: 1996-03-01, to: 2026-06-30, grain: quarterly}
+  gaps: []
+  vintage: 2026-08-10
+  note: >
+    Tested as an early-warning source and refuted. Word frequencies track the editorial
+    calendar rather than market conditions.
+  used_by: [exp-010]
+  traps: []
+  wishlist: false
+
+# ---------------------------------------------------------------------------------
+# Below the line: sources that would need to be bought. Each names the specific
+# question the purchase would answer, so the wishlist is an argument and not a
+# shopping list.
+# ---------------------------------------------------------------------------------
+
+- id: src-optionmetrics
+  label: OptionMetrics historical option surfaces
+  one_breath: >
+    Decades of daily option prices for every US stock, the paid version of the snapshots
+    now being captured by hand.
+  access: paid
+  coverage:
+    - {from: 1996-01-01, to: 2026-08-21, grain: daily}
+  gaps: []
+  wishlist: true
+  would_test: >
+    Whether the price of crash protection on the book's own holdings rises before a
+    reversal, which is currently untestable because the snapshot history starts this week
+    and a statistical test needs years.
+  used_by: []
+  traps: []
+
+- id: src-borrow
+  label: Securities lending borrow cost
+  one_breath: >
+    What it actually costs to borrow each stock to sell it short, priced daily by the
+    lending desks.
+  access: paid
+  coverage:
+    - {from: 2006-01-01, to: 2026-08-21, grain: daily}
+  gaps: []
+  wishlist: true
+  would_test: >
+    Whether option skew on the losing side of the book signals a coming squeeze or merely
+    prices the cost of borrowing, which are mechanically linked and cannot be separated
+    with free data alone.
+  used_by: []
+  traps: []
+
+- id: src-news-archive
+  label: Licensed full-text news archive
+  one_breath: >
+    Complete article text from major financial outlets going back decades, rather than
+    headlines and metadata.
+  access: paid
+  coverage:
+    - {from: 1990-01-01, to: 2026-08-21, grain: article-level}
+  gaps: []
+  wishlist: true
+  would_test: >
+    Whether the empty-corpus finding is a fact about the world or an artefact of free
+    news indexes starting in 2017 and capping every query at 250 records.
+  used_by: []
+  traps: []
+
+- id: src-13f
+  label: SEC Form 13F institutional holdings
+  one_breath: >
+    Quarterly long US equity positions of institutional managers, the only free record of
+    who owns what that reaches the 2007 unwind.
+  access: free-file
+  module: data/thirteenf.py
+  coverage:
+    - {from: 2001-01-01, to: 2026-06-30, grain: quarterly holdings per filer}
+  gaps: []
+  vintage: 2026-08-24
+  note: >
+    LOCAL STORAGE, 2026-08-28: the 170,818-file per-accession crawl archive
+    (data/raw/thirteenf/raw, 2.3GB) was deleted from disk after a verified upload to
+    gs://unstructured-momentum-data/repo_raw_backup/thirteenf/raw/ -- counts matched exactly
+    at 170,818 both sides before anything was removed. It is superseded by the bulk-dataset
+    parquets in data/raw/thirteenf/holdings (54 quarters), which no longer derive from it and
+    which every consumer reads; no code path referenced the crawl archive. Restore from the
+    bucket if a per-accession original is ever needed. The deletion was made under disk
+    pressure (the volume reached 83MB free and was failing tests and git operations).
+
+    Long US equity only, above a 100 million dollar threshold, so the momentum loser leg is
+    invisible and needs FINRA short interest instead. No leverage and no shorts. Roughly
+    3,200 filers a quarter in 2007 and 9,600 now, covering thirteen of the fifteen
+    registered episodes and missing only 1999-04 and 2000-03. period_of_report is the
+    position date and available_at is the acceptance timestamp about 45 days later; the two
+    are separate columns because the index quarter is the filing quarter, not the holdings
+    quarter. Values are in thousands until an SEC amendment moved them to whole dollars and
+    filers switched raggedly, so units are detected per filing rather than by date. Selected
+    because crowded deleveraging leaves no trace in company-filed text, companies not being
+    in the business of writing about who owns them, while this is the record that carries it.
+  used_by: [exp-036]
+  traps: [trp-28, trp-29]
+  wishlist: false
+
+- id: src-short-interest
+  label: FINRA consolidated short interest
+  one_breath: >
+    Shares short for every US equity security, twice a month, with FINRA's own days-to-cover
+    figure alongside.
+  access: free-api
+  module: data/shortinterest.py
+  coverage:
+    - {from: 2018-01-12, to: 2026-08-15, grain: twice monthly per security}
+  gaps: []
+  vintage: 2026-08-24
+  note: >
+    Roughly 16,200 securities per settlement date, of which about 11,700 are usable. The feed
+    carries settlementDate and NO publication date, which is the trap: settlement is when the
+    position was measured and FINRA disseminates about eight business days later, so building
+    on settlement dates would hold positions a week before anyone could see them. Availability
+    is therefore computed as settlement plus ten business days, deliberately later than the
+    real lag, because a stamp that is too late costs signal while one that is too early
+    invents it. daysToCoverQuantity saturates at 999.99 for securities reporting no volume;
+    those rows are 2,863 of 16,203 on a sample date and carry 15 percent of all short
+    interest, so they are dropped rather than averaged. This is a POSITION, unlike the daily
+    short-volume feed, which is flow contaminated by market-maker hedging. Selected because
+    13F established that long holdings cannot see the leg momentum is short, and this is that
+    leg.
+  used_by: [exp-037]
+  traps: []
+  wishlist: false
+
+- id: src-calls-curated
+  label: Earnings-call transcripts, hand-curated episode sample
+  one_breath: >
+    Management speaking quarterly with a question period, rather than lawyers writing annually
+    on a compliance calendar.
+  access: free-scrape
+  coverage:
+    - {from: 2019-10-01, to: 2022-12-31, grain: call-level, rows: 0}
+  gaps: []
+  wishlist: false
+  note: >
+    Registered as a data rung, NOT acquired. It is the acquisition step for the emergence
+    experiment's second rung and is taken only if that experiment's primary lands and its
+    diagnosis is corpus tempo.
+    The gap it fills is specific. Every text source in this project is filings: lawyer-mediated,
+    annually recycled, and released on a schedule that has nothing to do with when a risk became
+    real. Calls are quarterly, management speaks in its own register, and the question period
+    reveals what the market is probing rather than what counsel would volunteer. The emergence
+    claim is strongest exactly where language moves fastest, and novel risk vocabulary very
+    likely reaches a call one to two quarters before it reaches a risk-factor section. So if the
+    filing-based lead time comes back marginal, the first diagnosis to check is wrong corpus
+    tempo rather than no signal, and this is the rung that checks it.
+    Scope is deliberately small: the two emergence episodes only, top book names by weight,
+    hand-curated. Free coverage is patchy and licensing is murky, which is why the full archive
+    is a separate wishlist entry rather than this one.
+  used_by: []
+  traps: []
+
+- id: src-calls-archive
+  label: Licensed earnings-call transcript archive
+  one_breath: >
+    Complete quarterly transcripts with speaker attribution across the full universe, rather
+    than a hand-curated episode sample.
+  access: paid
+  coverage:
+    - {from: 2004-01-01, to: 2026-08-26, grain: call-level}
+  gaps: []
+  wishlist: true
+  would_test: >
+    Whether the emergence lead time measured on a hand-curated episode sample generalises. The
+    curated version can establish that calls lead filings on two episodes; only full coverage
+    could measure the distribution of that lead across many drivers, and only it would support a
+    live monitor, since a hand-curated sample cannot be maintained daily.
+  used_by: []
+  traps: []
+
+- id: src-edgar-8k
+  label: EDGAR 8-K bodies
+  one_breath: >
+    The text of material-event filings, not merely their timestamps, which is the
+    highest-frequency issuer writing that exists.
+  access: free-api
+  module: data/eightk.py
+  coverage:
+    - {from: 2018-01-02, to: 2026-08-26, grain: filing-level, rows: 52527}
+  gaps: []
+  wishlist: false
+  note: >
+    CORRECTED 2026-08-27: the bodies WERE fetched (52,527 indexed filings / 54,488 gzipped
+    bodies, 629MB, 1,339 tickers, second-stamped accepted_at) -- the rows-zero entry here was
+    stale and was caught by the unused-data review. The metadata has been used since early in
+    the project -- acceptance timestamps drive the earnings calendar -- while the bodies have
+    never been consumed by any registered experiment. They are free, on the same API the
+    filing loader already uses, and they are the only issuer text that moves at weekly rather
+    than quarterly tempo: guidance withdrawals, covenant waivers, executive departures,
+    financing events. Item 2.02 is already parsed for its timestamp; the other item codes carry
+    the material events.
+  used_by: []
+  traps: []
+
+- id: src-edgar-backfill
+  label: EDGAR filings extended back to 2001
+  one_breath: >
+    The same filing corpus, run back fifteen further years, which buys the 2008 credit episode.
+  access: free-api
+  coverage:
+    - {from: 2001-01-01, to: 2015-12-31, grain: filing-level, rows: 0}
+  gaps: []
+  wishlist: false
+  note: >
+    Registered as the CONFIRMATION-stage acquisition, not a now item. The corpus starting in
+    2016 leaves the emergence design two in-sample episodes and the sealed tier, which is thin
+    for a confirmation run that is supposed to be out-of-episode. EDGAR full text reaches 2001,
+    so extending it adds the 2008 to 2009 credit episode -- a different driver vocabulary from
+    both pandemic and inflation, and the one where risk language genuinely changed.
+    Pure compute and parsing, no licensing question. The cost is time, which is why it waits
+    until the design it would serve has proven itself on the corpus already held.
+  used_by: []
+  traps: []
+
+- id: src-implied-moments
+  label: Model-free implied moments (Vilkov/Rehman OSF panel)
+  one_breath: >
+    Published BKM risk-neutral skewness and variance for thousands of US names daily,
+    free and already integrated, so no option chain has to be touched.
+  access: free-file
+  module: null
+  coverage:
+    - {from: 2017-03-22, to: 2023-12-29, grain: ticker-day, rows: 1705}
+  gaps: []
+  vintage: 2026-08-28
+  wishlist: false
+  note: >
+    COVERAGE BOUNDS, stated here because they are boundaries rather than internal gaps:
+    MTUM listed in 2013 but enters this panel only in 2017-03, so its first four option
+    years are absent; and the panel ends 2023-12-29 while this project's own option capture
+    begins 2026-08-20, with NO overlapping day between them. Because the peer-reviewed
+    record is explicit that risk-neutral skewness is far more sensitive to surface
+    construction than variance is, and no overlap exists on which to calibrate one
+    construction against the other, stitching the two segments is REFUSED -- they are
+    separate series and must be reported as such.
+    Acquired 2026-08-28 after an options-sourcing audit. Rehman and Vilkov publish the
+    Bakshi-Kapadia-Madan model-free implied moment panel on OSF (DOI 10.17605/OSF.IO/BTVDH,
+    CC-BY 4.0), keyed on CRSP permno, daily 1996-2023, across roughly four to five thousand
+    names per day -- which covers any book this project constructs. MTUM is permno 13851
+    and is complete: 1,705 days, 100 percent non-null at the 30, 60 and 91-day horizons,
+    mean 30-day skew -1.05.
+    WHY THIS MATTERS: it is a direct risk-neutral skewness series for the momentum factor
+    itself, not a market-wide proxy, and it is the price null the monotone-quantile
+    registration needs -- the question becomes whether text adds tail information over what
+    the option market was already pricing ABOUT MOMENTUM, rather than about the S&P.
+    The full panel (mfis, mfiv, Martin simple variance, IV slopes; 989MB) also covers the
+    book's constituents, so a book-level implied skew weighted by leg membership is
+    buildable and is the natural next step. Paid alternatives were priced and are not
+    needed for the free path: a one-time 599 dollar vendor archive would remove the seam
+    and recover 2013-2017, and is worth revisiting only if the signal proves out.
+  used_by: []
+  traps: []
+
+- id: src-epu
+  label: Newspaper-based uncertainty and risk indices
+  one_breath: >
+    Century-deep counts of what the press wrote about policy uncertainty and geopolitical
+    risk, the first text source here as deep as the return archive.
+  access: free-file
+  module: null
+  coverage:
+    - {from: 1900-01-31, to: 2026-07-31, grain: monthly}
+  gaps: []
+  vintage: 2026-08-31
+  note: >
+    Two series. Baker, Bloom and Davis build the US Economic Policy Uncertainty index from
+    scaled article counts across ten newspapers; Caldara and Iacoviello build the historical
+    Geopolitical Risk index the same way. Both are free with attribution and both cover 100
+    percent of the 1,150-month state-vector archive, against 5 percent for the company-filing
+    corpus. Selected after the page replay showed no analogue in 372 pages could be described
+    from company filings, which begin 2018 while the median retrieved analogue is 19.9 years
+    old. Two limits bind. They are AGGREGATE monthly indices, so they carry nothing about
+    which names are in the book and cannot speak to crowding, leverage or securities lending
+    -- the positioning where momentum's danger lives, which is not public at any depth. And
+    the pre-1985 portion was constructed retrospectively, so the term list used to count 1950
+    articles was chosen by researchers who knew what followed; no future information about
+    1950 enters the 1950 value, but the feature definition carries hindsight a
+    contemporaneous index would not.
+  used_by: [exp-071]
+  traps: [trp-73]
+  wishlist: false
+
+- id: src-finra-margin
+  label: FINRA aggregate customer margin debt
+  one_breath: >
+    Monthly debit balances in customer securities margin accounts, the only free leverage
+    series long enough to reach the 2007 unwind.
+  access: free-file
+  module: data/margindebt.py
+  coverage:
+    - {from: 1997-01-31, to: 2026-07-31, grain: month-end, rows: 355}
+  gaps: []
+  vintage: 2026-08-31
+  note: >
+    Acquired because the existing positioning stack observes 6 of 15 registered episodes and
+    roughly 2 independent clusters, which is the weakest number in the data section. This
+    series covers every episode in the register. Three limits are structural and were known
+    before acquiring. It is MARKET-level, not factor-level, so it cannot say the momentum book
+    specifically was levered. It measures customer margin at brokers, which excludes the
+    prime-brokerage leverage that actually unwound in August 2007. And FINRA disseminates
+    roughly three to four weeks after month end with no publication date in the file, so
+    available_at is computed as month-end plus 25 days and any test must build on that rather
+    than on the measurement date.
+  used_by: []
+  traps: []
+  wishlist: False
+
+- id: src-ftd
+  label: SEC fails-to-deliver
+  one_breath: >
+    Twice-monthly counts of shares that failed to settle, per security, the only free measure
+    of settlement stress that is observed rather than inferred from returns.
+  access: free-file
+  module: data/ftd.py
+  coverage:
+    - {from: 2009-07-01, to: 2022-12-30, grain: settlement-date per security, rows: 0}
+  gaps: []
+  vintage: 2026-08-31
+  note: >
+    Pipe-delimited inside per-half-month zips. Two traps found while acquiring. The archive is
+    served under three different path prefixes across eras, so links must be scraped from the
+    index rather than constructed; a constructed URL returned 53KB of HTML with a 404 status,
+    which is the HTML-served-as-data failure this project has logged before. And the file
+    identifies securities by CUSIP and SYMBOL where the symbol is point-in-time, so joining to
+    a current-vintage ticker map would silently mis-assign renamed and delisted names.
+  used_by: []
+  traps: []
+  wishlist: False
+
+- id: src-nport
+  label: SEC Form N-PORT monthly portfolio holdings
+  one_breath: >
+    Registered funds' monthly holdings including short positions and borrowings, the only free
+    filing that reports gross rather than long-only exposure.
+  access: free-file
+  module: data/nport.py
+  coverage:
+    - {from: 2019-10-01, to: 2022-12-31, grain: quarterly file of monthly holdings, rows: 0}
+  gaps: []
+  vintage: 2026-08-31
+  note: >
+    Registered because it is the only free source carrying short positions and borrowings, the
+    quantity the positioning ceiling in the data section says is unobservable. Its limit is the
+    one that matters: it covers registered investment companies only, so it sees mutual funds
+    and ETFs and never the levered multi-strategy books whose deleveraging is the mechanism it
+    would be used to test. It narrows the gap and cannot close it. The structured datasets begin
+    2019q4, so only five of the fifteen registered episodes fall inside it.
+    ACQUIRED AND INSPECTED 2026-09-02, one quarter, and the construction is proven. Each
+    quarterly file is about 340MB and carries FUND_REPORTED_INFO with total assets, net assets
+    and borrowings payable, SECURITIES_LENDING with a per-holding loan value, BORROW_AGGREGATE,
+    and monthly sales, reinvestment and redemption flows. On 2020q1 that gives 11,259 usable
+    funds, an asset-weighted gross leverage of 1.0438, 510 funds reporting explicit borrowings
+    totalling $150.7bn, and $1,079bn of quarterly redemptions. This is real fund-level gross
+    leverage and a real forced-selling driver, which is more than any other free source offers.
+    THE TIME-SERIES TEST WAS DELIBERATELY NOT RUN. Thirteen quarters inside the design tier is
+    roughly 39 monthly observations, where the smallest partial correlation detectable at 80
+    percent power is about r = 0.44. Two better-powered tests of the same question have just
+    returned nulls at r = 0.17 and r = 0.27 with observed values near 0.03, so a test at 0.44
+    could not resolve anything they did not, and running it would produce a null that says only
+    that the sample was small. The 4.4GB acquisition is not justified for that. The design that
+    WOULD justify it is cross-sectional rather than time-series: with 11,259 funds per quarter,
+    identify which funds hold the momentum book and measure their leverage and redemption
+    pressure across funds at a point in time, where the sample is thousands rather than tens.
+  used_by: []
+  traps: []
+  wishlist: False
+

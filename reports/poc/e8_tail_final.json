@@ -1,0 +1,190 @@
+{
+  "page_line": {
+    "estimator": "parameter-free volatility-scaled empirical quantile",
+    "definition": "today's trailing volatility times the 5 percent quantile of past ten-day returns each divided by the volatility at their own start",
+    "conditioning_state": null,
+    "decided_by": "Tim, 2026-09-04"
+  },
+  "the_two_lines_on_the_book": {
+    "n_formations": 81,
+    "span": [
+      "2015-09-30",
+      "2022-12-31"
+    ],
+    "book_ann_vol": 0.3282505815771684,
+    "unconditional": {
+      "breaches": 9,
+      "n": 81,
+      "rate": 0.1111111111111111,
+      "expected": 0.05,
+      "lr": 4.798615789207943,
+      "p": 0.028482612202495552,
+      "ci": [
+        0.052083521572156045,
+        0.2004721003130511
+      ]
+    },
+    "scaled": {
+      "breaches": 6,
+      "n": 81,
+      "rate": 0.07407407407407407,
+      "expected": 0.05,
+      "lr": 0.8663490450286275,
+      "p": 0.3519680341761816,
+      "ci": [
+        0.02766836052440393,
+        0.1542861687152946
+      ]
+    },
+    "reading": "on the reconstructed book the UNCONDITIONAL line fails coverage and the scaled line passes; on the published factor it was the other way round, so the over-breach was a property of that series and not of the estimator"
+  },
+  "pinball_ratio": {
+    "on_the_book": {
+      "ratio": 0.8899599483170884,
+      "ci90": [
+        0.7516087301040593,
+        1.0606570586479305
+      ],
+      "block_months": 6,
+      "excludes_one": false
+    },
+    "on_the_published_factor": {
+      "ratio": 0.8561217625005166,
+      "ci90": [
+        0.7864443181924602,
+        0.9277020436535068
+      ],
+      "block_months": 12,
+      "excludes_one": true
+    },
+    "block_lengths_published_factor": {
+      "6": 0.8561217625005166,
+      "12": 0.8561217625005166,
+      "24": 0.8561217625005166
+    }
+  },
+  "shuffle_control": {
+    "real_ratio": 0.8561217625005166,
+    "shuffled_median": 1.2084931137366048,
+    "shuffled_band_5_95": [
+      1.1473057044423371,
+      1.2711369259926464
+    ],
+    "share_of_shuffles_matching": 0.0,
+    "reading": "shuffled, the forecast is WORSE than the unconditional quantile it is compared against; the gain is the volatility series knowing something about the date it scales, not the transformation"
+  },
+  "fitted_regression_tie": {
+    "ratio": 1.0075231687532196,
+    "ci90": [
+      0.9766475838535373,
+      1.0350467100497922
+    ],
+    "n_dates": 1047,
+    "reading": "the fitted quantile regression and the parameter-free line cannot be told apart on loss, so the simplification is vindicated on parsimony and not on performance"
+  },
+  "conditioning_variables_tested_and_not_used": [
+    {
+      "name": "bear state (Daniel-Moskowitz)",
+      "tested_on": "published factor",
+      "ratio": 1.0251943970227129,
+      "ci90": [
+        1.0045950612279364,
+        1.0456765117766609
+      ],
+      "verdict": "refuted: the interval excludes one on the wrong side, it makes the forecast worse"
+    },
+    {
+      "name": "calendar state (FOMC and earnings-heavy days)",
+      "tested_on": "reconstructed book",
+      "ratio": 0.9961583170987778,
+      "ci90": [
+        0.9719990137882766,
+        1.0241113617106214
+      ],
+      "verdict": "no improvement: the interval contains one",
+      "caveat": "effectively FOMC-only here; on at 22 of 81 formations, 18 from FOMC and 4 from earnings, median earnings weight in window 0.29 percent against a 10 percent threshold, because the 8-K corpus covers 1,579 of about 2,900 tickers and begins in 2018"
+    },
+    {
+      "name": "volatility tercile",
+      "tested_on": "reconstructed book",
+      "ratio": 1.0021049130662298,
+      "ci90": [
+        0.9605968323560446,
+        1.0439222983471796
+      ],
+      "verdict": "no improvement: the interval contains one"
+    }
+  ],
+  "conditional_coverage_on_the_book": {
+    "uncond": {
+      "by_vol_tercile": {
+        "low": 0.1111111111111111,
+        "mid": 0.0,
+        "high": 0.2222222222222222
+      },
+      "by_calendar_state": {
+        "on": 0.09090909090909091,
+        "off": 0.11864406779661017
+      }
+    },
+    "scaled": {
+      "by_vol_tercile": {
+        "low": 0.18518518518518517,
+        "mid": 0.0,
+        "high": 0.037037037037037035
+      },
+      "by_calendar_state": {
+        "on": 0.09090909090909091,
+        "off": 0.06779661016949153
+      }
+    },
+    "state": {
+      "by_vol_tercile": {
+        "low": 0.18518518518518517,
+        "mid": 0.0,
+        "high": 0.037037037037037035
+      },
+      "by_calendar_state": {
+        "on": 0.09090909090909091,
+        "off": 0.06779661016949153
+      }
+    },
+    "terc": {
+      "by_vol_tercile": {
+        "low": 0.18518518518518517,
+        "mid": 0.0,
+        "high": 0.037037037037037035
+      },
+      "by_calendar_state": {
+        "on": 0.09090909090909091,
+        "off": 0.06779661016949153
+      }
+    }
+  },
+  "expected_shortfall_and_probability": {
+    "mean_10d_es_scaled": -0.14747600603738872,
+    "mean_prob_below_registered_level": 0.15281982806084887
+  },
+  "concentration_per_leg": {
+    "weighting": "value-weighted within each leg, market value from quantity times price",
+    "median_long_effective_n": 14.869735926349136,
+    "median_short_effective_n": 20.583292658608332,
+    "median_long_weight_l2": 0.25932779493346086,
+    "median_short_weight_l2": 0.2204215134423171,
+    "median_long_top1": 0.1845213811183737,
+    "median_long_names": 257,
+    "latest": {
+      "long_n_names": 237.0,
+      "long_effective_n": 10.707005019721151,
+      "long_weight_l2": 0.3056088994120463,
+      "long_top1": 0.24563372017229657,
+      "long_top5": 0.5416161539318781,
+      "short_n_names": 237.0,
+      "short_effective_n": 23.259523576318834,
+      "short_weight_l2": 0.20734787677073468,
+      "short_top1": 0.1292789803048832,
+      "short_top5": 0.3804319488680534
+    },
+    "latest_date": "2026-07-31"
+  }
+}

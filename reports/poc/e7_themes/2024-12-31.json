@@ -1,0 +1,2087 @@
+{
+ "date": "2024-12-31",
+ "kind": "episode",
+ "built": true,
+ "reasons": [],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 126,
+  "start": "2024-07-03",
+  "end": "2024-12-31"
+ },
+ "constant_series_dropped": {
+  "n": 1,
+  "tickers": [
+   "GTXI"
+  ]
+ },
+ "market_check": {
+  "series": "capitalisation-weighted point-in-time IWV universe",
+  "corr_with_fama_french_mkt_rf": 0.9991,
+  "ff_days_available": 126
+ },
+ "book": {
+  "winners_registered": 251,
+  "losers_registered": 251,
+  "winners_used": 251,
+  "losers_used": 251,
+  "universe": 2615,
+  "caps_snapshot": "2024-12-31"
+ },
+ "random_books": {
+  "n": 200,
+  "cells_short_total": 0
+ },
+ "components": [
+  {
+   "k": 1,
+   "VS_k": 0.04865697082770773,
+   "VS_k_placebo_q95": 0.1640274994118093,
+   "VS_k_percentile_vs_random": 0.585,
+   "above_noise": false,
+   "g_k": 0.013044164705749657,
+   "sigma_k": 0.2823180384757379,
+   "set_size": 126,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.7389495209987993,
+    "b_k": -20.540187679118503,
+    "beta_H": 1.30352471502656,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.7389
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.6723
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.6684
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.5745
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.5532
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "VS_k": 0.00014527316169217895,
+   "VS_k_placebo_q95": 0.02896999541999542,
+   "VS_k_percentile_vs_random": 0.125,
+   "above_noise": false,
+   "g_k": 0.0014187050475764546,
+   "sigma_k": 0.1710330555625397,
+   "set_size": 126,
+   "bridge": {
+    "instrument": "sector_financials",
+    "r2": 0.061820453554803256,
+    "b_k": 3.7179711150892625,
+    "beta_H": 1.1794824147860707,
+    "source": "panel: equally-weighted Financials members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_financials",
+      "r2": 0.0618
+     },
+     {
+      "instrument": "sector_communication",
+      "r2": 0.033
+     },
+     {
+      "instrument": "sector_real_estate",
+      "r2": 0.0214
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.0211
+     },
+     {
+      "instrument": "sector_utilities",
+      "r2": 0.012
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "VS_k": 0.025747607467303292,
+   "VS_k_placebo_q95": 0.029552630075836705,
+   "VS_k_percentile_vs_random": 0.93,
+   "above_noise": false,
+   "g_k": 0.020553793461506747,
+   "sigma_k": 0.17979402501096683,
+   "set_size": 126,
+   "bridge": {
+    "instrument": "sector_consumer_discretionary",
+    "r2": 0.07826382566812673,
+    "b_k": -5.176194784467637,
+    "beta_H": 1.1580162660590072,
+    "source": "panel: equally-weighted Consumer Discretionary members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.0783
+     },
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.0528
+     },
+     {
+      "instrument": "ten_year",
+      "r2": 0.0415
+     },
+     {
+      "instrument": "sector_materials",
+      "r2": 0.0352
+     },
+     {
+      "instrument": "hy_credit",
+      "r2": 0.0338
+     }
+    ]
+   }
+  }
+ ],
+ "decomposition": {
+  "shrinkage": 0.6931041639287506,
+  "condition_number": 790.8327382568406,
+  "w_norm_l2": 0.614858963719504,
+  "n_names": 502,
+  "w_norm_l2_convention": "spec node `sort`: value-weighted within each leg, dollar-neutral across them, from RAW price * quantity",
+  "w_norm_l2_exp089_joint_convention": 0.49471267105735833,
+  "leg_concentration": {
+   "winner": {
+    "n": 251,
+    "top1_share": 0.5579023658835462,
+    "effective_n": 3.136922124863561,
+    "largest": "NVDA"
+   },
+   "loser": {
+    "n": 251,
+    "top1_share": 0.154931256919157,
+    "effective_n": 16.872587882465695,
+    "largest": "BA"
+   }
+  }
+ },
+ "news": {
+  "file": "2025-01_deepseek.parquet",
+  "titles_total": 17179,
+  "titles_kept": 3288,
+  "titles_unique_kept": 2618,
+  "share_before_formation": 0.1914,
+  "risk_statements_rule_b": 112,
+  "risk_statements_rule_a_exp085": 0
+ },
+ "filings": {
+  "tickers_in_any_component_set": 1739,
+  "tickers_with_item_1a_as_of_date": 265,
+  "tickers_used": 104,
+  "sentences_total": 8185,
+  "risk_statements_rule_b": 3426,
+  "risk_statements_rule_a_exp085": 93,
+  "excerpt_chars": 18000
+ },
+ "population": {
+  "n": 3538,
+  "news": 112,
+  "filing": 3426
+ },
+ "clustering_variants": {
+  "umap10_min_samples_5": {
+   "variant": "umap10_min_samples_5",
+   "min_samples": 5,
+   "reducer": "umap n_components=10 metric=cosine seed=0",
+   "clusters": {
+    "n": 41,
+    "noise_share": 0.36489542114188805,
+    "largest_cluster_share": 0.06868287167891464,
+    "degenerate": false,
+    "d_star": 0.7406107187271118,
+    "d_star_c": 0.7827667593955994,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 3,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 44,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "fpl",
+       "nee",
+       "operations",
+       "prospects",
+       "business",
+       "energy"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 57,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "currency",
+       "exchange",
+       "foreign",
+       "fluctuations",
+       "dollar",
+       "rates"
+      ]
+     },
+     {
+      "id": 2,
+      "size": 33,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "defense",
+       "program",
+       "government",
+       "programs",
+       "prime",
+       "funding"
+      ]
+     },
+     {
+      "id": 3,
+      "size": 31,
+      "news_members": 28,
+      "company_specific": false,
+      "boilerplate_excluded": false,
+      "label": [
+       "stocks",
+       "nasdaq",
+       "nyse",
+       "millionaire",
+       "trump",
+       "bitcoin"
+      ]
+     },
+     {
+      "id": 4,
+      "size": 84,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "stock",
+       "common",
+       "price",
+       "results",
+       "decline",
+       "quarterly"
+      ]
+     },
+     {
+      "id": 5,
+      "size": 116,
+      "news_members": 4,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "rate",
+       "rates",
+       "debt",
+       "risk",
+       "company",
+       "value"
+      ]
+     },
+     {
+      "id": 6,
+      "size": 52,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "liquidity",
+       "risk",
+       "company",
+       "cash",
+       "market",
+       "funding"
+      ]
+     },
+     {
+      "id": 7,
+      "size": 38,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "financial",
+       "consolidated",
+       "statements",
+       "reporting",
+       "company",
+       "xfeff"
+      ]
+     },
+     {
+      "id": 8,
+      "size": 65,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "credit",
+       "indebtedness",
+       "agreement",
+       "debt",
+       "covenants",
+       "default"
+      ]
+     },
+     {
+      "id": 9,
+      "size": 25,
+      "news_members": 7,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "notes",
+       "million",
+       "cash",
+       "net",
+       "senior",
+       "billion"
+      ]
+     },
+     {
+      "id": 10,
+      "size": 46,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "assets",
+       "impairment",
+       "goodwill",
+       "value",
+       "intangible",
+       "charges"
+      ]
+     },
+     {
+      "id": 11,
+      "size": 49,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "tax",
+       "income",
+       "taxes",
+       "changes",
+       "future",
+       "deferred"
+      ]
+     },
+     {
+      "id": 12,
+      "size": 32,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "product",
+       "clinical",
+       "trials",
+       "candidates",
+       "approved",
+       "regulatory"
+      ]
+     },
+     {
+      "id": 13,
+      "size": 69,
+      "news_members": 13,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "nuplazid",
+       "treatment",
+       "approval",
+       "fda",
+       "psychosis",
+       "approved"
+      ]
+     },
+     {
+      "id": 14,
+      "size": 31,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "advisory",
+       "investment",
+       "value",
+       "financial",
+       "market",
+       "conditions"
+      ]
+     },
+     {
+      "id": 15,
+      "size": 34,
+      "news_members": 2,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "suppliers",
+       "supply",
+       "chain",
+       "components",
+       "products",
+       "manufacturing"
+      ]
+     },
+     {
+      "id": 16,
+      "size": 40,
+      "news_members": 6,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "production",
+       "delay",
+       "delays",
+       "products",
+       "experience",
+       "new"
+      ]
+     },
+     {
+      "id": 17,
+      "size": 64,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "products",
+       "business",
+       "adverse",
+       "publicity",
+       "adversely",
+       "product"
+      ]
+     },
+     {
+      "id": 18,
+      "size": 50,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "risks",
+       "business",
+       "operations",
+       "global",
+       "international",
+       "political"
+      ]
+     },
+     {
+      "id": 19,
+      "size": 33,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "increases",
+       "demand",
+       "supply",
+       "material",
+       "shortages",
+       "price"
+      ]
+     },
+     {
+      "id": 20,
+      "size": 87,
+      "news_members": 2,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "gas",
+       "oil",
+       "fuel",
+       "power",
+       "prices",
+       "natural"
+      ]
+     },
+     {
+      "id": 21,
+      "size": 34,
+      "news_members": 2,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "solar",
+       "energy",
+       "demand",
+       "electricity",
+       "incentives",
+       "utility"
+      ]
+     },
+     {
+      "id": 22,
+      "size": 31,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "service",
+       "clients",
+       "data",
+       "interruptions",
+       "infrastructure",
+       "problems"
+      ]
+     },
+     {
+      "id": 23,
+      "size": 70,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "tariffs",
+       "trade",
+       "china",
+       "products",
+       "countries",
+       "export"
+      ]
+     },
+     {
+      "id": 24,
+      "size": 42,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "security",
+       "data",
+       "information",
+       "breaches",
+       "cyber",
+       "systems"
+      ]
+     },
+     {
+      "id": 25,
+      "size": 25,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "systems",
+       "computer",
+       "information",
+       "technology",
+       "business",
+       "operations"
+      ]
+     },
+     {
+      "id": 26,
+      "size": 243,
+      "news_members": 3,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "products",
+       "services",
+       "competitors",
+       "new",
+       "customers",
+       "ability"
+      ]
+     },
+     {
+      "id": 27,
+      "size": 29,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "estimates",
+       "accounting",
+       "differ",
+       "actual",
+       "assumptions",
+       "estimate"
+      ]
+     },
+     {
+      "id": 28,
+      "size": 36,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "water",
+       "produced",
+       "occidental",
+       "emissions",
+       "gas",
+       "oil"
+      ]
+     },
+     {
+      "id": 29,
+      "size": 66,
+      "news_members": 3,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "claims",
+       "penalties",
+       "litigation",
+       "liability",
+       "investigations",
+       "criminal"
+      ]
+     },
+     {
+      "id": 30,
+      "size": 49,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "regulations",
+       "laws",
+       "environmental",
+       "requirements",
+       "subject",
+       "costs"
+      ]
+     },
+     {
+      "id": 31,
+      "size": 38,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "risks",
+       "business",
+       "financial",
+       "results",
+       "condition",
+       "operations"
+      ]
+     },
+     {
+      "id": 32,
+      "size": 84,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "risks",
+       "factors",
+       "results",
+       "risk",
+       "uncertainties",
+       "financial"
+      ]
+     },
+     {
+      "id": 33,
+      "size": 49,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "financial",
+       "adversely",
+       "economic",
+       "business",
+       "factors",
+       "conditions"
+      ]
+     },
+     {
+      "id": 34,
+      "size": 25,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "semiconductor",
+       "cyclical",
+       "industry",
+       "demand",
+       "downturns",
+       "customers"
+      ]
+     },
+     {
+      "id": 35,
+      "size": 37,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "inventory",
+       "demand",
+       "excess",
+       "price",
+       "estimated",
+       "conditions"
+      ]
+     },
+     {
+      "id": 36,
+      "size": 45,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "consumer",
+       "stores",
+       "economic",
+       "retail",
+       "mall",
+       "demand"
+      ]
+     },
+     {
+      "id": 37,
+      "size": 27,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "customers",
+       "loss",
+       "significant",
+       "customer",
+       "business",
+       "adversely"
+      ]
+     },
+     {
+      "id": 38,
+      "size": 76,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "acquisitions",
+       "acquired",
+       "acquisition",
+       "business",
+       "businesses",
+       "benefits"
+      ]
+     },
+     {
+      "id": 39,
+      "size": 131,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "growth",
+       "business",
+       "effectively",
+       "results",
+       "unable",
+       "fail"
+      ]
+     },
+     {
+      "id": 40,
+      "size": 30,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "retain",
+       "key",
+       "employees",
+       "personnel",
+       "business",
+       "attract"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.06868287167891464,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": false,
+     "theme_cluster": 22,
+     "theme_label": [
+      "service",
+      "clients",
+      "data",
+      "interruptions",
+      "infrastructure",
+      "problems"
+     ],
+     "Q_e": 0.009193021907284727,
+     "P_e": 0.003962423327766779,
+     "E_e": 0.005230598579517949,
+     "placebo_q95_of_random_max": 0.012271084554277353,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 2,
+      "set_coverage_share": 0.0159,
+      "share_of_set_absolute_loading_covered": 0.016
+     },
+     "runner_up": {
+      "cluster": 24,
+      "label": [
+       "security",
+       "data",
+       "information",
+       "breaches",
+       "cyber",
+       "systems"
+      ],
+      "E_e": 0.004992170601074257
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 1,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Portions of our infrastructure also may experience interruptions, delays or cessations of service or produce errors in connection with systems integration or migration work that takes place from time to time."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 11,
+     "theme_label": [
+      "tax",
+      "income",
+      "taxes",
+      "changes",
+      "future",
+      "deferred"
+     ],
+     "Q_e": 0.012897436157679928,
+     "P_e": 0.0017794007930524575,
+     "E_e": 0.01111803536462747,
+     "placebo_q95_of_random_max": 0.01859818542536579,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 3,
+      "set_coverage_share": 0.0238,
+      "share_of_set_absolute_loading_covered": 0.0167
+     },
+     "runner_up": {
+      "cluster": 20,
+      "label": [
+       "gas",
+       "oil",
+       "fuel",
+       "power",
+       "prices",
+       "natural"
+      ],
+      "E_e": 0.011108860839919736
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 1,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Adjustments to the incremental provisional tax expense may be made in future periods as actual amounts may differ due to, among other factors, a change in interpretation of the U.S. tax code and related tax accounting guidance, changes in assumptions made in developing these estimates, regulatory guidance that may be issued with respect to the applicable revisions to the U.S. tax code, and state tax implications."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 39,
+     "theme_label": [
+      "growth",
+      "business",
+      "effectively",
+      "results",
+      "unable",
+      "fail"
+     ],
+     "Q_e": 0.020356199949076895,
+     "P_e": 0.008202696591322205,
+     "E_e": 0.01215350335775469,
+     "placebo_q95_of_random_max": 0.01812370292203029,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 3,
+      "set_coverage_share": 0.0238,
+      "share_of_set_absolute_loading_covered": 0.0204
+     },
+     "runner_up": {
+      "cluster": 32,
+      "label": [
+       "risks",
+       "factors",
+       "results",
+       "risk",
+       "uncertainties",
+       "financial"
+      ],
+      "E_e": 0.011410173833382747
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 2,
+     "statistic_is_informative": true,
+     "quotes": [
+      "If we do not continue to innovate and deliver high-quality, technologically advanced products and services, we will not remain competitive and our revenue and operating results could suffer."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  },
+  "registered": {
+   "variant": "registered",
+   "min_samples": null,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [registered] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  },
+  "min_samples_5": {
+   "variant": "min_samples_5",
+   "min_samples": 5,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 2,
+    "noise_share": 0.7945166760881854,
+    "largest_cluster_share": 0.19728660260033917,
+    "degenerate": false,
+    "d_star": 0.8709561228752136,
+    "d_star_c": 0.818858802318573,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 1,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 698,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "business",
+       "results",
+       "operations",
+       "financial",
+       "adversely",
+       "risks"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 29,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "nuplazid",
+       "psychosis",
+       "approval",
+       "approved",
+       "treatment",
+       "fda"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.19728660260033917,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 2,
+      "set_coverage_share": 0.0159,
+      "share_of_set_absolute_loading_covered": 0.016
+     },
+     "runner_up": null,
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 5.7513819257346326e-05,
+     "E_e": -5.7513819257346326e-05,
+     "placebo_q95_of_random_max": -5.7513819257346326e-05,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 3,
+      "set_coverage_share": 0.0238,
+      "share_of_set_absolute_loading_covered": 0.0167
+     },
+     "runner_up": null,
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 1,
+     "theme_label": [
+      "nuplazid",
+      "psychosis",
+      "approval",
+      "approved",
+      "treatment",
+      "fda"
+     ],
+     "Q_e": 0.0,
+     "P_e": 3.0193149012300614e-05,
+     "E_e": -3.0193149012300614e-05,
+     "placebo_q95_of_random_max": -3.0193149012300614e-05,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": false,
+     "coverage_note": null,
+     "set_coverage": {
+      "set_size": 126,
+      "set_companies_with_item_1a": 3,
+      "set_coverage_share": 0.0238,
+      "share_of_set_absolute_loading_covered": 0.0204
+     },
+     "runner_up": null,
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Even though the FDA has granted approval of NUPLAZID for the treatment of hallucinations and delusions associated with PD Psychosis, the terms of the approval may limit its commercial potential."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  }
+ },
+ "primary_variant": "umap10_min_samples_5",
+ "clusters": {
+  "n": 41,
+  "noise_share": 0.36489542114188805,
+  "largest_cluster_share": 0.06868287167891464,
+  "degenerate": false,
+  "d_star": 0.7406107187271118,
+  "d_star_c": 0.7827667593955994,
+  "min_cluster_size": 25,
+  "n_boilerplate_excluded": 3,
+  "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+  "boilerplate_vocabulary": [
+   "ability",
+   "additional",
+   "adverse",
+   "adversely",
+   "affect",
+   "affected",
+   "affecting",
+   "business",
+   "businesses",
+   "cash",
+   "certain",
+   "companies",
+   "company",
+   "condition",
+   "conditions",
+   "could",
+   "customer",
+   "customers",
+   "finances",
+   "financial",
+   "flows",
+   "future",
+   "harm",
+   "harmed",
+   "impact",
+   "impacted",
+   "including",
+   "material",
+   "materially",
+   "may",
+   "operate",
+   "operating",
+   "operations",
+   "product",
+   "products",
+   "result",
+   "results",
+   "revenue",
+   "revenues",
+   "risk",
+   "risks",
+   "service",
+   "services",
+   "significant",
+   "significantly"
+  ],
+  "detail": [
+   {
+    "id": 0,
+    "size": 44,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "fpl",
+     "nee",
+     "operations",
+     "prospects",
+     "business",
+     "energy"
+    ]
+   },
+   {
+    "id": 1,
+    "size": 57,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "currency",
+     "exchange",
+     "foreign",
+     "fluctuations",
+     "dollar",
+     "rates"
+    ]
+   },
+   {
+    "id": 2,
+    "size": 33,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "defense",
+     "program",
+     "government",
+     "programs",
+     "prime",
+     "funding"
+    ]
+   },
+   {
+    "id": 3,
+    "size": 31,
+    "news_members": 28,
+    "company_specific": false,
+    "boilerplate_excluded": false,
+    "label": [
+     "stocks",
+     "nasdaq",
+     "nyse",
+     "millionaire",
+     "trump",
+     "bitcoin"
+    ]
+   },
+   {
+    "id": 4,
+    "size": 84,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "stock",
+     "common",
+     "price",
+     "results",
+     "decline",
+     "quarterly"
+    ]
+   },
+   {
+    "id": 5,
+    "size": 116,
+    "news_members": 4,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "rate",
+     "rates",
+     "debt",
+     "risk",
+     "company",
+     "value"
+    ]
+   },
+   {
+    "id": 6,
+    "size": 52,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "liquidity",
+     "risk",
+     "company",
+     "cash",
+     "market",
+     "funding"
+    ]
+   },
+   {
+    "id": 7,
+    "size": 38,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "financial",
+     "consolidated",
+     "statements",
+     "reporting",
+     "company",
+     "xfeff"
+    ]
+   },
+   {
+    "id": 8,
+    "size": 65,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "credit",
+     "indebtedness",
+     "agreement",
+     "debt",
+     "covenants",
+     "default"
+    ]
+   },
+   {
+    "id": 9,
+    "size": 25,
+    "news_members": 7,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "notes",
+     "million",
+     "cash",
+     "net",
+     "senior",
+     "billion"
+    ]
+   },
+   {
+    "id": 10,
+    "size": 46,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "assets",
+     "impairment",
+     "goodwill",
+     "value",
+     "intangible",
+     "charges"
+    ]
+   },
+   {
+    "id": 11,
+    "size": 49,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "tax",
+     "income",
+     "taxes",
+     "changes",
+     "future",
+     "deferred"
+    ]
+   },
+   {
+    "id": 12,
+    "size": 32,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "product",
+     "clinical",
+     "trials",
+     "candidates",
+     "approved",
+     "regulatory"
+    ]
+   },
+   {
+    "id": 13,
+    "size": 69,
+    "news_members": 13,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "nuplazid",
+     "treatment",
+     "approval",
+     "fda",
+     "psychosis",
+     "approved"
+    ]
+   },
+   {
+    "id": 14,
+    "size": 31,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "advisory",
+     "investment",
+     "value",
+     "financial",
+     "market",
+     "conditions"
+    ]
+   },
+   {
+    "id": 15,
+    "size": 34,
+    "news_members": 2,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "suppliers",
+     "supply",
+     "chain",
+     "components",
+     "products",
+     "manufacturing"
+    ]
+   },
+   {
+    "id": 16,
+    "size": 40,
+    "news_members": 6,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "production",
+     "delay",
+     "delays",
+     "products",
+     "experience",
+     "new"
+    ]
+   },
+   {
+    "id": 17,
+    "size": 64,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": true,
+    "label": [
+     "products",
+     "business",
+     "adverse",
+     "publicity",
+     "adversely",
+     "product"
+    ]
+   },
+   {
+    "id": 18,
+    "size": 50,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "risks",
+     "business",
+     "operations",
+     "global",
+     "international",
+     "political"
+    ]
+   },
+   {
+    "id": 19,
+    "size": 33,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "increases",
+     "demand",
+     "supply",
+     "material",
+     "shortages",
+     "price"
+    ]
+   },
+   {
+    "id": 20,
+    "size": 87,
+    "news_members": 2,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "gas",
+     "oil",
+     "fuel",
+     "power",
+     "prices",
+     "natural"
+    ]
+   },
+   {
+    "id": 21,
+    "size": 34,
+    "news_members": 2,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "solar",
+     "energy",
+     "demand",
+     "electricity",
+     "incentives",
+     "utility"
+    ]
+   },
+   {
+    "id": 22,
+    "size": 31,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "service",
+     "clients",
+     "data",
+     "interruptions",
+     "infrastructure",
+     "problems"
+    ]
+   },
+   {
+    "id": 23,
+    "size": 70,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "tariffs",
+     "trade",
+     "china",
+     "products",
+     "countries",
+     "export"
+    ]
+   },
+   {
+    "id": 24,
+    "size": 42,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "security",
+     "data",
+     "information",
+     "breaches",
+     "cyber",
+     "systems"
+    ]
+   },
+   {
+    "id": 25,
+    "size": 25,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "systems",
+     "computer",
+     "information",
+     "technology",
+     "business",
+     "operations"
+    ]
+   },
+   {
+    "id": 26,
+    "size": 243,
+    "news_members": 3,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "products",
+     "services",
+     "competitors",
+     "new",
+     "customers",
+     "ability"
+    ]
+   },
+   {
+    "id": 27,
+    "size": 29,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "estimates",
+     "accounting",
+     "differ",
+     "actual",
+     "assumptions",
+     "estimate"
+    ]
+   },
+   {
+    "id": 28,
+    "size": 36,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "water",
+     "produced",
+     "occidental",
+     "emissions",
+     "gas",
+     "oil"
+    ]
+   },
+   {
+    "id": 29,
+    "size": 66,
+    "news_members": 3,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "claims",
+     "penalties",
+     "litigation",
+     "liability",
+     "investigations",
+     "criminal"
+    ]
+   },
+   {
+    "id": 30,
+    "size": 49,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "regulations",
+     "laws",
+     "environmental",
+     "requirements",
+     "subject",
+     "costs"
+    ]
+   },
+   {
+    "id": 31,
+    "size": 38,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": true,
+    "label": [
+     "risks",
+     "business",
+     "financial",
+     "results",
+     "condition",
+     "operations"
+    ]
+   },
+   {
+    "id": 32,
+    "size": 84,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "risks",
+     "factors",
+     "results",
+     "risk",
+     "uncertainties",
+     "financial"
+    ]
+   },
+   {
+    "id": 33,
+    "size": 49,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "financial",
+     "adversely",
+     "economic",
+     "business",
+     "factors",
+     "conditions"
+    ]
+   },
+   {
+    "id": 34,
+    "size": 25,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "semiconductor",
+     "cyclical",
+     "industry",
+     "demand",
+     "downturns",
+     "customers"
+    ]
+   },
+   {
+    "id": 35,
+    "size": 37,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "inventory",
+     "demand",
+     "excess",
+     "price",
+     "estimated",
+     "conditions"
+    ]
+   },
+   {
+    "id": 36,
+    "size": 45,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "consumer",
+     "stores",
+     "economic",
+     "retail",
+     "mall",
+     "demand"
+    ]
+   },
+   {
+    "id": 37,
+    "size": 27,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": true,
+    "label": [
+     "customers",
+     "loss",
+     "significant",
+     "customer",
+     "business",
+     "adversely"
+    ]
+   },
+   {
+    "id": 38,
+    "size": 76,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "acquisitions",
+     "acquired",
+     "acquisition",
+     "business",
+     "businesses",
+     "benefits"
+    ]
+   },
+   {
+    "id": 39,
+    "size": 131,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "growth",
+     "business",
+     "effectively",
+     "results",
+     "unable",
+     "fail"
+    ]
+   },
+   {
+    "id": 40,
+    "size": 30,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "retain",
+     "key",
+     "employees",
+     "personnel",
+     "business",
+     "attract"
+    ]
+   }
+  ]
+ },
+ "themes": [
+  {
+   "k": 1,
+   "above_noise": false,
+   "theme_cluster": 22,
+   "theme_label": [
+    "service",
+    "clients",
+    "data",
+    "interruptions",
+    "infrastructure",
+    "problems"
+   ],
+   "Q_e": 0.009193021907284727,
+   "P_e": 0.003962423327766779,
+   "E_e": 0.005230598579517949,
+   "placebo_q95_of_random_max": 0.012271084554277353,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 126,
+    "set_companies_with_item_1a": 2,
+    "set_coverage_share": 0.0159,
+    "share_of_set_absolute_loading_covered": 0.016
+   },
+   "runner_up": {
+    "cluster": 24,
+    "label": [
+     "security",
+     "data",
+     "information",
+     "breaches",
+     "cyber",
+     "systems"
+    ],
+    "E_e": 0.004992170601074257
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 1,
+   "statistic_is_informative": true,
+   "quotes": [
+    "Portions of our infrastructure also may experience interruptions, delays or cessations of service or produce errors in connection with systems integration or migration work that takes place from time to time."
+   ]
+  },
+  {
+   "k": 2,
+   "above_noise": false,
+   "theme_cluster": 11,
+   "theme_label": [
+    "tax",
+    "income",
+    "taxes",
+    "changes",
+    "future",
+    "deferred"
+   ],
+   "Q_e": 0.012897436157679928,
+   "P_e": 0.0017794007930524575,
+   "E_e": 0.01111803536462747,
+   "placebo_q95_of_random_max": 0.01859818542536579,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 126,
+    "set_companies_with_item_1a": 3,
+    "set_coverage_share": 0.0238,
+    "share_of_set_absolute_loading_covered": 0.0167
+   },
+   "runner_up": {
+    "cluster": 20,
+    "label": [
+     "gas",
+     "oil",
+     "fuel",
+     "power",
+     "prices",
+     "natural"
+    ],
+    "E_e": 0.011108860839919736
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 1,
+   "statistic_is_informative": true,
+   "quotes": [
+    "Adjustments to the incremental provisional tax expense may be made in future periods as actual amounts may differ due to, among other factors, a change in interpretation of the U.S. tax code and related tax accounting guidance, changes in assumptions made in developing these estimates, regulatory guidance that may be issued with respect to the applicable revisions to the U.S. tax code, and state tax implications."
+   ]
+  },
+  {
+   "k": 3,
+   "above_noise": false,
+   "theme_cluster": 39,
+   "theme_label": [
+    "growth",
+    "business",
+    "effectively",
+    "results",
+    "unable",
+    "fail"
+   ],
+   "Q_e": 0.020356199949076895,
+   "P_e": 0.008202696591322205,
+   "E_e": 0.01215350335775469,
+   "placebo_q95_of_random_max": 0.01812370292203029,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": false,
+   "coverage_note": null,
+   "set_coverage": {
+    "set_size": 126,
+    "set_companies_with_item_1a": 3,
+    "set_coverage_share": 0.0238,
+    "share_of_set_absolute_loading_covered": 0.0204
+   },
+   "runner_up": {
+    "cluster": 32,
+    "label": [
+     "risks",
+     "factors",
+     "results",
+     "risk",
+     "uncertainties",
+     "financial"
+    ],
+    "E_e": 0.011410173833382747
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 2,
+   "statistic_is_informative": true,
+   "quotes": [
+    "If we do not continue to innovate and deliver high-quality, technologically advanced products and services, we will not remain competitive and our revenue and operating results could suffer."
+   ]
+  }
+ ],
+ "named_component": null,
+ "any_theme_risen": false,
+ "risen_on_component_above_noise": false,
+ "numeric_built": true,
+ "expected_label_terms": null,
+ "expected_label_phrase": null,
+ "expected_label_source": null,
+ "label_matches_expected": null,
+ "label_match_basis": "no expected label was registered for this date",
+ "expected_terms_in_top_theme_label": null,
+ "expected_label_carried_at": "2026-09-07T10:27:42.590304+00:00"
+}

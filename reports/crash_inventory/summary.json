@@ -1,0 +1,143 @@
+{
+  "n_episodes": 195,
+  "n_fast": 164,
+  "n_slow_only": 31,
+  "n_also_slow": 82,
+  "n_typed": 193,
+  "n_no_decomposition": 2,
+  "routes": {
+    "FITS-NONE": 86,
+    "Route 1": 63,
+    "Route 2": 44,
+    "NO-DECOMPOSITION": 2
+  },
+  "fits_none": 86,
+  "fits_none_share": 0.44559585492227977,
+  "fits_none_ci": [
+    0.3742056250367452,
+    0.5186831839687525
+  ],
+  "registered_band": [
+    0.05,
+    0.3
+  ],
+  "in_band": false,
+  "by_era": {
+    "reconstructed": {
+      "FITS-NONE": 22,
+      "Route 2": 5,
+      "Route 1": 3
+    },
+    "returns-only": {
+      "FITS-NONE": 64,
+      "Route 1": 60,
+      "Route 2": 39,
+      "NO-DECOMPOSITION": 2
+    }
+  },
+  "separation": {
+    "n": 107,
+    "n_route1": 63,
+    "n_route2": 44,
+    "auc_loser_share": 1.0,
+    "auc_mkt_during": 0.9985569985569985
+  },
+  "separation_note": "VOID. The route labels are a deterministic function of loser_share (Route 1 requires >= 0.60, Route 2 requires winner_share >= 0.60 and so loser_share <= 0.40), so the AUC of loser_share against those labels is 1.0 by construction and the comparison against mkt_during measures nothing. The registration asked for this comparison and the circularity was noticed only after the run; logged as trp-85 and reported rather than deleted.",
+  "residue": {
+    "n": 86,
+    "failure_modes": {
+      "R1:no-bear | R2:winner-share": 77,
+      "R1:loser-share | R2:bear-on": 8,
+      "R1:mkt-not-up | R2:bear-on": 1
+    },
+    "modal_mode_share": 0.8953488372093024,
+    "loser_share_median": 1.1277684456437909,
+    "mkt_during_median": 0.0327223245663637,
+    "market_rose": 72,
+    "route3_clauses_over_full_inventory": {
+      "flat_market": 21,
+      "both_shares_in_band": 16,
+      "retraced_half": 80,
+      "flat_and_band": 8,
+      "flat_and_retrace": 5,
+      "all_three": 0
+    },
+    "counterfactual_drop_bear_clause": {
+      "n_no_bear_loser_driven": 77,
+      "would_become_route_1": 71,
+      "note": "reported, not applied; the rule is not re-run with the clause dropped"
+    }
+  },
+  "planted": {
+    "planted": {
+      "Route 1": "Route 1",
+      "Route 2": "Route 2",
+      "Route 3": "Route 3",
+      "FITS-NONE": "FITS-NONE",
+      "NO-DECOMPOSITION": "NO-DECOMPOSITION"
+    },
+    "all_recovered": true
+  },
+  "crash_day_episodes": [
+    {
+      "trough_at": "1939-09-13",
+      "depth": "-0.2921690586449639",
+      "route": "FITS-NONE",
+      "crash_days": "1"
+    },
+    {
+      "trough_at": "1939-11-30",
+      "depth": "-0.3518401232101799",
+      "route": "FITS-NONE",
+      "crash_days": "1"
+    },
+    {
+      "trough_at": "2020-11-18",
+      "depth": "-0.1566027054655902",
+      "route": "FITS-NONE",
+      "crash_days": "1"
+    }
+  ],
+  "worst_five": [
+    {
+      "trough_at": "1932-09-07",
+      "depth": "-0.520132965268929",
+      "route": "Route 1",
+      "loser_share": "1.2418458519024038",
+      "winner_share": "-0.2418458519024038",
+      "mkt_during": "0.7771455515053494"
+    },
+    {
+      "trough_at": "2009-06-11",
+      "depth": "-0.5180001178112088",
+      "route": "Route 1",
+      "loser_share": "1.059532622481807",
+      "winner_share": "-0.05953262248180692",
+      "mkt_during": "0.4049501023430746"
+    },
+    {
+      "trough_at": "1939-11-30",
+      "depth": "-0.3518401232101799",
+      "route": "FITS-NONE",
+      "loser_share": "0.8582491506468846",
+      "winner_share": "0.1417508493531154",
+      "mkt_during": "0.1115563078796562"
+    },
+    {
+      "trough_at": "1931-02-24",
+      "depth": "-0.2981149078857347",
+      "route": "Route 1",
+      "loser_share": "1.186647496219231",
+      "winner_share": "-0.18664749621923113",
+      "mkt_during": "0.23740669756779842"
+    },
+    {
+      "trough_at": "1938-07-25",
+      "depth": "-0.2922071191530158",
+      "route": "Route 1",
+      "loser_share": "1.2743012922460404",
+      "winner_share": "-0.2743012922460403",
+      "mkt_during": "0.3328405092420872"
+    }
+  ]
+}

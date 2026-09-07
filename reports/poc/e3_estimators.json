@@ -1,0 +1,69 @@
+{
+  "arm_a": {
+    "real_ratio": 0.8561217625005166,
+    "n_shuffles": 200,
+    "shuffled_median": 1.2084931137366048,
+    "shuffled_band_5_95": [
+      1.1473057044423371,
+      1.2711369259926464
+    ],
+    "share_of_shuffles_beating_the_real_gain": 0.0,
+    "gain_survives_shuffling": false
+  },
+  "arm_b": {
+    "n_common_dates": 1047,
+    "fitted_vs_parameter_free": {
+      "ratio": 1.0075231687532196,
+      "ci90": [
+        0.9766475838535373,
+        1.0350467100497922
+      ],
+      "block_months": 12,
+      "excludes_one": false
+    },
+    "coverage": {
+      "parameter_free": {
+        "breaches": 75,
+        "n": 1047,
+        "rate": 0.07163323782234957,
+        "expected": 0.05,
+        "lr": 9.150168661133023,
+        "p": 0.0024869514195582057,
+        "ci": [
+          0.056757645778912666,
+          0.088968050197281
+        ]
+      },
+      "fitted": {
+        "breaches": 74,
+        "n": 1047,
+        "rate": 0.07067812798471824,
+        "expected": 0.05,
+        "lr": 8.399447529442853,
+        "p": 0.0037533506391467324,
+        "ci": [
+          0.05590167435032228,
+          0.08791985873096815
+        ]
+      }
+    },
+    "conditional_coverage": {
+      "parameter_free": {
+        "by_vol_tercile": {
+          "low vol": 0.07736389684813753,
+          "mid vol": 0.08595988538681948,
+          "high vol": 0.05157593123209169
+        },
+        "spread": 0.03438395415472779
+      },
+      "fitted": {
+        "by_vol_tercile": {
+          "low vol": 0.07163323782234957,
+          "mid vol": 0.09169054441260745,
+          "high vol": 0.04871060171919771
+        },
+        "spread": 0.04297994269340974
+      }
+    }
+  }
+}

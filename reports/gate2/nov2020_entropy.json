@@ -1,0 +1,20 @@
+{
+  "loser": {
+    "names": 9,
+    "records": 19,
+    "clusters": 4,
+    "entropy": 1.1490596969706204,
+    "max_entropy": 2.1972245773362196,
+    "normalised_entropy": 0.5229596049593027,
+    "largest_cluster_share": 0.5555555555555556
+  },
+  "winner": {
+    "names": 10,
+    "records": 11,
+    "clusters": 7,
+    "entropy": 1.8866967846580784,
+    "max_entropy": 2.302585092994046,
+    "normalised_entropy": 0.8193820026016112,
+    "largest_cluster_share": 0.2
+  }
+}

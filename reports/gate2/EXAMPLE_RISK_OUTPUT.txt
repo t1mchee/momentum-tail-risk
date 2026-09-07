@@ -1,0 +1,102 @@
+──────────────────────────────────────────────────────────────────────────────
+MOMENTUM REVERSAL RISK — formation 2020-10-31
+US equity cross-sectional momentum, long winners / short losers.
+Horizon: 10 trading days at the 5% quantile. No probability is reported.
+──────────────────────────────────────────────────────────────────────────────
+
+SEVERITY   [conditional on today's state, fitted out of sample]
+  10-day 5% VaR      -9.47%      against an unconditional -4.24%   (2.2x)
+  10-day 5% ES      -14.55%
+  21-day 5% VaR     -13.55%      against an unconditional -5.80%
+  The conditioning is doing the work: the unconditional reading is the one a
+  full-sample estimate would give, and it is less than half as alarmed.
+
+  TWO ESTIMATORS, AND THE CHOICE BETWEEN THEM IS NOT SETTLED.
+  The line above is a fitted quantile regression. The parameter-free estimator the
+  design specifies reads -13.69% on this date. Over 1,047 monthly formation dates the
+  two score identically on pinball loss, with an interval containing one, so the
+  evidence cannot choose between them; here they differ by four percentage points and
+  only one of them is breached by what followed. That is a real uncertainty in the
+  headline and it is printed rather than resolved by preference.
+
+WHAT THE READER'S EXISTING SCREENS SAY
+  Sector screen      263 names across 10 GICS sectors, Herfindahl 0.146
+                     largest sector Energy at 23%  ->  reads DIVERSIFIED
+  VIX                38.0, 96.8% of its own history  ->  high risk, no direction
+  Implied corr 1M    62.2, 87.4%  ->  market-level, says nothing about this book
+
+POSITIONING   [components differ in universe and lag; never blended]
+  Comomentum W-L     -0.0295   24th percentile of 82 observations  ->  QUIET
+  Short volume       0.465, -0.008 over the window                ->  quiet
+  MTUM shares        +0.5% over the window                        ->  quiet
+  Positioning reads quiet. This is a measured null, not a missing input: no
+  public crowding measure here adds to trailing volatility at the power available.
+
+WHAT THE LOSER LEG IS PRICED ON   [8-K filings, gated on acceptance time]
+  Stated an external survival condition:  loser 19 of 112 filings (17.0%)
+                                         winner 11 of 206 filings (5.3%)
+  Against two ordinary months, same construction, same leg, no episode nearby:
+    2019-04-30   8 of 113 (7.1%)      2021-10-31   8 of 110 (7.3%)
+  So the ordinary rate is 7.2% and today is 17.0% -- 2.4x by filing. Counted by NAME,
+  which is the correct unit because filings cluster within filers, it is 25.0% against
+  13.3%, a ratio of 1.9x at Fisher p = 0.18. The direction and size are real; at 36
+  names against 83 the difference is NOT significant, and the by-filing p of 0.008 is
+  inflated by one filer contributing 6 filings. Reported as suggestive, not shown.
+  9 loser names carry a condition, spanning 4 GICS sectors, and 8 of them
+  name one condition: the resumption of normal demand after COVID-19.
+  The sector screen sees 10 sectors. The filings see one bet.
+
+  Evidence, verbatim, with the date it became public:
+    UAL  accepted 2020-09-09
+        "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine ..."
+    CCL  accepted 2020-08-07
+        "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near..."
+    AMC  accepted 2020-09-24
+        "We currently estimate that unless theatre attendance levels improve significantly from the third quarter of 2020 to the fourth quarter of 2020 and ..."
+
+ANALOGUES   [retrieval, then a panel that may overrule it]
+  Five nearest historical states, and what followed each:
+    #1 2009-08-31   distance 0.039   forward 21d -4.03%
+    #2 2009-05-31   distance 0.070   forward 21d +3.91%
+    #3 2009-01-31   distance 0.085   forward 21d +11.24%
+    #4 2008-10-31   distance 0.088   forward 21d +6.33%
+    #5 2000-05-31   distance 0.110   forward 21d +16.09%
+  Four of five were followed by GAINS. Retrieval alone would reassure.
+  Panel verdict: match is NOT APT, fails on query_extracted_conditions
+    Every retrieved state is a credit-crisis or dot-com recovery; this book is
+    priced on one condition with a discrete resolving event. Same volatility
+    regime, different mechanism.
+
+WHAT WOULD CHANGE THIS READING
+  A vaccine or treatment readout resolves the shared condition -> the loser leg
+  reprices upward together and the short half takes the loss. Named by the filings,
+  not by the model: UAL states it as the condition on 2020-09-09.
+  Not forecastable. The system reads conditions; triggers are dated by events.
+
+COVERAGE AND LIMITS
+  9 of 263 loser-leg names carry a stated condition (3.4%). 36 of 263
+  have any 8-K in the window; the corpus covers 1,579 tickers against a universe
+  near 2,849 and is biased toward larger names, so it covers the distressed half
+  worst. Better coverage can only add names to the concentration reading.
+  An entropy statistic over these conditions was computed and WITHDRAWN: the gap
+  against the winner leg was an artifact of cluster count, 0.296 at one threshold
+  and 0.004 at equal k. The rate comparison above needs no clustering.
+──────────────────────────────────────────────────────────────────────────────
+
+──────────────────────────────────────────────────────────────────────────────
+POSTSCRIPT — what happened. Not part of the reading above.
+──────────────────────────────────────────────────────────────────────────────
+  realised 10-day cumulative   -9.56%   against a 10-day 5% VaR of -9.47%
+  realised 21-day cumulative   -12.70%
+  worst single day             -14.39% on 2020-11-09, the day a vaccine was announced
+  market that day              +0.83%
+
+  The market rose. The book's conferred market-beta spread at formation was -0.300,
+  so the market term contributes -0.25% of the -14.39% session -- 1.7% of the loss.
+  The rest sat in the loser leg's shared condition repricing, which is the term
+  this system exists to read.
+
+  The conditional VaR was breached. That precision
+  is coincidence: one date, chosen, and a 5% VaR is meant to break one day in twenty.
+  What is not coincidence is the 2.2x gap against the unconditional reading.
+──────────────────────────────────────────────────────────────────────────────

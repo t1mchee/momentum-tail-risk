@@ -1,0 +1,1170 @@
+# The system as a graph. `inputs` and `outputs` are what draw the schematic.
+
+# ---- getting the data in ---------------------------------------------------------
+
+- id: cmp-pit
+  label: Availability discipline
+  one_breath: >
+    Stamps every record with when it happened and when we could first have known it, and
+    refuses to build features on the former.
+  layer: data
+  state: working
+  module: pit.py
+  does: >
+    Separates the moment something occurred from the moment it became knowable, and raises
+    an error when a calculation reaches across that line. Built in the first commit,
+    because retrofitting it never works.
+  inputs: []
+  outputs: [cmp-holdings, cmp-french, cmp-edgar, cmp-news]
+  last_changed: 2026-08-12
+  claims: []
+
+- id: cmp-holdings
+  label: Index holdings loader
+  one_breath: >
+    Downloads and validates the daily list of index constituents, including companies that
+    later disappeared.
+  layer: data
+  state: working
+  module: data/ishares.py
+  does: >
+    Fetches holdings, rejects the several kinds of plausible-looking rubbish the endpoint
+    returns, and maintains a rebuildable panel of prices and weights. Most of the trap log
+    lives here.
+  inputs: [cmp-pit]
+  outputs: [cmp-legs, cmp-composition]
+  last_changed: 2026-08-16
+  claims: []
+
+- id: cmp-french
+  label: Academic factor returns
+  one_breath: >
+    Loads the standard published factor return series and keeps a hash of every download,
+    because the publisher restates history silently.
+  layer: data
+  state: working
+  module: data/french.py
+  does: >
+    Provides the reference momentum series used for research, records the publication
+    delay that rules it out of live use, and can report exactly what changed between two
+    downloads.
+  inputs: [cmp-pit]
+  outputs: [cmp-constructions, cmp-severity]
+  last_changed: 2026-08-13
+  claims: []
+
+- id: cmp-cboe
+  label: Volatility and correlation indices
+  one_breath: >
+    Loads free daily option-implied volatility and correlation history, with an explicit
+    list of series that quietly stopped updating.
+  layer: data
+  state: working
+  module: data/cboe.py
+  does: >
+    Supplies market-wide option-implied measures back to 1990, and guards against the
+    failure mode where a discontinued series reads as permanent calm.
+  inputs: [cmp-pit]
+  outputs: [cmp-channels]
+  last_changed: 2026-08-19
+  claims: [clm-implied-corr]
+
+- id: cmp-options
+  label: Option chain capture
+  one_breath: >
+    Captures full option prices for every stock in the book each day, forward only, because
+    no free history exists to buy or download.
+  layer: data
+  state: partial
+  module: data/options.py
+  does: >
+    Walks both sides of the book, throttled to a pace the provider tolerates, and stores
+    raw chains. A day missed here can never be recovered, which drives every design choice
+    in the module.
+  inputs: [cmp-pit, cmp-legs]
+  outputs: [cmp-skew]
+  last_changed: 2026-08-21
+  claims: []
+
+- id: cmp-edgar
+  label: Regulatory filing timestamps
+  one_breath: >
+    Reads when each company actually filed its earnings release, stamped to the second by
+    the regulator.
+  layer: data
+  state: working
+  module: data/earnings.py
+  does: >
+    Builds a dated earnings calendar for the companies actually held, which is the
+    book-specific version of a catalyst calendar.
+  inputs: [cmp-pit]
+  outputs: [cmp-grid]
+  last_changed: 2026-08-21
+  claims: []
+
+- id: cmp-news
+  label: News index reader
+  one_breath: >
+    Queries a free worldwide news index, cached to disk because the service allows roughly
+    one request every twelve seconds.
+  layer: data
+  state: working
+  module: data/gdelt.py
+  does: >
+    Retrieves dated article metadata for a topic and time window, and sorts results by
+    publisher quality so a null can be tested separately at each tier.
+  inputs: [cmp-pit]
+  outputs: [cmp-extract]
+  last_changed: 2026-08-18
+  claims: [clm-news-crowding]
+
+- id: cmp-shortside
+  label: Short selling data
+  one_breath: Daily short volume per stock, plus the settlement-failure list that turned out unusable.
+  layer: data
+  state: partial
+  module: data/shortside.py
+  does: >
+    Supplies the only free daily measure of short activity per stock. Levels are
+    meaningless because market makers hedge; only changes carry information.
+  inputs: [cmp-pit]
+  outputs: [cmp-skew]
+  last_changed: 2026-08-16
+  claims: [clm-regsho]
+
+# ---- turning it into measurements ------------------------------------------------
+
+- id: cmp-constructions
+  label: Portfolio constructions
+  one_breath: >
+    Builds the momentum portfolio twelve different ways, because which crashes exist
+    depends on how it is built.
+  layer: feature
+  state: working
+  module: factor/constructions.py
+  does: >
+    Produces value-weighted and equally-weighted variants, size splits, and each side of
+    the portfolio separately, so no single construction choice is smuggled in as an
+    assumption.
+  inputs: [cmp-french]
+  outputs: [cmp-episodes, cmp-severity]
+  last_changed: 2026-08-14
+  claims: [clm-construction]
+
+- id: cmp-legs
+  label: Book reconstruction
+  one_breath: >
+    Rebuilds what a momentum book would actually have held on any past date, from the
+    index membership of that date.
+  layer: feature
+  state: working
+  module: factor/legs.py
+  does: >
+    Ranks the investable universe on past performance and forms the winning and losing
+    sides, keeping companies that later delisted so the losing side is not quietly
+    flattered.
+  inputs: [cmp-holdings]
+  outputs: [cmp-comomentum, cmp-composition, cmp-options]
+  last_changed: 2026-08-15
+  claims: []
+
+- id: cmp-comomentum
+  label: Crowding measure
+  one_breath: >
+    Measures how similarly the stocks inside one side of the book move together, after
+    removing what the market explains.
+  layer: feature
+  state: working
+  module: features/comomentum.py
+  does: >
+    Implements a published crowding measure and reproduces its central result on data
+    published after the original paper ended. Descriptively useful, economically worthless
+    as a trigger.
+  inputs: [cmp-legs]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-17
+  claims: [clm-comomentum-replicates, clm-comomentum-useless]
+
+- id: cmp-channels
+  label: Two-channel state
+  one_breath: >
+    Distinguishes a panic rebound from a crowded rotation, which are two different events
+    that share a name.
+  layer: feature
+  state: partial
+  module: features/channels.py
+  does: >
+    Separates episodes cleanly into the two mechanisms and correctly fails to improve any
+    forecast. Retained for explanation, excluded from the model.
+  inputs: [cmp-cboe, cmp-constructions]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-17
+  claims: [clm-taxonomy, clm-quake-not-momentum, clm-2019-mirror]
+
+- id: cmp-composition
+  label: Exposure map
+  one_breath: >
+    Describes what the book is actually betting on, beyond the sector labels its holdings
+    happen to carry.
+  layer: feature
+  state: working
+  module: features/composition.py
+  does: >
+    Measures concentration and turnover, and compares portfolio-level summaries against
+    the individual holdings. This is where the most useful finding in the project came
+    from.
+  inputs: [cmp-holdings, cmp-legs]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-18
+  claims: [clm-aggregation]
+
+- id: cmp-skew
+  label: Option skew features
+  one_breath: >
+    Turns raw option chains into the price of downside protection per stock, comparable
+    across the book.
+  layer: feature
+  state: working
+  module: features/skew.py
+  does: >
+    Interpolates option prices to a fixed sensitivity point so one stock's crash protection
+    is comparable with another's, applies the liquidity gates, and reports which companies
+    dropped and why as an output rather than a footnote.
+  inputs: [cmp-options, cmp-shortside]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-22
+  claims: [clm-skew-squeeze]
+
+- id: cmp-extract
+  label: Evidence extraction
+  one_breath: >
+    Reads news text and returns structured, dated evidence records that cannot contain a
+    probability.
+  layer: feature
+  state: partial
+  module: llm/extract.py
+  does: >
+    Filters and structures text far more precisely than keyword matching. The record
+    format has no field for a probability, so the model is structurally unable to produce
+    the number the deterministic code is responsible for.
+  inputs: [cmp-news]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-18
+  claims: [clm-semantic-filter, clm-empty-corpus]
+
+# ---- deciding what it means ------------------------------------------------------
+
+- id: cmp-episodes
+  label: Episode detector
+  one_breath: >
+    Finds the historical reversals from the return data itself, rather than from a list
+    someone wrote down.
+  layer: model
+  state: working
+  module: events/episodes.py
+  does: >
+    Derives drawdown episodes at several horizons, so the event set is an output to be
+    inspected rather than an assumption to be defended.
+  inputs: [cmp-constructions]
+  outputs: [cmp-grid, cmp-severity]
+  last_changed: 2026-08-14
+  claims: [clm-definition]
+
+- id: cmp-severity
+  label: Severity model
+  one_breath: >
+    Turns today's market state into an estimate of how bad the next two weeks could get,
+    with no attempt to say when.
+  layer: model
+  state: working
+  module: model/severity.py
+  does: >
+    Estimates the conditional tail of momentum returns by quantile regression, refit on an
+    expanding window so no forecast ever sees its own future.
+  inputs: [cmp-french, cmp-constructions, cmp-episodes]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-16
+  claims: [clm-severity-forecastable, clm-nothing-beats-vol, clm-miscalibration, clm-2019-complacency]
+
+- id: cmp-baselines
+  label: Classical baselines
+  one_breath: >
+    The strong conventional models that anything cleverer has to beat, plus the tests of
+    whether they are honest.
+  layer: model
+  state: working
+  module: model/baselines.py
+  does: >
+    Provides a well-calibrated volatility model, formal coverage tests, and a costed
+    exposure-reduction backtest that separates statistical skill from money.
+  inputs: [cmp-french]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-16
+  claims: [clm-garch, clm-comomentum-useless]
+
+- id: cmp-grid
+  label: Multiplicity-corrected testing
+  one_breath: >
+    Runs a hypothesis across every reasonable definition at once and corrects for having
+    looked many times.
+  layer: model
+  state: working
+  module: validation/hypotheses.py
+  does: >
+    Tests each idea over a grid of horizons and thresholds, corrects for multiple testing,
+    and reports the smallest effect the sample could ever have detected. Both refutations
+    came from here.
+  inputs: [cmp-episodes, cmp-edgar]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-21
+  claims: [clm-power, clm-fomc, clm-earnings-density]
+
+- id: cmp-registry
+  label: Episode registry
+  one_breath: >
+    A hand-written list of known episodes used to check the detector, with one entry
+    deliberately inverted.
+  layer: model
+  state: working
+  module: events/registry.py
+  does: >
+    Records what each detector should and should not find. The 2007 crisis must be absent
+    from the momentum detector and present in the joint one, so the check fails if the
+    detector merely agrees with folklore.
+  inputs: [cmp-episodes]
+  outputs: []
+  last_changed: 2026-08-15
+  claims: [clm-quake-not-momentum]
+
+# ---- what comes out --------------------------------------------------------------
+
+- id: cmp-brief
+  label: Risk briefing
+  one_breath: >
+    The one-page output a portfolio manager actually reads, for any date past or present.
+  layer: output
+  state: working
+  module: report/memo.py
+  does: >
+    States how bad the tail is, which mechanism is live, what the book is concentrated in,
+    and what was not measured on that date. The last section is what makes it honest.
+  inputs: [cmp-severity, cmp-baselines, cmp-composition, cmp-comomentum, cmp-channels, cmp-extract, cmp-grid, cmp-skew]
+  outputs: []
+  last_changed: 2026-08-18
+  claims: [clm-aggregation, clm-2019-complacency]
+
+- id: cmp-console
+  label: Project console
+  one_breath: >
+    Renders the project's own state from structured files, so no fact has two homes that
+    can disagree.
+  layer: output
+  state: working
+  module: build/render_console.py
+  does: >
+    Generates both this dashboard and the cold-start ledger from the same source files,
+    after validation that fails loudly on contradictions.
+  inputs: []
+  outputs: []
+  last_changed: 2026-08-21
+  claims: []
+
+- id: cmp-taxonomy
+  label: taxonomy-v4, the eight-driver screen vocabulary
+  layer: data
+  state: partial
+  module: text/taxonomy.py
+  one_breath: >
+    Eight drivers, seed terms expanded from the corpus, one content-hashed snapshot per year.
+  does: >
+    Supplies the term lists a lexical screen uses to select candidate firm-quarters per driver.
+    Now on its FOURTH revision, and both repairs are worth carrying: single-word seeds pulled
+    polysemous matches across three drivers, so inflation_pricing is seeded on PHRASES rather
+    than words; and terms are stored in LIFT order rather than alphabetically, because storing
+    them alphabetically once made a good expansion read as noise when its first entries were
+    inspected.
+    Snapshots are point-in-time: a snapshot for year Y is expanded using only filings available
+    before Y, enforced in the builder rather than trusted to a caller. Seven vintages exist,
+    2017 through 2023, each content-hashed and immutable on write.
+  honest_scope: >
+    THE EIGHT-DRIVER LIST IS A DESIGN-LEVEL CHOICE MADE WITH HINDSIGHT over the whole period. It
+    is frozen and disclosed as such, which is the same status as the decision to study momentum
+    at all. Pretending the list was derived point-in-time would be the more misleading option.
+    The VINTAGE snapshot governs any claim whose content carries a date. The union vocabulary is
+    licensed for SCREENING only, on the reasoning that a term which exists only in 2022 finds
+    nothing in a 2016 filing and that what the screen misses is measured by the false-negative
+    design rather than assumed.
+    Quality is NOT uniform across drivers and the state is `partial` for that reason. Strong
+    expansions: energy_commodities (geological, hydraulic, fracturing, rail, rigs), fx_dollar
+    (japanese, australian, sterling, reconcile), ai_compute (fabrication, electronics, silicon).
+    Weak: rates_duration, whose expansion returns identical, false, removed and instituted,
+    because its seed words interest and rate are polysemous in filing prose; supply_chain and
+    inflation_pricing carry medical and IP boilerplate. rates_duration being the weakest is the
+    one that matters most, since it is the driver this project uses.
+    A document-frequency ceiling at the 95th percentile of each vintage's own distribution
+    removed signature-block boilerplate -- undersigned at 0.191 and thereunto at 0.185 -- while
+    keeping libor at 0.137. It treats a symptom: the confound is document length, since an
+    over-captured section holds both a seed word and a signature block because it is long, and
+    the ceiling does not measure length.
+    SUPERSEDED BY v3, 2026-08-26. v1 is kept in history. Two rounds of reseeding followed, both
+    made before any extraction record existed, so nothing was invalidated.
+    v2 replaced the sampled expansion with exact document-frequency counting and reseeded
+    rates_duration on unambiguous unigrams plus phrase seeds. rates now expands to risk interest,
+    rate swaps, average interest, outstanding borrowings and libor plus. Jaccard between nested
+    vintages rose on seven of eight drivers -- energy 0.40 to 0.76, fx 0.22 to 0.62, credit 0.18
+    to 0.53, rates 0.11 to 0.35 -- reported descriptively, since v1 and v2 differ in seeds, in
+    bigram space AND in sampling.
+    v3 fixed two more drivers with the SAME disease, which v1's unigram space had masked.
+    fx_dollar's seed "exchange" matched Securities Exchange Act and recruited disclosure-controls
+    boilerplate; china_trade's seed "trade" matched trade secrets and recruited
+    intellectual-property language. Both now expand into their own subject: currency forward,
+    currency exposure, australian dollar; chinese yuan, chinese renminbi, tariffs quotas.
+    Cross-driver leak at vintage 2019 is 0.000 for six of eight drivers.
+    WHAT IS STILL OPEN, and it is selectivity rather than correctness. A mechanical seed audit
+    raises nine of forty-eight seeds, and three fire on both its signals: "credit" appears in 67
+    percent of filings, "cost" in 56, "interest rate" in 56. Their EXPANSIONS are on-topic --
+    credit agreement, credit facilities, additional indebtedness -- so this is not the drift that
+    v2 and v3 fixed. It is a screen that may select two thirds of the corpus for one driver and
+    do no work. The cost is directly measurable in the screen counts rather than assertable from
+    a triage statistic, so it is measured there rather than reseeded on suspicion.
+  inputs: [cmp-edgar]
+  outputs: []
+  last_changed: 2026-08-26
+  claims: []
+  reproduce: uv run python scripts/build_taxonomy_versioned.py
+
+- id: cmp-screen
+  label: screen-v2, the operative funnel
+  layer: data
+  state: working
+  module: text/screen.py
+  one_breath: >
+    How many of a driver's terms a document must carry before it is worth reading, versioned
+    separately from the terms themselves.
+  does: >
+    A screen is not a taxonomy. The taxonomy says which terms belong to a driver; the screen says
+    how many of them a document must carry. They change independently, so a record needs both to
+    be reproducible and carries the screen identifier alongside the taxonomy hash.
+    screen-v1 was implicit and required ONE term. Measured on 6,000 sampled filings it selected
+    94 percent of the corpus, fired 4.84 of 8 drivers on the average document, produced unique
+    shares of 0.001 to 0.015, and projected 700M input tokens across 200,000 cells. A funnel that
+    does no funnelling.
+    screen-v2 requires a FRACTION of each driver's own vocabulary rather than an absolute count,
+    because vocabularies run 55 to 125 terms and an absolute threshold demands twice as much of a
+    small vocabulary as of a large one. At ten percent it selects 59 percent of the corpus at 1.53
+    drivers per document and 221M tokens: a 3.2-fold reduction that costs no reseed and re-hashes
+    no taxonomy.
+  honest_scope: >
+    The threshold was chosen from a measured table AFTER seeing it, which is licensed hindsight of
+    the same kind as choosing a horizon. It is an operational cost parameter and not a
+    verdict-bearing statistic, it is disclosed rather than buried, and what the tightening misses
+    is MEASURED by the false-negative design rather than assumed -- which is why that design
+    stratifies on the band the threshold drops as well as on never-selected documents.
+    Counting is of DISTINCT terms, not occurrences: ten mentions of one phrase is one term, since
+    the threshold exists to require breadth.
+  inputs: [cmp-taxonomy]
+  outputs: []
+  last_changed: 2026-08-26
+  claims: []
+  reproduce: uv run python scripts/d2_threshold_sweep.py
+
+
+# ---- registered 2026-08-26: 38 modules that existed and were not on the schematic --------
+# The system had grown to 61 modules while the graph described 23. An agent reading the
+# console saw about a third of what is built, and the third it saw was the oldest third.
+
+- id: cmp-config
+  label: Holdout protocol as code
+  one_breath: >
+    Which years may be looked at, expressed as a function rather than as a promise in prose.
+  layer: data
+  state: working
+  module: config.py
+  does: >
+    Splits the history into design, validation and sealed tiers and exposes `tier_of(date)`, so
+    an accidental look at held-out years is a code change visible in a diff rather than a
+    lapse of memory. The rule was still evaded once, by a power certification that ran on all
+    128 month-ends because certifying is not testing and no guard watched it.
+  inputs: []
+  outputs: [cmp-french, cmp-severity]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-guard
+  label: Resource guards
+  one_breath: >
+    Makes a long local job die instead of the machine.
+  layer: data
+  state: working
+  module: guard.py
+  does: >
+    Watches swap, disk and memory during long extractions and kills the job before the host
+    is in trouble. Written after a section extraction held every filing's text in one list,
+    grew swap to 10 GB against a 9.2 GB store, and panicked the kernel.
+  inputs: []
+  outputs: [cmp-filings]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-filings
+  label: Filing section corpus
+  one_breath: >
+    Forty-three thousand filings with their sections split out, each stamped to the second the
+    regulator received it.
+  layer: data
+  state: working
+  module: data/filings.py
+  does: >
+    Downloads company annual and quarterly reports and splits them into the numbered sections
+    a reader would cite, keeping the full text so a new section is a change of pattern rather
+    than a new download. Exists as a module because four earlier one-off pulls each repeated a
+    mistake the previous one had already found: a section that is really a pointer elsewhere,
+    a heading split across formatting tags, a cached field trusted over the document.
+  inputs: [cmp-pit, cmp-guard]
+  outputs: [cmp-harvest, cmp-retrieve, cmp-taxonomy]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-eightk
+  label: Current-report bodies
+  one_breath: >
+    The text companies publish between quarters, which is the only issuer text that moves
+    weekly.
+  layer: data
+  state: working
+  module: data/eightk.py
+  does: >
+    Fetches the bodies of current reports, not just their timestamps. The timestamps had
+    driven the earnings calendar since early in the project while the text itself was never
+    downloaded, which left a gap in anything asking when language moves rather than when a
+    filing arrived.
+  inputs: [cmp-pit]
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-thirteenf
+  label: Institutional holdings
+  one_breath: >
+    Who owns what each quarter, rebuilt from the regulator's own filings rather than bought.
+  layer: data
+  state: working
+  module: data/thirteenf.py
+  does: >
+    Reconstructs quarterly institutional equity positions and reproduces a known closing value
+    to the cent on every quarter as its own check. Crowding was treated as unobservable for
+    most of this project; it was unobservable in the data then to hand, not in principle.
+  inputs: [cmp-pit, cmp-crosswalk]
+  outputs: [cmp-overlap]
+  last_changed: 2026-08-24
+  claims: [clm-13f-legs-no-asymmetry]
+
+- id: cmp-crosswalk
+  label: Identifier crosswalk
+  one_breath: >
+    Matches the regulator's security numbers to index tickers, and proves each match with a
+    price.
+  layer: data
+  state: working
+  module: data/crosswalk.py
+  does: >
+    Institutional filings identify securities one way and index holdings another, and no free
+    published mapping covers the years that matter. This builds the mapping and then verifies
+    every pairing against an independent price, so a wrong match fails loudly instead of
+    quietly renaming a company.
+  inputs: []
+  outputs: [cmp-thirteenf]
+  last_changed: 2026-08-24
+  claims: []
+
+- id: cmp-shortinterest
+  label: Short interest
+  one_breath: >
+    The size of the short position, twice a month, stamped with when it became public.
+  layer: data
+  state: working
+  module: data/shortinterest.py
+  does: >
+    Loads consolidated short interest per stock with both its settlement date and its
+    publication date. This is the one positioning source that sees the leg momentum is short,
+    which institutional long filings structurally cannot.
+  inputs: [cmp-pit]
+  outputs: [cmp-crowding]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-fred
+  label: Macro driver series
+  one_breath: >
+    Free macro history, with a note on which famous series quietly stopped being free.
+  layer: data
+  state: working
+  module: data/fred.py
+  does: >
+    Loads public macro series and records which ones no longer serve full history. The
+    high-yield spread series most people reach for now returns a rolling three-year window
+    whatever range is requested, which is the kind of silent truncation that reads as data.
+  inputs: []
+  outputs: [cmp-channels]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-fedcal
+  label: Central bank calendar
+  one_breath: >
+    Scheduled meeting dates and statement text, to test whether reversals sit on a calendar.
+  layer: data
+  state: working
+  module: data/fedcal.py
+  does: >
+    Holds the meeting schedule and statement language behind the scheduled-catalyst
+    hypothesis, which was that a reversal need not be forecast from narrative if its trigger
+    is known in advance. The hypothesis was refuted across a three-by-three grid of event
+    definitions; the calendar remains in use as a control.
+  inputs: [cmp-pit]
+  outputs: [cmp-run]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-official
+  label: Official-sector commentary
+  one_breath: >
+    Central bank review text, the last text source with a plausible lead on a new driver.
+  layer: data
+  state: partial
+  module: data/official.py
+  does: >
+    Loads quarterly official-sector reviews. Coverage is the limitation and it is a hard one:
+    the archive spans 2005 to 2010 and 2018 to 2020, and contains essentially no pandemic
+    language before 2020, so a seeded arm on the COVID episode fails by construction and says
+    nothing about the method.
+  inputs: [cmp-pit]
+  outputs: [cmp-taxonomy]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-chrono
+  label: Vintage-matched embeddings
+  one_breath: >
+    Reads old documents with a model that did not know how the story ended.
+  layer: feature
+  state: partial
+  module: embed/chrono.py
+  does: >
+    Embeds each document under the latest model checkpoint whose training predates the
+    measurement date, because a modern model placed every historical window correctly with
+    dates stripped -- blinding is not a defence. Vintage is keyed to the MEASUREMENT date, not
+    the filing date, since vectors from different checkpoints are not comparable and mixing
+    them inside one cross-section invalidates everything downstream.
+  inputs: [cmp-filings]
+  outputs: [cmp-concentration]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-cleanlegs
+  label: Corporate-action correction
+  one_breath: >
+    Stops a share consolidation reading as a nineteen-hundred percent return.
+  layer: feature
+  state: working
+  module: factor/cleanlegs.py
+  does: >
+    Detects and corrects splits in the unadjusted price field before momentum is computed. A
+    one-for-twenty consolidation is a step change in an unadjusted series, and this project
+    recorded one ranking as the best-performing stock in the book before the correction
+    existed.
+  inputs: [cmp-holdings]
+  outputs: [cmp-legs]
+  last_changed: 2026-08-23
+  claims: []
+
+- id: cmp-sectors
+  label: Sector taxonomy bridge
+  one_breath: >
+    One sector scheme for a panel carrying two, and no dash ranked as a company.
+  layer: feature
+  state: working
+  module: factor/sectors.py
+  does: >
+    Maps the older and newer sector schemes onto one another across the vendor change around
+    2020, and refuses placeholder values. Both failures are in the trap log: labels that
+    emptied a decade of the panel, and a dash placeholder that ranked as a stock.
+  inputs: [cmp-holdings]
+  outputs: [cmp-comovement, cmp-placebo]
+  last_changed: 2026-08-23
+  claims: []
+
+- id: cmp-placebo
+  label: Placebo books
+  one_breath: >
+    Books no sort built, so the sort's effect has something to be measured against.
+  layer: feature
+  state: working
+  module: factor/placebo.py
+  does: >
+    Constructs comparison books from the same universe under selection rules other than
+    momentum. The project's central finding is that the momentum sort MANUFACTURES the
+    exposure it later gets blamed for, and that finding had no null until this existed: if any
+    selection rule confers a comparable tilt, the claim is about sorting, not about momentum.
+  inputs: [cmp-legs, cmp-sectors]
+  outputs: [cmp-conferred]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-conferred
+  label: Conferred-tilt channel
+  one_breath: >
+    What the ranking BUILDS into the book, as opposed to what the companies in it disclose.
+  layer: feature
+  state: working
+  module: features/conferred.py
+  does: >
+    Measures the factor loadings the momentum sort creates at each formation date. The
+    exposure that made September 2019 fragile was not a property the constituent firms had and
+    wrote down; it was conferred on them by the ranking. This is the mechanism behind the
+    project's most useful finding and the reason company filings cannot see it.
+  inputs: [cmp-legs, cmp-placebo]
+  outputs: [cmp-severity, cmp-translate]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-crowding
+  label: Return-based crowding
+  one_breath: >
+    How much arbitrage capital is in the same trade, inferred from how the stocks move.
+  layer: feature
+  state: working
+  module: features/crowding.py
+  does: >
+    Computes the average pairwise correlation of factor-residual returns among stocks inside a
+    momentum leg, the published measure of arbitrage activity, alongside short-interest based
+    components.
+  inputs: [cmp-legs, cmp-shortinterest]
+  outputs: [cmp-channels]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-overlap
+  label: Ownership overlap
+  one_breath: >
+    Separates a stock being popular from a basket being held together by the same managers.
+  layer: feature
+  state: working
+  module: features/overlap.py
+  does: >
+    Measures how far one set of institutions holds a basket jointly, rather than how many
+    institutions hold each name. Popularity and crowding are different quantities and the
+    difference is the entire point: large index-tracked stocks are held by everyone without
+    anyone being crowded into them.
+  inputs: [cmp-thirteenf]
+  outputs: []
+  last_changed: 2026-08-24
+  claims: [clm-13f-legs-no-asymmetry]
+
+- id: cmp-comovement
+  label: Partition co-movement test
+  one_breath: >
+    Asks whether the names a grouping puts together actually fall together, against
+    sector-matched random groups.
+  layer: feature
+  state: working
+  module: features/comovement.py
+  does: >
+    Takes any grouping of a book and tests whether its groups co-move more than random groups
+    drawn to match the same sector composition. This is how a naming layer gets graded on
+    something outside the document it read, and the sector matching is what stops industry
+    membership answering for it.
+  inputs: [cmp-sectors]
+  outputs: [cmp-partition]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-concentration
+  label: Sub-bet statistics
+  one_breath: >
+    Finds a concentrated bet inside a book that averages look right through.
+  layer: feature
+  state: working
+  module: features/concentration.py
+  does: >
+    Statistics for whether a SUBSET of a book shares one direction, rather than whether the
+    book as a whole does. Mean pairwise similarity is algebraically the squared centroid norm,
+    so a sub-bet covering a fraction of the book enters that statistic squared and disappears.
+    This is the algebra behind five of the project's underpowered nulls.
+  inputs: [cmp-chrono]
+  outputs: [cmp-power]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-factor-comovement
+  label: Cross-factor co-movement
+  one_breath: >
+    The deleveraging channel, for the founding episode that is invisible in momentum returns
+    alone.
+  layer: feature
+  state: working
+  module: factor/comovement.py
+  does: >
+    Measures co-movement across factors rather than within one. The August 2007 quant quake --
+    the founding episode of the whole crowded-unwind literature -- does not appear as an
+    extreme move in daily momentum returns at all, so an episode detector reading momentum
+    alone will never find it.
+  inputs: [cmp-french]
+  outputs: [cmp-episodes]
+  last_changed: 2026-08-24
+  claims: []
+
+- id: cmp-narrative
+  label: Narrative concentration
+  one_breath: >
+    Concentration in what is written about the holdings, rather than in the holdings
+    themselves.
+  layer: feature
+  state: working
+  module: features/narrative.py
+  does: >
+    Measures whether coverage of a book's holdings converges on one story. Built from the
+    finding that in September 2019 the book was one bet wearing ten sector labels while every
+    portfolio-level average said it was ordinary.
+  inputs: [cmp-news]
+  outputs: [cmp-channels]
+  last_changed: 2026-08-22
+  claims: []
+
+- id: cmp-riskpairs
+  label: Risk-text pair statistics
+  one_breath: >
+    Whether two firms' disclosure similarity explains their co-movement beyond shared
+    industry.
+  layer: feature
+  state: working
+  module: features/riskpairs.py
+  does: >
+    Compares pairs of firms on disclosure language against their realised co-movement, with
+    industry held fixed. Rebuilt from its own outputs: the original was written, run, cited
+    under two reproduced claims and four experiments, and never committed, leaving eleven
+    reproduce commands in the ledger pointing at code that did not exist.
+  inputs: [cmp-filings]
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-retrieve
+  label: Retrieval
+  one_breath: >
+    Targeted reading, with its own recall measured rather than assumed.
+  layer: feature
+  state: working
+  module: text/retrieve.py
+  does: >
+    Treats a candidate driver as a query, pulls each holding's relevant passages, and hands
+    them to extraction. Availability is a hard filter on the acceptance timestamp rather than
+    a re-ranking. Recall bootstraps from cached extraction records, whose quoted evidence
+    marks a known-relevant passage in a known filing, so recall is computable before anyone
+    hand-marks anything.
+  inputs: [cmp-filings]
+  outputs: [cmp-harvest]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-harvest
+  label: Dual-harvest reader
+  one_breath: >
+    Reads one filing twice at once: in the company's own words, then against eight fixed
+    themes.
+  layer: feature
+  state: working
+  module: llm/harvest.py
+  does: >
+    Asks first for every exposure the company names itself, unprompted by any list, so the
+    anchors cannot prime it; then for an explicit judgement on each of eight registered
+    themes. Every claim in both halves carries a quote checked mechanically against the source.
+    Three schema versions in one day: the first forced a direction onto disclosure that states
+    an exposure without giving one, the second exposed that `hurt_by_rising` was being used as
+    a generic "bad for us" label and inverting every passage describing harm from a FALL.
+  inputs: [cmp-filings, cmp-retrieve, cmp-taxonomy]
+  outputs: [cmp-translate]
+  last_changed: 2026-08-26
+  claims: [clm-harvest-schema-honesty]
+
+- id: cmp-exposure
+  label: Per-name exposure extraction
+  one_breath: >
+    One model, one document, one call about it -- the shape this project measures the model to
+    be good at.
+  layer: feature
+  state: working
+  module: llm/exposure.py
+  does: >
+    Extracts what a company states about its own rate exposure from its own filing, with the
+    quoted evidence checked as a substring of the source. Hallucinated evidence is the failure
+    mode this layer exists to prevent and it is machine-checkable for free, so failures are
+    build failures.
+  inputs: [cmp-filings]
+  outputs: [cmp-harvest, cmp-ppi]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-schema
+  label: Typed evidence records
+  one_breath: >
+    The contract that stops the language layer ever producing a number a model consumes.
+  layer: feature
+  state: working
+  module: llm/schema.py
+  does: >
+    Defines what the language layer is allowed to emit: a structured record with a citation,
+    saying whether a passage is genuinely about the mechanism. It reads text and never
+    produces a probability or a magnitude. Aggregation into numbers happens in arithmetic that
+    can be audited.
+  inputs: []
+  outputs: [cmp-exposure, cmp-harvest, cmp-extract]
+  last_changed: 2026-08-20
+  claims: []
+
+- id: cmp-partition
+  label: Book partitioner
+  one_breath: >
+    Asks a model to name what a book jointly bets on, and which holdings carry each bet.
+  layer: feature
+  state: working
+  module: llm/partition.py
+  does: >
+    Produces named groupings of a book's holdings, graded on whether the names inside a group
+    actually fall together rather than on whether the names sound plausible. Built because
+    four separate text nulls reduce to one cause, and none of them tested naming.
+  inputs: [cmp-chrono]
+  outputs: [cmp-comovement]
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-synthesis
+  label: Semantic news aggregation
+  one_breath: >
+    Aggregation over a book's coverage that can express a shared bet, with a placebo and a
+    hindsight probe.
+  layer: feature
+  state: working
+  module: llm/synthesis.py
+  does: >
+    Aggregates news semantically rather than by counting theme words, because a fixed
+    vocabulary cannot express what the September 2019 book actually was. Ships with a placebo
+    arm and a hindsight probe, since an aggregator that reads the future is the obvious way
+    this fails.
+  inputs: [cmp-news]
+  outputs: [cmp-narrative]
+  last_changed: 2026-08-22
+  claims: []
+
+- id: cmp-power
+  label: Planted-effect certificates
+  one_breath: >
+    What could this instrument have seen? A null is a claim about the world only if the answer
+    is "enough".
+  layer: model
+  state: working
+  module: validation/power.py
+  does: >
+    Plants effects of known size and measures how often the instrument detects them,
+    producing a smallest-detectable-effect region and a false-alarm rate. The validator
+    refuses a refutation without one. Each certificate is fingerprinted twice, on the
+    POPULATION it was issued against and on the NULL CONSTRUCTION it used, because a
+    certificate that survives a change in either silently gates the wrong verdict -- both
+    failures have happened here.
+  inputs: [cmp-concentration]
+  outputs: [cmp-severity]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-ppi
+  label: Prediction-powered inference
+  one_breath: >
+    Honest intervals on a quantity built from twenty thousand model labels and ninety human
+    ones.
+  layer: model
+  state: partial
+  module: validation/ppi.py
+  does: >
+    Combines a large set of model labels with a small set of human labels to give an interval
+    that is neither tight-around-a-biased-number nor unbiased-and-useless. Partial because the
+    gold sets are task-matched and the exposure gold set does not exist yet: aboutness labels
+    rectify aboutness quantities only, and cached extraction records are a regression target,
+    never ground truth.
+  inputs: [cmp-exposure]
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-regimes
+  label: Regime clustering
+  one_breath: >
+    Lets the data say how many kinds of reversal there are, and states why the answer cannot
+    be trusted far.
+  layer: model
+  state: working
+  module: events/regimes.py
+  does: >
+    Clusters detected episodes on their own characteristics rather than imposing a taxonomy.
+    The honest constraint is arithmetic: there are on the order of twenty-five to thirty
+    distinct modern episodes, and at that count any clustering returns something.
+  inputs: [cmp-episodes]
+  outputs: []
+  last_changed: 2026-08-23
+  claims: []
+
+- id: cmp-evaluate
+  label: Extractor bake-off
+  one_breath: >
+    Whether the model actually beats the keyword baseline, held as a measurement rather than
+    an assertion.
+  layer: model
+  state: working
+  module: llm/evaluate.py
+  does: >
+    Scores the language extractor against a keyword baseline on human-labelled ground truth.
+    The brief asks whether AI materially improves the process, which is a claim about a
+    comparison, so the comparison lives in code.
+  inputs: [cmp-extract]
+  outputs: []
+  last_changed: 2026-08-21
+  claims: []
+
+- id: cmp-referee
+  label: Adversarial referee
+  one_breath: >
+    Can a model name an experiment's structural flaw from its registration alone?
+  layer: model
+  state: working
+  module: llm/referee.py
+  does: >
+    Reads an experiment's registration and tries to name what is wrong with it, graded against
+    deliberately seeded defects. Also rebuilt from its outputs after being written, run, cited
+    and never committed.
+  inputs: []
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-translate
+  label: Translation layer
+  one_breath: >
+    Turns a measured tilt into something a portfolio manager can act on and be scored against.
+  layer: output
+  state: working
+  module: llm/translate.py
+  does: >
+    Converts sentences like "the book just inherited a 1.46 beta spread with a defensive tilt
+    at the twentieth percentile of its history" into a stated implication. This is the step
+    where a measurement becomes an instruction, and nothing numeric makes that crossing on its
+    own.
+  inputs: [cmp-conferred, cmp-harvest]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-24
+  claims: []
+
+- id: cmp-run
+  label: End-to-end run
+  one_breath: >
+    One date in, one brief out, with every stage that could not run saying so.
+  layer: output
+  state: working
+  module: pipeline/run.py
+  does: >
+    Executes every stage for a single date and renders regardless of failures, each gap
+    carrying a reason. A monitor whose gaps are invisible is worse than one full of holes,
+    because the reader cannot distinguish "measured and benign" from "not measured".
+  inputs: [cmp-severity, cmp-channels, cmp-conferred, cmp-crowding]
+  outputs: [cmp-brief]
+  last_changed: 2026-08-26
+  claims: []
+
+- id: cmp-brief
+  label: Brief renderer
+  one_breath: >
+    The page a portfolio manager reads, with the could-not-measure list in the body rather than
+    an appendix.
+  layer: output
+  state: working
+  module: pipeline/brief.py
+  does: >
+    Renders one date's run as a page. The gap list sits in the body deliberately: the
+    difference between "measured and quiet" and "never measured" is the difference between a
+    monitor and a decoration, and only the brief can tell the reader which one they hold.
+  inputs: [cmp-run, cmp-translate]
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-nightly
+  label: Nightly run
+  one_breath: >
+    One dated brief per calendar day, whatever coverage exists, because monitoring is proven by
+    calendar time alone.
+  layer: output
+  state: working
+  module: pipeline/nightly.py
+  does: >
+    Emits a dated, versioned brief every day at whatever coverage the system currently has. A
+    system demonstrated on request is a backtest with a nice renderer; one that has been
+    emitting dated briefs for weeks, with its could-not-measure list visibly shrinking, is a
+    monitor.
+  inputs: [cmp-run]
+  outputs: []
+  last_changed: 2026-08-25
+  claims: []
+
+- id: cmp-dates
+  label: Regression date set
+  one_breath: >
+    Six dates chosen so that breaking any one of them breaks something specific and nameable.
+  layer: output
+  state: working
+  module: pipeline/dates.py
+  does: >
+    Fixes the dates the system must render a brief for. These are not a sample and are not
+    evidence; they are a regression test, chosen so a failure points at a named cause rather
+    than at general breakage.
+  inputs: []
+  outputs: [cmp-run]
+  last_changed: 2026-08-24
+  claims: []
+
+- id: cmp-state-vector
+  label: State vector
+  one_breath: >
+    One numeric row per month-end describing the sensor's state, block-standardised on
+    expanding windows and gated before anything retrieves against it.
+  layer: feature
+  state: working
+  module: ../scripts/build_state_vector.py
+  does: >
+    Assembles eight blocks -- conferred tilt with its placebo percentile, within-leg
+    comovement, cross-sectional dispersion, a conferred valuation spread, the trailing
+    volatility regime, the two-channel mechanism indicator, short-side pressure and the
+    index-implied options state -- into one month-end panel running 1927-03 to the seal at
+    2023-01. Each column is z-scored on an expanding window through t inclusive with a
+    36-month burn-in, so a value never uses data after its own date. Blocks are weighted
+    equally and a block's weight is split evenly across its own columns, so adding a column
+    to a block does not buy that block influence. Missing blocks are explicit NaN beside a
+    per-block coverage column and are never imputed.
+  inputs: [cmp-conferred, cmp-channels]
+  outputs: []
+  last_changed: 2026-08-30
+  claims: []
+  artifacts:
+    - data/processed/state_vector.parquet
+    - data/processed/state_vector_spec.json
+  interface: >
+    FROZEN at sha256 01e6458bc8365aa2 (recorded in state_vector_spec.json alongside the
+    block map, the column weights, the burn-in and the per-column first-valid dates).
+    Consumers read the spec for the weights; they do not re-derive them. The panel is
+    ragged by design and a consumer must compute over present blocks only: 754 of 1,150
+    rows carry three blocks, 68 carry six or more, 18 carry all eight.
+  limits: >
+    Conferred loadings are masked where the formation window carries fewer than 120
+    observations, which removes 2007-10 to 2013-05 from the tilt and valuation blocks; the
+    monthly holdings panel cannot support a loading before then. Comovement starts 2014-01,
+    the placebo percentile 2013-09, short-side pressure 2018-08, and the options term slope
+    2009-09 against 1990-01 for implied level and skew. French publishes with roughly a
+    fifty-day lag, so the blocks derived from it are unavailable for the two newest months
+    of a live reading.

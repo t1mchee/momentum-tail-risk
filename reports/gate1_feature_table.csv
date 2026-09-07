@@ -1,0 +1,5 @@
+feature,first_valid,last_valid,n_obs,grain
+slow_fast,1927-04-04,2022-12-30,25173,daily
+xs_dispersion,1926-11-03,2022-12-30,25298,daily
+factor_autocorr,1970-06-30,2022-12-13,631,monthly-ish
+comomentum,2014-01-31,2022-12-31,101,monthly-ish

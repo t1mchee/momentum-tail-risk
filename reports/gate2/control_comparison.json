@@ -1,0 +1,21 @@
+{
+  "unit": "grounded records",
+  "target": {
+    "k": 19,
+    "n": 112,
+    "names_k": 9,
+    "names_n": 36
+  },
+  "controls": {
+    "k": 15,
+    "n": 223,
+    "names_k": 11,
+    "names_n": 83
+  },
+  "winner": {
+    "k": 11,
+    "n": 206
+  },
+  "fisher_p_by_filing": 0.006376872181995069,
+  "fisher_p_by_name": 0.1801042016601957
+}

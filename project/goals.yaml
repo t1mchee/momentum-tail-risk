@@ -1,0 +1,183 @@
+# What the assignment actually asked for, and how the project stands against each item.
+# `plain_status` is written for someone who has read the brief and nothing else.
+
+# ---- required elements -----------------------------------------------------------
+
+- id: goal-identify
+  requirement: Identify tail risk in the US equity momentum factor
+  one_breath: Spot when momentum is exposed to a severe reversal.
+  required: true
+  state: covered
+  evidence: [clm-severity-forecastable, clm-vol-robust, clm-overlap-inference, clm-garch, exp-003, exp-004, exp-025]
+  plain_status: >
+    Covered, with an important qualification. How bad a reversal would be is genuinely
+    forecastable and the system does it. When one will happen is not forecastable at this
+    sample size, and the project says so rather than pretending otherwise.
+
+- id: goal-explain
+  requirement: Explain the tail risk, not merely flag it
+  one_breath: Say why the book is exposed, in terms a person can act on.
+  required: true
+  state: covered
+  evidence: [clm-aggregation, clm-taxonomy, clm-2019-complacency, exp-008]
+  plain_status: >
+    Covered, and this turned out to be where the project's real value sits. The briefing
+    names which mechanism is live, what the book is concentrated in beneath its sector
+    labels, and where the model itself is likely to be wrong.
+
+- id: goal-monitor
+  requirement: Monitor on an ongoing basis
+  one_breath: Produce this every day, not once.
+  required: true
+  state: partial
+  evidence: [exp-008, exp-017]
+  plain_status: >
+    The briefing regenerates for any date from data already on disk, daily option capture runs
+    forward, and the nightly run now emits one dated brief per calendar day at whatever coverage
+    exists. Still partial rather than covered, and deliberately: monitoring is proven by calendar
+    time and nothing else, so this becomes covered when the run has a record behind it rather
+    than when the code exists. Drift alerting is described in the write-up rather than built.
+
+- id: goal-market
+  requirement: Use market data
+  one_breath: Prices, returns and volatility.
+  required: true
+  state: covered
+  evidence: [clm-severity-forecastable, clm-construction, clm-universe, exp-002, exp-003]
+  plain_status: >
+    Covered thoroughly. Twenty years of index membership including delisted companies,
+    a century of academic factor returns, and free option-implied volatility back to 1990.
+
+- id: goal-positioning
+  requirement: Use positioning or crowding information
+  one_breath: Measure how many other people hold the same bet.
+  required: true
+  state: covered
+  evidence: [clm-comomentum-replicates, clm-comomentum-useless, clm-aggregation, clm-skew-squeeze, exp-012, exp-019]
+  plain_status: >
+    Covered, and one of the more interesting outcomes. A published crowding measure was
+    replicated successfully on new data, then shown to be worthless as a trading trigger.
+    Both halves are reported, because the second half is what a practitioner needs to know.
+    Option prices on the book's own short positions were tested as a second, forward-looking
+    positioning measure and carry no squeeze signal.
+
+- id: goal-text
+  requirement: Use at least one timestamped text data source
+  one_breath: Something written, dated, and known at the time.
+  required: true
+  state: null_result
+  evidence: [clm-news-crowding, clm-semantic-filter, clm-empty-corpus, clm-10k, clm-text-no-exposure, clm-aboutness-ladder, exp-009, exp-010, exp-023]
+  plain_status: >
+    Covered, and the answer is negative in a way worth reporting. A dated text source is
+    instrumented end to end: a million matched articles harvested, attributed to holdings by
+    a model-filtered rule measured at 96.6 percent precision against blind hand labels, and
+    reduced to a corpus genuinely about the companies held. Three results came out of it.
+    Market commentary carries no discussion of factor crowding before a reversal. Coverage
+    of the holdings does not encode the factor exposure that made the book fragile: the
+    2019 winning side was a concentrated rate bet and its news is 0.32 percent rate-themed,
+    below its own losing side. And the concentration statistic built on that corpus turned
+    out to be a coverage count rather than a measure of narrative. The text layer works and
+    what it found is that this particular signal is not there.
+
+- id: goal-output
+  requirement: Produce an output aimed at a portfolio manager
+  one_breath: One page a decision-maker can read in two minutes.
+  required: true
+  state: covered
+  evidence: [exp-008, clm-aggregation]
+  plain_status: >
+    Covered. The briefing carries severity at three horizons, mechanism attribution,
+    concentration beneath the sector labels, and a section listing what could not be
+    measured on that date, which is the part that makes it trustworthy.
+
+- id: goal-ai
+  requirement: Use AI tools thoughtfully, and show how
+  one_breath: Demonstrate judgement about where models help and where they do not.
+  required: true
+  state: covered
+  evidence: [clm-semantic-filter, clm-empty-corpus, clm-panel-arithmetic, clm-hypothesis-label, exp-009, exp-018]
+  plain_status: >
+    Covered in both directions, which is the point. Language models were measured doing
+    something well, filtering text sixteen times more precisely than keywords, and
+    measured doing something badly, overstating their own headline numbers twice. The
+    structural fix is that the evidence format has no field for a probability.
+
+- id: goal-validation
+  requirement: Validate credibly
+  one_breath: Show the results would survive a sceptic.
+  required: true
+  state: covered
+  evidence: [clm-power, clm-garch, clm-comomentum-useless, clm-fomc, clm-earnings-density, exp-013, exp-014]
+  plain_status: >
+    Covered. Every hypothesis is tested across a grid of reasonable definitions with
+    correction for multiple testing, the smallest detectable effect is stated up front,
+    statistical results are separated from economic ones, and the sample is split into
+    three tiers with the last opened only once.
+
+- id: goal-tradeoffs
+  requirement: Be clear about tradeoffs and limitations
+  one_breath: Say what does not work and why.
+  required: true
+  state: covered
+  evidence: [clm-power, clm-contamination, clm-miscalibration, clm-lowvol-wrong]
+  plain_status: >
+    Covered, including limitations of my own work. Two refutations, a fourteen-entry log
+    of data that parsed cleanly and was wrong, two occasions where I asserted something
+    without checking it, and an explicit statement that the models cannot be tested on
+    history they were trained on.
+
+# ---- deliverables ----------------------------------------------------------------
+
+- id: goal-code
+  requirement: Working code package with a README
+  one_breath: Something a reader can run.
+  required: true
+  state: covered
+  evidence: [exp-003, exp-008]
+  plain_status: >
+    Covered. Every headline number has a command that regenerates it, and the project state
+    is generated from structured files rather than maintained by hand in two places.
+
+- id: goal-memo
+  requirement: Research memo of six to ten pages
+  one_breath: The written argument.
+  required: true
+  state: not_covered
+  evidence: []
+  plain_status: >
+    Not started, and the highest-value remaining work. The structure is settled and the
+    project record already contains most of the content, so this is assembly rather than
+    research.
+
+- id: goal-example
+  requirement: One example risk output
+  one_breath: A real briefing for a real date.
+  required: true
+  state: covered
+  evidence: [exp-008]
+  plain_status: >
+    Covered by the briefing for the eve of the September 2019 reversal, which is the
+    stronger exhibit precisely because the model was wrong that day and the briefing shows
+    why. A current-date version is also produced.
+
+- id: goal-deck
+  requirement: Presentation of fifteen to twenty minutes
+  one_breath: The talk.
+  required: true
+  state: not_covered
+  evidence: []
+  plain_status: >
+    Not started. Follows the written argument, since the same spine serves both.
+
+# ---- explicitly out of scope -----------------------------------------------------
+
+- id: goal-timing
+  requirement: Forecast when a reversal will occur
+  one_breath: Predict the date, not just the damage.
+  required: false
+  state: null_result
+  evidence: [clm-power, clm-fomc, clm-earnings-density]
+  plain_status: >
+    Deliberately not attempted, and the reason is measured rather than asserted. There have
+    been too few reversals for any timing signal to clear statistical significance, and two
+    separate calendar hypotheses were tested and refuted at that ceiling.

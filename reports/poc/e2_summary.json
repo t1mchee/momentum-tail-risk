@@ -1,0 +1,40 @@
+{
+  "n_dates": 28,
+  "n_filings": 3625,
+  "model": {
+    "n_episode": 12,
+    "n_control": 16,
+    "median_episode": 0.1064935064935065,
+    "median_control": 0.09358563569312617,
+    "gap": 0.012907870800380333,
+    "U": 114.0,
+    "p_one_sided": 0.20827616740584248,
+    "separates": false
+  },
+  "keyword": {
+    "n_episode": 12,
+    "n_control": 16,
+    "median_episode": 0.43786572220511244,
+    "median_control": 0.4258040146773149,
+    "gap": 0.01206170752779756,
+    "U": 95.0,
+    "p_one_sided": 0.5277582099182165,
+    "separates": false
+  },
+  "agreement": {
+    "both": 341,
+    "model_only": 96,
+    "keyword_only": 1224,
+    "neither": 1964,
+    "n": 3625,
+    "share_agreeing": 0.6358620689655172,
+    "keyword_flags_that_the_model_declined": 1224,
+    "of_what_the_keyword_flags_the_model_keeps": 0.21789137380191692,
+    "note": "the rule flags 3.7 times as many filings; the model declines most of them. Neither number is precision -- the model is not ground truth -- but the asymmetry is the boilerplate the registration predicted the rule would fire on"
+  },
+  "capability": {
+    "model_records_carry_a_grounded_span": true,
+    "keyword_rule_can_name_the_condition": false,
+    "note": "the rule flags a document; it cannot say WHAT the filer is priced on, so the condition text and the verbatim quote on the page have no keyword equivalent"
+  }
+}

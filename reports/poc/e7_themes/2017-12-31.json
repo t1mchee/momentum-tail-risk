@@ -1,0 +1,747 @@
+{
+ "date": "2017-12-31",
+ "kind": "episode",
+ "built": true,
+ "reasons": [],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 105,
+  "start": "2017-08-02",
+  "end": "2017-12-29"
+ },
+ "constant_series_dropped": {
+  "n": 1,
+  "tickers": [
+   "GRB"
+  ]
+ },
+ "market_check": {
+  "series": "capitalisation-weighted point-in-time IWV universe",
+  "corr_with_fama_french_mkt_rf": 0.9971,
+  "ff_days_available": 105
+ },
+ "book": {
+  "winners_registered": 260,
+  "losers_registered": 260,
+  "winners_used": 260,
+  "losers_used": 260,
+  "universe": 2895,
+  "caps_snapshot": "2017-12-29"
+ },
+ "random_books": {
+  "n": 200,
+  "cells_short_total": 0
+ },
+ "components": [
+  {
+   "k": 1,
+   "VS_k": 0.01854498122796113,
+   "VS_k_placebo_q95": 0.059966075501766095,
+   "VS_k_percentile_vs_random": 0.625,
+   "above_noise": false,
+   "g_k": 0.006576685621399592,
+   "sigma_k": 0.14695466898061452,
+   "set_size": 130,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.41919533858232383,
+    "b_k": -13.476892085278433,
+    "beta_H": 1.3894438213754676,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.4192
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.3809
+     },
+     {
+      "instrument": "sector_communication",
+      "r2": 0.3723
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.351
+     },
+     {
+      "instrument": "sector_materials",
+      "r2": 0.2645
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "VS_k": 0.005647031974060714,
+   "VS_k_placebo_q95": 0.01697102325030694,
+   "VS_k_percentile_vs_random": 0.755,
+   "above_noise": false,
+   "g_k": 0.004815869823677514,
+   "sigma_k": 0.11383635647464424,
+   "set_size": 130,
+   "bridge": {
+    "instrument": "sector_communication",
+    "r2": 0.1266093936022582,
+    "b_k": -7.602807586332426,
+    "beta_H": 1.0698404606332352,
+    "source": "panel: equally-weighted Communication members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_communication",
+      "r2": 0.1266
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.1163
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.106
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.0874
+     },
+     {
+      "instrument": "sector_financials",
+      "r2": 0.066
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "VS_k": 0.0028500831022319584,
+   "VS_k_placebo_q95": 0.013134492181322342,
+   "VS_k_percentile_vs_random": 0.72,
+   "above_noise": false,
+   "g_k": 0.003611020418901819,
+   "sigma_k": 0.12078059422645984,
+   "set_size": 130,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.04178671425369718,
+    "b_k": 3.497151229994202,
+    "beta_H": 1.3894438213754676,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.0418
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.0334
+     },
+     {
+      "instrument": "ig_credit",
+      "r2": 0.0268
+     },
+     {
+      "instrument": "sector_financials",
+      "r2": 0.0219
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.0214
+     }
+    ]
+   }
+  }
+ ],
+ "decomposition": {
+  "shrinkage": 0.8082136804998952,
+  "condition_number": 391.08894038044167,
+  "w_norm_l2": 0.3785161362894617,
+  "n_names": 520,
+  "w_norm_l2_convention": "spec node `sort`: value-weighted within each leg, dollar-neutral across them, from RAW price * quantity",
+  "w_norm_l2_exp089_joint_convention": 0.18484881515618048,
+  "leg_concentration": {
+   "winner": {
+    "n": 260,
+    "top1_share": 0.17563440304261518,
+    "effective_n": 18.082856469618708,
+    "largest": "BAC"
+   },
+   "loser": {
+    "n": 260,
+    "top1_share": 0.21422708707429114,
+    "effective_n": 11.367063539146567,
+    "largest": "CMCSA"
+   }
+  }
+ },
+ "news": {
+  "file": "2018-02_volmageddon.parquet",
+  "titles_total": 7685,
+  "titles_kept": 468,
+  "titles_unique_kept": 374,
+  "share_before_formation": 0.0609,
+  "risk_statements_rule_b": 6,
+  "risk_statements_rule_a_exp085": 0
+ },
+ "filings": {
+  "tickers_in_any_component_set": 1692,
+  "tickers_with_item_1a_as_of_date": 45,
+  "tickers_used": 6,
+  "sentences_total": 429,
+  "risk_statements_rule_b": 201,
+  "risk_statements_rule_a_exp085": 5,
+  "excerpt_chars": 18000
+ },
+ "population": {
+  "n": 207,
+  "news": 6,
+  "filing": 201
+ },
+ "clustering_variants": {
+  "umap10_min_samples_5": {
+   "variant": "umap10_min_samples_5",
+   "min_samples": 5,
+   "reducer": "umap n_components=10 metric=cosine seed=0",
+   "clusters": {
+    "n": 3,
+    "noise_share": 0.1497584541062802,
+    "largest_cluster_share": 0.45893719806763283,
+    "degenerate": false,
+    "d_star": 1.7219905853271484,
+    "d_star_c": 2.1562435626983643,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 0,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 95,
+      "news_members": 1,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "company",
+       "regulations",
+       "operations",
+       "costs",
+       "impact",
+       "significant"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 53,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "restaurants",
+       "sales",
+       "restaurant",
+       "new",
+       "customer",
+       "impact"
+      ]
+     },
+     {
+      "id": 2,
+      "size": 28,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "cash",
+       "debt",
+       "assets",
+       "activities",
+       "convertible",
+       "notes"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.45893719806763283,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "company",
+      "regulations",
+      "operations",
+      "costs",
+      "impact",
+      "significant"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 1,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 130,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 1,
+      "label": [
+       "restaurants",
+       "sales",
+       "restaurant",
+       "new",
+       "customer",
+       "impact"
+      ],
+      "E_e": 0.0
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 4,
+     "statistic_is_informative": false,
+     "quotes": [
+      "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "company",
+      "regulations",
+      "operations",
+      "costs",
+      "impact",
+      "significant"
+     ],
+     "Q_e": 0.0,
+     "P_e": 2.7347036858403002e-05,
+     "E_e": -2.7347036858403002e-05,
+     "placebo_q95_of_random_max": -2.7347036858403002e-05,
+     "risen": false,
+     "news_members": 1,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 130,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 1,
+      "label": [
+       "restaurants",
+       "sales",
+       "restaurant",
+       "new",
+       "customer",
+       "impact"
+      ],
+      "E_e": -2.7347036858403002e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 4,
+     "statistic_is_informative": false,
+     "quotes": [
+      "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "company",
+      "regulations",
+      "operations",
+      "costs",
+      "impact",
+      "significant"
+     ],
+     "Q_e": 0.0,
+     "P_e": 6.007159384134808e-05,
+     "E_e": -6.007159384134808e-05,
+     "placebo_q95_of_random_max": -6.007159384134808e-05,
+     "risen": false,
+     "news_members": 1,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 130,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 1,
+      "label": [
+       "restaurants",
+       "sales",
+       "restaurant",
+       "new",
+       "customer",
+       "impact"
+      ],
+      "E_e": -6.007159384134808e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 4,
+     "statistic_is_informative": false,
+     "quotes": [
+      "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  },
+  "registered": {
+   "variant": "registered",
+   "min_samples": null,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [registered] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  },
+  "min_samples_5": {
+   "variant": "min_samples_5",
+   "min_samples": 5,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [min_samples_5] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  }
+ },
+ "primary_variant": "umap10_min_samples_5",
+ "clusters": {
+  "n": 3,
+  "noise_share": 0.1497584541062802,
+  "largest_cluster_share": 0.45893719806763283,
+  "degenerate": false,
+  "d_star": 1.7219905853271484,
+  "d_star_c": 2.1562435626983643,
+  "min_cluster_size": 25,
+  "n_boilerplate_excluded": 0,
+  "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+  "boilerplate_vocabulary": [
+   "ability",
+   "additional",
+   "adverse",
+   "adversely",
+   "affect",
+   "affected",
+   "affecting",
+   "business",
+   "businesses",
+   "cash",
+   "certain",
+   "companies",
+   "company",
+   "condition",
+   "conditions",
+   "could",
+   "customer",
+   "customers",
+   "finances",
+   "financial",
+   "flows",
+   "future",
+   "harm",
+   "harmed",
+   "impact",
+   "impacted",
+   "including",
+   "material",
+   "materially",
+   "may",
+   "operate",
+   "operating",
+   "operations",
+   "product",
+   "products",
+   "result",
+   "results",
+   "revenue",
+   "revenues",
+   "risk",
+   "risks",
+   "service",
+   "services",
+   "significant",
+   "significantly"
+  ],
+  "detail": [
+   {
+    "id": 0,
+    "size": 95,
+    "news_members": 1,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "company",
+     "regulations",
+     "operations",
+     "costs",
+     "impact",
+     "significant"
+    ]
+   },
+   {
+    "id": 1,
+    "size": 53,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "restaurants",
+     "sales",
+     "restaurant",
+     "new",
+     "customer",
+     "impact"
+    ]
+   },
+   {
+    "id": 2,
+    "size": 28,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "cash",
+     "debt",
+     "assets",
+     "activities",
+     "convertible",
+     "notes"
+    ]
+   }
+  ]
+ },
+ "themes": [
+  {
+   "k": 1,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "company",
+    "regulations",
+    "operations",
+    "costs",
+    "impact",
+    "significant"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.0,
+   "E_e": 0.0,
+   "placebo_q95_of_random_max": 0.0,
+   "risen": false,
+   "news_members": 1,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 130,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 1,
+    "label": [
+     "restaurants",
+     "sales",
+     "restaurant",
+     "new",
+     "customer",
+     "impact"
+    ],
+    "E_e": 0.0
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 4,
+   "statistic_is_informative": false,
+   "quotes": [
+    "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+   ]
+  },
+  {
+   "k": 2,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "company",
+    "regulations",
+    "operations",
+    "costs",
+    "impact",
+    "significant"
+   ],
+   "Q_e": 0.0,
+   "P_e": 2.7347036858403002e-05,
+   "E_e": -2.7347036858403002e-05,
+   "placebo_q95_of_random_max": -2.7347036858403002e-05,
+   "risen": false,
+   "news_members": 1,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 130,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 1,
+    "label": [
+     "restaurants",
+     "sales",
+     "restaurant",
+     "new",
+     "customer",
+     "impact"
+    ],
+    "E_e": -2.7347036858403002e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 4,
+   "statistic_is_informative": false,
+   "quotes": [
+    "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+   ]
+  },
+  {
+   "k": 3,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "company",
+    "regulations",
+    "operations",
+    "costs",
+    "impact",
+    "significant"
+   ],
+   "Q_e": 0.0,
+   "P_e": 6.007159384134808e-05,
+   "E_e": -6.007159384134808e-05,
+   "placebo_q95_of_random_max": -6.007159384134808e-05,
+   "risen": false,
+   "news_members": 1,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 6 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 130,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 1,
+    "label": [
+     "restaurants",
+     "sales",
+     "restaurant",
+     "new",
+     "customer",
+     "impact"
+    ],
+    "E_e": -6.007159384134808e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 4,
+   "statistic_is_informative": false,
+   "quotes": [
+    "New legislation or regulatory changes could impact the Company's earnings or restrict its ability to independently negotiate prices."
+   ]
+  }
+ ],
+ "named_component": null,
+ "any_theme_risen": false,
+ "risen_on_component_above_noise": false,
+ "numeric_built": true,
+ "expected_label_terms": null,
+ "expected_label_phrase": null,
+ "expected_label_source": null,
+ "label_matches_expected": null,
+ "label_match_basis": "no expected label was registered for this date",
+ "expected_terms_in_top_theme_label": null,
+ "expected_label_carried_at": "2026-09-07T10:27:42.574433+00:00"
+}

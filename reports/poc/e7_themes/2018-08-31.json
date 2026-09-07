@@ -1,0 +1,803 @@
+{
+ "date": "2018-08-31",
+ "kind": "calm",
+ "built": true,
+ "reasons": [],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 126,
+  "start": "2018-03-06",
+  "end": "2018-08-31"
+ },
+ "constant_series_dropped": {
+  "n": 0,
+  "tickers": []
+ },
+ "market_check": {
+  "series": "capitalisation-weighted point-in-time IWV universe",
+  "corr_with_fama_french_mkt_rf": 0.9991,
+  "ff_days_available": 126
+ },
+ "book": {
+  "winners_registered": 270,
+  "losers_registered": 270,
+  "winners_used": 270,
+  "losers_used": 270,
+  "universe": 2759,
+  "caps_snapshot": "2018-08-31"
+ },
+ "random_books": {
+  "n": 200,
+  "cells_short_total": 0
+ },
+ "components": [
+  {
+   "k": 1,
+   "VS_k": 0.0003642845705724368,
+   "VS_k_placebo_q95": 0.040938198576359545,
+   "VS_k_percentile_vs_random": 0.15,
+   "above_noise": false,
+   "g_k": 0.001029776109314334,
+   "sigma_k": 0.1413415385051882,
+   "set_size": 135,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.744001034586912,
+    "b_k": 17.280193568962584,
+    "beta_H": 1.0416868659056606,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.744
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.4031
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.3844
+     },
+     {
+      "instrument": "sector_communication",
+      "r2": 0.3336
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.326
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "VS_k": 0.0015701017192324607,
+   "VS_k_placebo_q95": 0.003700291164175465,
+   "VS_k_percentile_vs_random": 0.86,
+   "above_noise": false,
+   "g_k": 0.002992453895762296,
+   "sigma_k": 0.10185968073299363,
+   "set_size": 135,
+   "bridge": {
+    "instrument": "sector_information_technology",
+    "r2": 0.0503153024632671,
+    "b_k": 4.062303123635366,
+    "beta_H": 1.0969923729192697,
+    "source": "panel: equally-weighted Information Technology members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.0503
+     },
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.0398
+     },
+     {
+      "instrument": "sector_real_estate",
+      "r2": 0.0398
+     },
+     {
+      "instrument": "ten_year",
+      "r2": 0.0251
+     },
+     {
+      "instrument": "sector_energy",
+      "r2": 0.0233
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "VS_k": 0.0015905308442525047,
+   "VS_k_placebo_q95": 0.00498409957974755,
+   "VS_k_percentile_vs_random": 0.795,
+   "above_noise": false,
+   "g_k": 0.003858958789848552,
+   "sigma_k": 0.09010047788946017,
+   "set_size": 135,
+   "bridge": {
+    "instrument": "sector_energy",
+    "r2": 0.08614144754712516,
+    "b_k": -1.9890373541616044,
+    "beta_H": 1.0409970430642288,
+    "source": "panel: equally-weighted Energy members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_energy",
+      "r2": 0.0861
+     },
+     {
+      "instrument": "ten_year",
+      "r2": 0.0414
+     },
+     {
+      "instrument": "sector_financials",
+      "r2": 0.0309
+     },
+     {
+      "instrument": "sector_consumer_discretionary",
+      "r2": 0.023
+     },
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.0224
+     }
+    ]
+   }
+  }
+ ],
+ "decomposition": {
+  "shrinkage": 0.8071170286837736,
+  "condition_number": 1082.879446661461,
+  "w_norm_l2": 0.4291702409269277,
+  "n_names": 540,
+  "w_norm_l2_convention": "spec node `sort`: value-weighted within each leg, dollar-neutral across them, from RAW price * quantity",
+  "w_norm_l2_exp089_joint_convention": 0.2660570388998167,
+  "leg_concentration": {
+   "winner": {
+    "n": 270,
+    "top1_share": 0.35895476210393545,
+    "effective_n": 7.090520298592059,
+    "largest": "AMZN"
+   },
+   "loser": {
+    "n": 270,
+    "top1_share": 0.11626762298538705,
+    "effective_n": 23.172972271899994,
+    "largest": "PM"
+   }
+  }
+ },
+ "news": {
+  "file": null,
+  "titles_total": 0,
+  "titles_kept": 0,
+  "risk_statements_rule_b": 0,
+  "risk_statements_rule_a_exp085": 0
+ },
+ "filings": {
+  "tickers_in_any_component_set": 1583,
+  "tickers_with_item_1a_as_of_date": 105,
+  "tickers_used": 28,
+  "sentences_total": 2240,
+  "risk_statements_rule_b": 1117,
+  "risk_statements_rule_a_exp085": 26,
+  "excerpt_chars": 18000
+ },
+ "population": {
+  "n": 1117,
+  "news": 0,
+  "filing": 1117
+ },
+ "clustering_variants": {
+  "umap10_min_samples_5": {
+   "variant": "umap10_min_samples_5",
+   "min_samples": 5,
+   "reducer": "umap n_components=10 metric=cosine seed=0",
+   "clusters": {
+    "n": 5,
+    "noise_share": 0.06535362578334826,
+    "largest_cluster_share": 0.6714413607878246,
+    "degenerate": false,
+    "d_star": 2.1059701442718506,
+    "d_star_c": 1.9245811700820923,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 1,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 35,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "eylea",
+       "approved",
+       "treatment",
+       "bayer",
+       "commercialization",
+       "indications"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 750,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": true,
+      "label": [
+       "business",
+       "results",
+       "adversely",
+       "financial",
+       "products",
+       "affect"
+      ]
+     },
+     {
+      "id": 2,
+      "size": 61,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "abbvie",
+       "products",
+       "product",
+       "patent",
+       "patents",
+       "new"
+      ]
+     },
+     {
+      "id": 3,
+      "size": 109,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "regulations",
+       "laws",
+       "occidental",
+       "operations",
+       "pharmacy",
+       "gas"
+      ]
+     },
+     {
+      "id": 4,
+      "size": 89,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "data",
+       "systems",
+       "security",
+       "information",
+       "business",
+       "computer"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.6714413607878246,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "eylea",
+      "approved",
+      "treatment",
+      "bayer",
+      "commercialization",
+      "indications"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 135,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 2,
+      "label": [
+       "abbvie",
+       "products",
+       "product",
+       "patent",
+       "patents",
+       "new"
+      ],
+      "E_e": 0.0
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": false,
+     "quotes": [
+      "Finally, ZALTRAP has not been manufactured and formulated for use in intravitreal injections, and there is a risk that third parties may attempt to repackage ZALTRAP for off-label use and sale for the treatment of wet AMD and other diseases of the eye, which would present a potential low-cost competitive threat to EYLEA for its approved indications."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 3,
+     "theme_label": [
+      "regulations",
+      "laws",
+      "occidental",
+      "operations",
+      "pharmacy",
+      "gas"
+     ],
+     "Q_e": 0.0035344336962537704,
+     "P_e": 0.0004208570012331875,
+     "E_e": 0.003113576695020583,
+     "placebo_q95_of_random_max": 0.0033572589199377225,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 135,
+      "set_companies_with_item_1a": 1,
+      "set_coverage_share": 0.0074,
+      "share_of_set_absolute_loading_covered": 0.0035
+     },
+     "runner_up": {
+      "cluster": 0,
+      "label": [
+       "eylea",
+       "approved",
+       "treatment",
+       "bayer",
+       "commercialization",
+       "indications"
+      ],
+      "E_e": -3.726072088506242e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 1,
+     "statistic_is_informative": true,
+     "quotes": [
+      "Current and future legislative action and regulatory initiatives could result in changes to operating permits, material changes in operations, increased capital expenditures and operating costs, increased costs of the goods we sell, and decreased demand for our products that cannot be assessed with certainty at this time."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "eylea",
+      "approved",
+      "treatment",
+      "bayer",
+      "commercialization",
+      "indications"
+     ],
+     "Q_e": 0.0,
+     "P_e": 4.264786496297424e-05,
+     "E_e": -4.264786496297424e-05,
+     "placebo_q95_of_random_max": 0.0031449729509677267,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 135,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 2,
+      "label": [
+       "abbvie",
+       "products",
+       "product",
+       "patent",
+       "patents",
+       "new"
+      ],
+      "E_e": -8.179986079030059e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": false,
+     "quotes": [
+      "Finally, ZALTRAP has not been manufactured and formulated for use in intravitreal injections, and there is a risk that third parties may attempt to repackage ZALTRAP for off-label use and sale for the treatment of wet AMD and other diseases of the eye, which would present a potential low-cost competitive threat to EYLEA for its approved indications."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  },
+  "registered": {
+   "variant": "registered",
+   "min_samples": null,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [registered] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  },
+  "min_samples_5": {
+   "variant": "min_samples_5",
+   "min_samples": 5,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [min_samples_5] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  }
+ },
+ "primary_variant": "umap10_min_samples_5",
+ "clusters": {
+  "n": 5,
+  "noise_share": 0.06535362578334826,
+  "largest_cluster_share": 0.6714413607878246,
+  "degenerate": false,
+  "d_star": 2.1059701442718506,
+  "d_star_c": 1.9245811700820923,
+  "min_cluster_size": 25,
+  "n_boilerplate_excluded": 1,
+  "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+  "boilerplate_vocabulary": [
+   "ability",
+   "additional",
+   "adverse",
+   "adversely",
+   "affect",
+   "affected",
+   "affecting",
+   "business",
+   "businesses",
+   "cash",
+   "certain",
+   "companies",
+   "company",
+   "condition",
+   "conditions",
+   "could",
+   "customer",
+   "customers",
+   "finances",
+   "financial",
+   "flows",
+   "future",
+   "harm",
+   "harmed",
+   "impact",
+   "impacted",
+   "including",
+   "material",
+   "materially",
+   "may",
+   "operate",
+   "operating",
+   "operations",
+   "product",
+   "products",
+   "result",
+   "results",
+   "revenue",
+   "revenues",
+   "risk",
+   "risks",
+   "service",
+   "services",
+   "significant",
+   "significantly"
+  ],
+  "detail": [
+   {
+    "id": 0,
+    "size": 35,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "eylea",
+     "approved",
+     "treatment",
+     "bayer",
+     "commercialization",
+     "indications"
+    ]
+   },
+   {
+    "id": 1,
+    "size": 750,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": true,
+    "label": [
+     "business",
+     "results",
+     "adversely",
+     "financial",
+     "products",
+     "affect"
+    ]
+   },
+   {
+    "id": 2,
+    "size": 61,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "abbvie",
+     "products",
+     "product",
+     "patent",
+     "patents",
+     "new"
+    ]
+   },
+   {
+    "id": 3,
+    "size": 109,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "regulations",
+     "laws",
+     "occidental",
+     "operations",
+     "pharmacy",
+     "gas"
+    ]
+   },
+   {
+    "id": 4,
+    "size": 89,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "data",
+     "systems",
+     "security",
+     "information",
+     "business",
+     "computer"
+    ]
+   }
+  ]
+ },
+ "themes": [
+  {
+   "k": 1,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "eylea",
+    "approved",
+    "treatment",
+    "bayer",
+    "commercialization",
+    "indications"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.0,
+   "E_e": 0.0,
+   "placebo_q95_of_random_max": 0.0,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 135,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 2,
+    "label": [
+     "abbvie",
+     "products",
+     "product",
+     "patent",
+     "patents",
+     "new"
+    ],
+    "E_e": 0.0
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": false,
+   "quotes": [
+    "Finally, ZALTRAP has not been manufactured and formulated for use in intravitreal injections, and there is a risk that third parties may attempt to repackage ZALTRAP for off-label use and sale for the treatment of wet AMD and other diseases of the eye, which would present a potential low-cost competitive threat to EYLEA for its approved indications."
+   ]
+  },
+  {
+   "k": 2,
+   "above_noise": false,
+   "theme_cluster": 3,
+   "theme_label": [
+    "regulations",
+    "laws",
+    "occidental",
+    "operations",
+    "pharmacy",
+    "gas"
+   ],
+   "Q_e": 0.0035344336962537704,
+   "P_e": 0.0004208570012331875,
+   "E_e": 0.003113576695020583,
+   "placebo_q95_of_random_max": 0.0033572589199377225,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 135,
+    "set_companies_with_item_1a": 1,
+    "set_coverage_share": 0.0074,
+    "share_of_set_absolute_loading_covered": 0.0035
+   },
+   "runner_up": {
+    "cluster": 0,
+    "label": [
+     "eylea",
+     "approved",
+     "treatment",
+     "bayer",
+     "commercialization",
+     "indications"
+    ],
+    "E_e": -3.726072088506242e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 1,
+   "statistic_is_informative": true,
+   "quotes": [
+    "Current and future legislative action and regulatory initiatives could result in changes to operating permits, material changes in operations, increased capital expenditures and operating costs, increased costs of the goods we sell, and decreased demand for our products that cannot be assessed with certainty at this time."
+   ]
+  },
+  {
+   "k": 3,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "eylea",
+    "approved",
+    "treatment",
+    "bayer",
+    "commercialization",
+    "indications"
+   ],
+   "Q_e": 0.0,
+   "P_e": 4.264786496297424e-05,
+   "E_e": -4.264786496297424e-05,
+   "placebo_q95_of_random_max": 0.0031449729509677267,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 135,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 2,
+    "label": [
+     "abbvie",
+     "products",
+     "product",
+     "patent",
+     "patents",
+     "new"
+    ],
+    "E_e": -8.179986079030059e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": false,
+   "quotes": [
+    "Finally, ZALTRAP has not been manufactured and formulated for use in intravitreal injections, and there is a risk that third parties may attempt to repackage ZALTRAP for off-label use and sale for the treatment of wet AMD and other diseases of the eye, which would present a potential low-cost competitive threat to EYLEA for its approved indications."
+   ]
+  }
+ ],
+ "named_component": null,
+ "any_theme_risen": false,
+ "risen_on_component_above_noise": false,
+ "numeric_built": true,
+ "expected_label_terms": null,
+ "expected_label_phrase": null,
+ "expected_label_source": null,
+ "label_matches_expected": null,
+ "label_match_basis": "no expected label was registered for this date",
+ "expected_terms_in_top_theme_label": null,
+ "expected_label_carried_at": "2026-09-07T10:27:42.575680+00:00"
+}

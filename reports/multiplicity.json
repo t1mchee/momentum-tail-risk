@@ -1,0 +1,114 @@
+{
+  "experiments": 74,
+  "complete": 61,
+  "never_ran": 13,
+  "cells": 70,
+  "p_values": 22,
+  "fwer": 0.676466455026291,
+  "bonferroni_threshold": 0.002272727272727273,
+  "clear_bonferroni": 3,
+  "clear_bh_10": 9,
+  "clear_by_10": 4,
+  "smallest": [
+    {
+      "exp": "exp-073",
+      "label": "RANDOM, reported and not the bar",
+      "p": 0.0002
+    },
+    {
+      "exp": "exp-044",
+      "label": "tnic peer network, matched input",
+      "p": 0.001
+    },
+    {
+      "exp": "exp-044",
+      "label": "tnic peer network, natural input",
+      "p": 0.002
+    },
+    {
+      "exp": "exp-030",
+      "label": "same statistic",
+      "p": 0.004
+    },
+    {
+      "exp": "exp-030",
+      "label": "risk-text against downside correlation given sector",
+      "p": 0.01
+    },
+    {
+      "exp": "exp-064",
+      "label": "Arm A, test three",
+      "p": 0.016
+    },
+    {
+      "exp": "exp-028",
+      "label": "signed text exposure against rate beta",
+      "p": 0.021
+    },
+    {
+      "exp": "exp-029",
+      "label": "signed exposure against rate beta",
+      "p": 0.021
+    },
+    {
+      "exp": "exp-044",
+      "label": "bag-of-nouns as a PARTITION, same vectors",
+      "p": 0.032
+    },
+    {
+      "exp": "exp-004",
+      "label": "test of that shortfall",
+      "p": 0.054
+    },
+    {
+      "exp": "exp-058",
+      "label": "2019 era-permutation rank",
+      "p": 0.0574
+    },
+    {
+      "exp": "exp-064",
+      "label": "Arm A, test one at three months",
+      "p": 0.125
+    },
+    {
+      "exp": "exp-066",
+      "label": "re-ranking demonstration",
+      "p": 0.125
+    },
+    {
+      "exp": "exp-044",
+      "label": "chrono 2019 embeddings, partition",
+      "p": 0.184
+    },
+    {
+      "exp": "exp-034",
+      "label": "best text rank correlation",
+      "p": 0.2
+    },
+    {
+      "exp": "exp-019",
+      "label": "rank correlation",
+      "p": 0.231
+    },
+    {
+      "exp": "exp-019",
+      "label": "same",
+      "p": 0.238
+    },
+    {
+      "exp": "exp-004",
+      "label": "test that breaches do not cluster",
+      "p": 0.279
+    },
+    {
+      "exp": "exp-073",
+      "label": "ADJACENT, the registered bar",
+      "p": 0.8318
+    },
+    {
+      "exp": "exp-004",
+      "label": "test that the rate is correct",
+      "p": 0.85
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+# Every project-specific term, defined once, for someone who has read the assignment brief
+# and nothing else.
+
+- term: momentum
+  plain: >
+    The tendency of stocks that have risen recently to keep rising. A momentum book buys
+    the recent winners and sells the recent losers.
+  first_defined: exp-002
+
+- term: momentum reversal
+  plain: >
+    A sudden, sharp loss on a momentum book, when the recent losers rally hard and the
+    recent winners fall. Rare, violent, and the subject of this project.
+  first_defined: exp-001
+
+- term: comomentum
+  plain: >
+    How similarly the stocks inside one side of the book move together, once the market's
+    own movement is removed. High values mean the book is one bet wearing many names.
+  first_defined: exp-012
+
+- term: crowding
+  plain: >
+    How many other investors hold the same positions. A crowded trade unwinds violently
+    because everyone reaches for the exit at once.
+  first_defined: exp-012
+
+- term: the book
+  plain: >
+    The momentum portfolio itself: the winners it is long and the losers it is short at any
+    given moment.
+  first_defined: exp-008
+
+- term: winning side
+  plain: The recent winners the book holds. Also called the long leg.
+  first_defined: exp-008
+
+- term: losing side
+  plain: The recent losers the book is short. Also called the short leg.
+  first_defined: exp-008
+
+- term: severity
+  plain: >
+    How bad a loss would be if one happened, rather than how likely it is to happen. This
+    project forecasts severity and deliberately does not forecast timing.
+  first_defined: exp-003
+
+- term: panic rebound
+  plain: >
+    A momentum crash that happens when a long bear market ends and beaten-down stocks
+    rally violently. The book's short positions are what hurt.
+  first_defined: exp-007
+
+- term: crowded rotation
+  plain: >
+    A momentum crash that happens in an otherwise calm market, because too many investors
+    held the same positions and unwound together.
+  first_defined: exp-007
+
+- term: pinball loss
+  plain: >
+    A scoring rule for forecasts of a worst case. It cannot be gamed by simply forecasting
+    disaster every day, which is why it is used here. Lower is better.
+  first_defined: exp-003
+
+- term: breach rate
+  plain: >
+    How often actual losses exceed the model's own estimate. A model promising to be
+    exceeded five percent of the time should be exceeded five percent of the time.
+  first_defined: exp-004
+
+- term: base rate
+  plain: >
+    How often the thing being predicted happens anyway, with no model at all. Any signal
+    has to beat this before it means anything.
+  first_defined: exp-001
+
+- term: lift
+  plain: >
+    How many times more often an event happens when a signal fires than when it does not. A
+    lift of one means the signal carries no information.
+  first_defined: exp-013
+
+- term: minimum detectable lift
+  plain: >
+    The smallest effect a test could ever have found, given how little data exists. Stating
+    it before running the test is what separates a real null from a failure to look.
+  first_defined: exp-001
+
+- term: multiple testing correction
+  plain: >
+    An adjustment for having tried many versions of the same idea. Testing nine variants
+    and reporting the best one finds something roughly every time, whether or not anything
+    is there.
+  first_defined: exp-013
+
+- term: point-in-time
+  plain: >
+    Using only what was actually knowable on the date in question. The opposite mistake is
+    letting information from the future leak into a historical calculation.
+  first_defined: exp-008
+
+- term: survivorship bias
+  plain: >
+    The error of studying only the companies that still exist. It matters enormously here,
+    because companies that went bust are exactly what the book was short.
+  first_defined: exp-002
+
+- term: skew
+  plain: >
+    How much more expensive protection against a large fall is than protection against a
+    large rise. It is the option market's price of fear on a single stock.
+  first_defined: exp-016
+
+- term: implied correlation
+  plain: >
+    What option prices imply about how much stocks will move together. High values mean
+    the market expects everything to fall at once rather than separately.
+  first_defined: exp-012
+
+- term: short volume
+  plain: >
+    How many shares were sold short on a given day. About half of all volume is short by
+    construction because market makers hedge, so only changes are informative.
+  first_defined: exp-016
+
+- term: borrow cost
+  plain: >
+    What it costs to borrow a stock in order to sell it short. When it rises sharply, short
+    sellers are forced to close, which drives the price up further.
+  first_defined: exp-016
+
+- term: rebalance
+  plain: >
+    The scheduled date on which an index fund adjusts its holdings to match its rules. Its
+    trades on that date are partly knowable in advance.
+  first_defined: exp-015
+
+- term: de-gross
+  plain: >
+    Reducing the size of both sides of the book to cut risk, without changing what it is
+    betting on.
+  first_defined: exp-012
+
+- term: drawdown
+  plain: The fall from a portfolio's high point to its subsequent low point.
+  first_defined: exp-002
+
+- term: quantile regression
+  plain: >
+    A method that predicts a bad outcome directly, rather than predicting the average and
+    assuming the shape of everything around it.
+  first_defined: exp-003
+
+- term: case-control
+  plain: >
+    Comparing the periods before each crash against carefully matched calm periods, instead
+    of comparing against everything else at once.
+  first_defined: exp-009
+
+- term: DESIGN
+  plain: >
+    The portion of history freely inspected while building the system. Findings here prove
+    nothing on their own.
+  first_defined: exp-003
+
+- term: VALIDATE
+  plain: >
+    A portion of history opened once, after the design was frozen, to check whether it
+    generalises.
+  first_defined: exp-011
+
+- term: SEALED
+  plain: >
+    History from 2023 onward, untouched until the very end and opened exactly once, with
+    the result reported whatever it turns out to be.
+  first_defined: exp-016
+
+- term: GARCH
+  plain: >
+    A standard model in which today's volatility depends on yesterday's, so calm and
+    turbulent periods cluster the way they do in real markets.
+  first_defined: exp-004
+
+- term: GJR-GARCH
+  plain: >
+    A volatility model with an extra term letting falls raise future volatility more than
+    equivalent rises, which is what equity markets actually do.
+  first_defined: exp-004
+
+- term: skewed-t
+  plain: >
+    A distribution for the model's shocks that is fat-tailed and lopsided, so large losses
+    are both more likely and larger than a bell curve allows.
+  first_defined: exp-004
+
+- term: Benjamini-Hochberg
+  plain: >
+    A correction for having tested many versions of one idea. It controls the share of
+    reported discoveries that are false, rather than the chance of any false one.
+  first_defined: exp-013
+
+- term: Spearman
+  plain: >
+    A correlation computed on ranks instead of values, so a few extreme names cannot drive
+    it and no straight-line relationship is assumed.
+  first_defined: exp-019
+
+- term: bootstrap
+  plain: >
+    Re-running a calculation on many resamples of the data to see how much the answer moves,
+    which gives an uncertainty range without assuming a formula.
+  first_defined: exp-019
+
+- term: effective rank
+  plain: >
+    How many genuinely independent directions a table of numbers contains. Near its number
+    of rows means everything differs; near one means everything says the same thing.
+  first_defined: exp-020
+
+- term: delta
+  plain: >
+    How much an option's price moves per unit move in the stock. Used here as a scale-free
+    way to say how far out of the money a contract is.
+  first_defined: exp-019
+
+- term: implied volatility
+  plain: >
+    The volatility that would justify an option's market price. It is the market's forecast
+    rather than a measurement of the past.
+  first_defined: exp-019
+
+- term: put-call parity
+  plain: >
+    A fixed arithmetic relationship between a put, a call and the stock. Departures from it
+    reveal the cost of holding or borrowing the shares.
+  first_defined: exp-019
+
+- term: expected shortfall
+  plain: >
+    The average loss on the days the loss exceeds the worst case you budgeted for. Answers
+    how bad it gets once it is bad.
+  first_defined: exp-003
+
+- term: value at risk
+  plain: >
+    A loss level a portfolio should exceed only a stated fraction of the time, for example
+    five days in a hundred.
+  first_defined: exp-003
+
+- term: residualise
+  plain: >
+    Strip out the part of one series explained by others, keeping only what is left, so a
+    measure is not just rediscovering the market.
+  first_defined: exp-012
+
+- term: singular value
+  plain: >
+    A number describing how much of a table's variation lies along one direction. The
+    spread of them says whether the data is really one pattern or many.
+  first_defined: exp-020
+

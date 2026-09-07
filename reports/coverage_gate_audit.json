@@ -1,0 +1,8 @@
+{
+  "dates": 108,
+  "loser_jaccard_median": 0.94075,
+  "loser_jaccard_min": 0.42,
+  "loser_above_5pct_share_median": 0.0419,
+  "loser_mean_fill": 0.017502919205200116,
+  "winner_mean_fill": 0.00925588173520248
+}

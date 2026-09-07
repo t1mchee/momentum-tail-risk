@@ -1,0 +1,1758 @@
+# Findings, with how much weight each can bear.
+# reproduced = re-run and matched · measured_once = seen once, not re-run
+# unverified = do not build on it · refuted = tested and failed, kept as a record
+
+# ---------------------------------------------------------------------------------
+# Constraints that bound every other claim in this file
+# ---------------------------------------------------------------------------------
+
+- id: clm-power
+  statement: >
+    There are only about two dozen momentum reversals in the modern era, and they cluster
+    into roughly eight to seventeen genuinely independent regimes. Against a base rate of
+    15.4 percent, an effect must more than double the reversal rate before it can be
+    distinguished from chance. Forecasting the timing of a reversal is therefore not
+    answerable with this data, and the project does not attempt it.
+  one_breath: >
+    Too few reversals have ever happened to prove a timing signal works, so the project
+    forecasts severity instead.
+  confidence: reproduced
+  from_experiment: exp-001
+  evidence:
+    - {label: independent regimes, value: "8 to 17", comparison: "from ~24 raw episodes; 7, 5 and 3 in the daily-holdings era from 2013"}
+    - {label: minimum detectable lift, value: 2.2x, comparison: "at 24 observations and a 15.4% base rate, for significance at the 5% level"}
+  reproduce: "uv run python -c 'from unstructured_momentum.validation import hypotheses as H; print(H.minimum_detectable_lift(24, 0.154))'"
+  supersedes: []
+  history:
+    - {date: 2026-08-14, note: "Computed from the episode registry, then re-derived independently from the detector output."}
+
+- id: clm-contamination
+  statement: >
+    Every language model reachable by an interface was trained on data running past every
+    historical date this project studies. Asking a model what it would have said in 2019 is
+    therefore asking a model that already knows the answer. Only two dates in the whole
+    sample sit outside that window, so any hindsight test has a sample size of about two.
+  one_breath: >
+    The language models already know how every historical episode turned out, so their
+    historical judgement cannot be scored.
+  confidence: measured_once
+  from_experiment: null
+  evidence:
+    - {label: scorable hindsight dates, value: "~2", comparison: "against roughly 24 episodes in the full sample"}
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Established from published training cutoffs. Not independently reproducible; it is a fact about the vendors."}
+    - {date: 2026-08-19, note: "Elevated to a governing constraint on the write-up after nearly writing a hindsight claim."}
+    - {date: 2026-08-22, note: "No longer only an inference from published training cutoffs. Directly measured: a model placed four de-identified historical windows to the exact year, forty times from forty."}
+
+- id: clm-definition
+  statement: >
+    Which episodes count as reversals depends on the measurement window chosen. The
+    November 2022 inflation-print reversal is severe over one day and five days, and
+    absent entirely at ten and twenty-one days. Choosing a horizon silently chooses which
+    events exist to be explained.
+  one_breath: >
+    Changing the measurement window changes which crashes exist at all, so the window has
+    to be declared up front.
+  confidence: reproduced
+  from_experiment: exp-002
+  evidence:
+    - {label: one-day move, value: "-11.5%", comparison: "clears every severity threshold tested"}
+    - {label: five-day move, value: "-15.8%", comparison: "clears every severity threshold tested"}
+    - {label: ten- and twenty-one-day move, value: absent, comparison: "clears no threshold; the episode has vanished"}
+  reproduce: "uv run python -m unstructured_momentum.events.episodes --horizons 1,5,10,21"
+  supersedes: []
+  history:
+    - {date: 2026-08-14, note: "Found while checking why the detector disagreed with the hand-written episode list."}
+
+# ---------------------------------------------------------------------------------
+# Mechanism
+# ---------------------------------------------------------------------------------
+
+- id: clm-quake-not-momentum
+  statement: >
+    The August 2007 quant crisis, universally described as a momentum event, is not one.
+    Momentum alone puts it at the sixth percentile of bad days, clearing no severity
+    threshold in any of twelve ways of building the portfolio. Measured jointly across
+    factors it is the worst day in the sample, because value, momentum, short-term
+    reversal and size all broke together.
+  one_breath: >
+    The famous 2007 quant crisis was not a momentum crash but a simultaneous unwind
+    across every factor at once.
+  confidence: reproduced
+  from_experiment: exp-006
+  evidence:
+    - {label: momentum-only severity, value: 5.97th percentile, comparison: "clears no threshold in any of 12 portfolio constructions"}
+    - {label: joint severity across factors, value: 0.10th percentile, comparison: "the most extreme day in the sample"}
+    - {label: value factor move, value: -6.53 sigma, comparison: "against momentum at -5.05, short-term reversal -4.52, size -3.00"}
+  reproduce: "uv run python -m unstructured_momentum.factor.comovement --episode 2007-08"
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Reproduced across all twelve constructions after the first result looked too surprising to trust."}
+
+- id: clm-2019-mirror
+  statement: >
+    September 2019 is the exact mirror image of August 2007. It is a severe momentum event
+    measured on momentum alone, and an unremarkable day measured jointly across factors.
+    Each of the two detectors is blind to the other's worst episode, which is why the
+    system runs both rather than combining them into one score.
+  one_breath: >
+    September 2019 was a pure momentum crash that a joint-factor detector cannot see, and
+    2007 is the reverse.
+  confidence: reproduced
+  from_experiment: exp-006
+  evidence:
+    - {label: momentum-only severity, value: -6.03 sigma, comparison: "a severe event on this measure"}
+    - {label: joint severity across factors, value: "+0.59", comparison: "positive, so a non-event on the measure that flags 2007"}
+  reproduce: "uv run python -m unstructured_momentum.factor.comovement --episode 2019-09"
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Found while checking whether the joint detector could simply replace the momentum one."}
+
+- id: clm-construction
+  statement: >
+    How the momentum portfolio is built changes which episodes appear in it. August 2007
+    is twice as severe among large companies as in the headline construction. January 2021
+    is a real event among large companies and invisible when every stock is weighted
+    equally. There is no neutral construction, so the choice must be stated.
+  one_breath: >
+    Building the portfolio differently produces a different list of crashes, so the
+    construction is a research choice and not a detail.
+  confidence: reproduced
+  from_experiment: exp-002
+  evidence:
+    - {label: August 2007, large companies, value: "-8.37%", comparison: "against -4.53% in the headline construction, nearly twice as bad"}
+    - {label: January 2021, large companies, value: "-6.88%", comparison: "against -0.89% weighting every stock equally, where it disappears"}
+  reproduce: "uv run python -m unstructured_momentum.factor.constructions --report"
+  supersedes: []
+  history:
+    - {date: 2026-08-14, note: "Reproduced after the first pass; it is the reason twelve constructions are carried rather than one."}
+
+- id: clm-taxonomy
+  statement: >
+    Sorting reversals into panic rebounds and crowded rotations describes them accurately
+    but does not help predict them. The two groups separate cleanly on every state
+    variable measured at the trough. Feeding that same group membership into the severity
+    model makes its forecasts worse.
+  one_breath: >
+    The two-type story of momentum crashes is real and descriptive, and adds nothing to
+    forecasting how bad the next one is.
+  confidence: reproduced
+  from_experiment: exp-007
+  evidence:
+    - {label: bear-market indicator at trough, value: "1.000 versus 0.167", comparison: "panic rebounds versus crowded rotations; a clean separation"}
+    - {label: joint-factor stress at trough, value: "-3.509", comparison: "for joint unwinds, against better than -0.24 for every other group"}
+    - {label: losing-side downside beta, value: "1.588 versus 1.209", comparison: "panic rebounds versus crowded rotations"}
+    - {label: effect on severity forecast, value: worse, comparison: "adding the group label degrades the model that trailing volatility alone already wins"}
+  reproduce: "uv run python -m unstructured_momentum.features.channels --separation"
+  supersedes: []
+  history:
+    - {date: 2026-08-17, note: "Both halves reproduced. The descriptive half passing and the predictive half failing is the finding."}
+
+- id: clm-miscalibration
+  statement: >
+    The severity model is wrong in both directions at once. On average it is too cautious,
+    breaching its own loss estimate less often than it should. At crowded rotations
+    specifically it is not cautious enough. An average-accuracy score cannot see this,
+    which is the case for evaluating a risk model on more than one metric.
+  one_breath: >
+    The model is too cautious on ordinary days and not cautious enough on exactly the days
+    that matter, and one summary score hides both.
+  confidence: reproduced
+  from_experiment: exp-004
+  evidence:
+    - {label: rate of losses exceeding the estimate, value: 0.028, comparison: "against 0.050 expected; too conservative overall"}
+    - {label: test of that shortfall, value: "p = 0.054", comparison: "borderline, so the conservatism is real but not overwhelming"}
+    - {label: behaviour at crowded rotations, value: under-alarmed, comparison: "the opposite direction from the average, and invisible to the average score"}
+  reproduce: "uv run python -m unstructured_momentum.model.baselines --christoffersen"
+  supersedes: []
+  history:
+    - {date: 2026-08-17, note: "Reproduced. Flagged for prominence in the write-up because it justifies the whole two-metric design in one sentence."}
+
+# ---------------------------------------------------------------------------------
+# The motivating case
+# ---------------------------------------------------------------------------------
+
+- id: clm-aggregation
+  statement: >
+    Before the September 2019 reversal the portfolio was a single bet on falling interest
+    rates wearing ten different sector labels. Every portfolio-level summary said the book
+    was diversified and unremarkable. Looking at the individual holdings said the
+    opposite. The failure was aggregation, not measurement, and this is the single most
+    useful thing the project found.
+  one_breath: >
+    The 2019 crash was visible in the individual holdings and invisible in every
+    portfolio-level average, so averaging was the mistake.
+  confidence: reproduced
+  from_experiment: exp-008
+  evidence:
+    - {label: sector concentration, value: 50th percentile, comparison: "reads as ordinary diversification"}
+    - {label: portfolio interest-rate sensitivity, value: 32nd percentile, comparison: "reads as unremarkable"}
+    - {label: rate sensitivity of the twelve largest holdings, value: median 26th percentile, comparison: "five of twelve in the bottom fifth of all stocks; a concentrated one-way bet"}
+    - {label: crowding within the winning side, value: 87th percentile, comparison: "against index-level implied correlation at the 26th percentile, which saw nothing"}
+  reproduce: "uv run python -m unstructured_momentum.report.memo --as-of 2019-09-06"
+  supersedes: []
+  history:
+    - {date: 2026-08-18, note: "Every line reproduced from the point-in-time holdings. This is the spine of the memo."}
+
+- id: clm-2019-complacency
+  statement: >
+    On the day before the September 2019 reversal the severity model was less alarmed than
+    its own no-information baseline, and the realised five-day loss was worse than the
+    model's estimate of the average bad outcome. The cause was not quiet markets.
+    Volatility was at the 75th percentile. The cause was a term detecting the absence of a
+    bear market, which is correct in general and wrong for crowded rotations.
+  one_breath: >
+    The model was calmer than saying nothing at all, right before the worst momentum week
+    in years, for a traceable reason.
+  confidence: reproduced
+  from_experiment: exp-008
+  evidence:
+    - {label: full model loss estimate, value: "-3.94%", comparison: "against -4.86% for the no-information baseline, so the model was calmer than knowing nothing"}
+    - {label: same estimate from volatility alone, value: "-4.70%", comparison: "roughly neutral, so volatility was not the cause"}
+    - {label: same estimate from the bear-market term alone, value: "-3.48%", comparison: "this is what produced the complacency"}
+    - {label: what actually happened over five days, value: "-6.98%", comparison: "worse than the model's -4.41% estimate of the average bad outcome"}
+    - {label: trailing volatility at the time, value: 75th percentile, comparison: "not low, contradicting the explanation I gave twice before checking"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --decompose --as-of 2019-09-06"
+  supersedes: [clm-lowvol-wrong]
+  history:
+    - {date: 2026-08-16, note: "First measured."}
+    - {date: 2026-08-18, note: "Decomposed after catching my own wrong explanation twice. The decomposition is what turned a story into a finding."}
+
+# ---------------------------------------------------------------------------------
+# Model performance
+# ---------------------------------------------------------------------------------
+
+- id: clm-severity-forecastable
+  statement: >
+    How bad a momentum reversal will be is genuinely forecastable, and trailing volatility
+    carries essentially all of the forecastable part. Scaling by recent volatility beats a
+    no-information baseline by 23 percent on a scoring rule that cannot be gamed, across
+    318 refits on data the model had not seen.
+  one_breath: >
+    Severity can be predicted, and past volatility alone does almost all of the predicting.
+  confidence: reproduced
+  from_experiment: exp-003
+  evidence:
+    - {label: volatility-scaled model score, value: 0.00379, comparison: "against 0.00495 with no information, a 23.4% improvement; lower is better"}
+    - {label: full model score, value: 0.00393, comparison: "worse than volatility alone despite using more information"}
+    - {label: bear-market model score, value: 0.00400, comparison: "also worse than volatility alone"}
+    - {label: out-of-sample refits, value: 318, comparison: "each trained only on data preceding its own forecast"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --backtest --horizon 10 --quantile 0.05"
+  supersedes: []
+  history:
+    - {date: 2026-08-16, note: "Reproduced exactly on a second run from a clean interpreter."}
+
+- id: clm-nothing-beats-vol
+  statement: >
+    Six candidate signals were tested against trailing volatility as severity forecasters
+    and all six lost. That comparison is now known to be uninformative at realistic effect
+    sizes. Handed a genuinely predictive signal blended with noise, the framework does not
+    prefer it to trailing volatility until the signal is nearly noiseless: at a 40 percent
+    signal share the gain is still negative. Any realistic candidate sits far below that
+    threshold, so the six failures cannot distinguish a useless feature from a useful one.
+    The shared property of the six, that all are functions of past returns, remains a fair
+    description of what was tried and is no longer evidence about what would have worked.
+  one_breath: >
+    Six candidates lost to trailing volatility, but the test could not have detected a
+    realistic winner, so the result says little.
+  confidence: refuted
+  from_experiment: exp-025
+  evidence:
+    - {label: candidates tested, value: 6, comparison: "crowding, bear-market state, leg-beta asymmetry, eigenvalue concentration, joint stress on quiet days, implied volatility"}
+    - {label: candidates that beat trailing volatility, value: 0, comparison: "out of six, on out-of-sample forecast score"}
+    - {label: signal share needed before the framework prefers a known predictor, value: "between 40% and 100%", comparison: "at 40% the gain is still negative; the test only sees a nearly noiseless feature"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --audit"
+  supersedes: []
+  history:
+    - {date: 2026-08-17, note: "Recorded as a finding after the fifth and sixth candidates failed."}
+    - {date: 2026-08-22, note: "Withdrawn as stated. A positive control shows the framework cannot detect a genuinely predictive feature unless it is almost pure, so the six failures measured the instrument at least as much as the world. The observation that all six are return-derived stands as a description of what was tried."}
+
+- id: clm-garch
+  statement: >
+    A conventional volatility model with an asymmetric, skewed error distribution passes
+    every standard test of whether its loss estimates are breached at the right rate, at
+    the right times, and independently of each other. It is the strong classical baseline
+    that everything else has to beat.
+  one_breath: >
+    A standard volatility model already produces well-calibrated loss estimates and sets
+    the bar for anything more elaborate.
+  confidence: unverified
+  from_experiment: exp-004
+  evidence:
+    - {label: rate of losses exceeding the estimate, value: 0.052, comparison: "against 0.050 expected, essentially exact"}
+    - {label: test that the rate is correct, value: "p = 0.850", comparison: "no evidence against correct calibration"}
+    - {label: test that breaches do not cluster, value: "p = 0.279", comparison: "no evidence of clustering"}
+    - {label: forecasts evaluated, value: 325, comparison: "all out of sample"}
+  reproduce: "uv run python scripts/garch_headtohead.py  # the ONLY working comparison; the command previously recorded here was a no-op"
+  supersedes: []
+  history:
+    - {date: 2026-08-16, note: "Reproduced. Deliberately built strong, because a weak baseline would make every later result look better than it is."}
+    - {date: 2026-08-31, note: "DEMOTED from reproduced to unverified. The reproduce command on this claim names a module with no command-line interface, so it emits nothing and the numbers cannot be regenerated. A paired comparison on 1,151 dates where both models forecast puts this baseline at a 0.0851 breach rate, failing unconditional coverage at p 5.9e-07 in every era tested, which reverses this claim's headline. The contradiction is not resolved; the claim is held unverified rather than refuted because the original run may have used a configuration this one cannot reconstruct."}
+
+- id: clm-comomentum-replicates
+  statement: >
+    A published academic crowding measure, built from how similarly stocks inside the
+    momentum portfolio move together, replicates on data published after the original
+    paper's sample ended. Weeks in the most crowded fifth suffer crash days three times as
+    often as the least crowded fifth, and the relationship is monotone across all five
+    groups.
+  one_breath: >
+    A published crowding measure still works on new data the original authors never saw.
+  confidence: reproduced
+  from_experiment: exp-012
+  evidence:
+    - {label: crash-day frequency, least to most crowded, value: "6.4% to 19.6%", comparison: "a 3.06x increase, against 2.7x in the original paper"}
+    - {label: shape across the five groups, value: monotone, comparison: "each group worse than the last, not just the extremes"}
+    - {label: average forward return, least to most crowded, value: "+2.5% to -1.3%", comparison: "the sign flips across the range"}
+    - {label: sample used, value: after 2015, comparison: "entirely outside the original paper's window"}
+  reproduce: "uv run python -m unstructured_momentum.features.comomentum --oos"
+  supersedes: []
+  history:
+    - {date: 2026-08-17, note: "Reproduced. The most satisfying result in the project and, as it turned out, not a usable one."}
+
+- id: clm-comomentum-useless
+  statement: >
+    The same crowding measure that replicates cleanly is worthless as a trading trigger.
+    Using it to reduce exposure leaves risk-adjusted return slightly worse and the worst
+    drawdown slightly deeper, and it stops paying at zero trading cost. Reducing exposure
+    on trailing volatility instead survives 150 basis points of cost. A result can be
+    statistically real and economically empty, and only testing both reveals it.
+  one_breath: >
+    The crowding measure that replicates statistically is useless in practice and stops
+    paying at zero trading cost.
+  confidence: reproduced
+  from_experiment: exp-012
+  evidence:
+    - {label: change in risk-adjusted return, value: "-0.02", comparison: "slightly worse than not using the signal at all"}
+    - {label: change in worst drawdown, value: "+3.2 percentage points", comparison: "deeper, in the wrong direction"}
+    - {label: trading cost at which it stops paying, value: 0 basis points, comparison: "against 150 basis points for the same rule driven by trailing volatility"}
+    - {label: volatility-driven comparison, value: "0.41 to 0.64", comparison: "risk-adjusted return improves, and worst drawdown falls from -63.2% to -45.1%"}
+  reproduce: "uv run python -m unstructured_momentum.model.baselines --degross"
+  supersedes: []
+  history:
+    - {date: 2026-08-17, note: "Run because a replicating signal that had not been costed felt like an unfinished claim. It was."}
+
+# ---------------------------------------------------------------------------------
+# What the language models actually contributed
+# ---------------------------------------------------------------------------------
+
+- id: clm-semantic-filter
+  statement: >
+    On the same 48 news articles, keyword matching marked every one relevant and a
+    language model marked three. Against hand labels the model caught all twenty pieces of
+    templated filler and the keyword filter caught none. This sixteen-fold difference in
+    precision is what makes reading a large text corpus feasible at all.
+  one_breath: >
+    A language model filtering news is sixteen times more precise than keyword matching on
+    identical articles.
+  confidence: reproduced
+  from_experiment: exp-009
+  evidence:
+    - {label: articles marked relevant by keyword matching, value: "48 of 48", comparison: "against 3 of 48 by the language model, on the same articles"}
+    - {label: templated filler correctly rejected, value: "20 of 20", comparison: "against 0 of 20 for keyword matching"}
+  despite_refutation: >
+    The experiment refuted the hypothesis that news discusses factor crowding. This claim measures filtering precision against hand labels on the same corpus, which is independent of whether the corpus contained anything.
+  reproduce: "uv run python -m unstructured_momentum.llm.evaluate --compare"
+  supersedes: []
+  history:
+    - {date: 2026-08-18, note: "Scored against a hand-labelled file anyone can open and check, which is what makes it a measurement."}
+
+- id: clm-empty-corpus
+  statement: >
+    Two independent methods agree that free news coverage contains no discussion of factor
+    crowding before a reversal. Hand-labelling 246 articles found zero genuine items, and
+    the language model reading the same corpus blind found approximately zero. Agreement
+    between a careful human pass and an automated one is what turns an absence into a
+    finding.
+  one_breath: >
+    Hand-reading and machine-reading independently agree that the free news corpus is
+    empty of what we were looking for.
+  confidence: reproduced
+  from_experiment: exp-009
+  evidence:
+    - {label: genuine factor-positioning articles by hand, value: "0 of 246", comparison: "against approximately 0 found by the language model reading blind"}
+  despite_refutation: >
+    The refuted hypothesis is that news warns of crowding. That the corpus is empty IS the refutation, measured two independent ways, so the claim and the verdict agree rather than conflict.
+  reproduce: "uv run python -m unstructured_momentum.llm.evaluate --corpus 2019-09"
+  supersedes: []
+  history:
+    - {date: 2026-08-18, note: "The two methods were run without reference to each other, which is the whole value of the agreement."}
+
+- id: clm-panel-arithmetic
+  statement: >
+    Language-model expert panels generated excellent hypotheses and unreliable arithmetic.
+    Two separate panel write-ups each overstated their headline number, once by six times
+    and once by two. In both cases the individual measurements were correct and only the
+    derived summary figure was inflated, which is the dangerous pattern because the summary
+    is what gets quoted.
+  one_breath: >
+    Model-generated research panels produced good ideas and wrong headline numbers, twice,
+    while their underlying measurements were fine.
+  confidence: measured_once
+  from_experiment: exp-018
+  evidence:
+    - {label: headline overstatements, value: 2 of 2, comparison: "in two panel write-ups, by factors of 6 and 2"}
+    - {label: underlying measurements, value: correct, comparison: "every individual number reproduced; only the aggregate was wrong"}
+  despite_refutation: >
+    The experiment refuted the hypothesis that model-generated panels produce reliable numbers. This claim states that they do not, so it is the refutation itself.
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "First overstatement caught by reproducing the number before quoting it."}
+    - {date: 2026-08-16, note: "Second one caught the same way. Two independent instances is a pattern, not an accident."}
+    - {date: 2026-08-21, note: "Demoted from reproduced to measured once. The check refuses that status without a command anyone can run, and it is right to."}
+
+- id: clm-hypothesis-label
+  statement: >
+    Requiring a language model to label any claim it had not actually computed as a
+    hypothesis appears to eliminate the invented-number problem. The panel run without that
+    instruction overstated its headline sixfold. The panel run with it reproduced every
+    number exactly. Two runs is not proof, but the comparison is close to controlled and
+    the fix costs one sentence.
+  one_breath: >
+    Making the model label uncomputed claims as hypotheses removed the invented numbers,
+    across two otherwise similar runs.
+  confidence: measured_once
+  from_experiment: exp-018
+  evidence:
+    - {label: run without the instruction, value: 6x overstatement, comparison: "against every number reproducing exactly in the run with it"}
+    - {label: runs compared, value: 2, comparison: "one each way; suggestive, not conclusive"}
+  despite_refutation: >
+    Produced by the same run as the refutation and independent of it: a comparison between two panels, one with a labelling instruction and one without.
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-16, note: "Recorded as measured once rather than reproduced, because a two-run comparison is not a controlled experiment."}
+
+# ---------------------------------------------------------------------------------
+# Refuted, kept as a record. Deletion is prohibited.
+# ---------------------------------------------------------------------------------
+
+- id: clm-news-crowding
+  statement: >
+    Before the September 2019 reversal, news coverage did not discuss factor crowding. Of
+    246 articles in the preceding 25 days, none were genuine factor-positioning items, and
+    the result held at every source quality tier. Coverage of the unwind is dated after the
+    move. This is one episode. It was written up as a general statement about news and
+    reversals and it does not support one: the same project corrected nine cells for
+    multiplicity on a calendar hypothesis and then generalised from a single date here.
+    Scoped to what was actually tested until it is run on the other crowded rotations.
+  one_breath: >
+    News did not warn before the September 2019 unwind. One episode, so not yet a statement
+    about news and reversals in general.
+  confidence: refuted
+  from_experiment: exp-009
+  evidence:
+    - {label: genuine items found, value: "0 of 246", comparison: "209 templated filler, 22 macroeconomic rather than about factors, 15 other"}
+    - {label: highest-quality sources, value: "0 of 8", comparison: "the major-wire hits were a bond survey, gold, and recession sentiment"}
+    - {label: date of actual unwind coverage, value: "12 to 14 September", comparison: "after the move on the 9th to 11th"}
+    - {label: episodes tested, value: "1 of 6", comparison: "crowded rotations in the registry; the other five were never searched"}
+  despite_refutation: >
+    The claim is the refutation, scoped to the single episode it rests on.
+  reproduce: "uv run python -m unstructured_momentum.llm.evaluate --corpus 2019-09"
+  supersedes: []
+  traps: [trp-17]
+  history:
+    - {date: 2026-08-18, note: "Refuted, and the refutation treated as a deliverable."}
+    - {date: 2026-08-22, note: "Scoped down to the single episode it actually rests on. The generalised wording was an overreach and nobody caught it for four days."}
+    - {date: 2026-08-22, note: "Caveat corrected: the 250-record cap was never binding, because the harvester already sliced into three-day windows and flagged truncation. The thin corpus is a fact about the query, not about the ceiling. The 2017 start remains a real limit."}
+
+- id: clm-fomc
+  statement: >
+    Momentum reversals do not cluster around scheduled central bank meetings. Across nine
+    combinations of horizon and severity threshold the median effect was a 1.13-fold
+    change, four of nine went the wrong way, and none survived correction for multiple
+    testing. The largest cell has an effect below one, so this is a real null and not a
+    shortage of data.
+  one_breath: >
+    Reversals do not cluster on central bank meeting dates, and the biggest test cell
+    rules out a power problem.
+  confidence: refuted
+  from_experiment: exp-013
+  evidence:
+    - {label: median effect across the grid, value: 1.13x, comparison: "against 1.0x for no effect; four of nine cells fell below 1.0x"}
+    - {label: cells surviving multiple-testing correction, value: "0 of 9", comparison: "none reached significance even before correction"}
+    - {label: largest cell, value: 0.91x, comparison: "122 observations pointing the wrong way, so not a power problem"}
+  despite_refutation: >
+    The claim is the refutation itself.
+  reproduce: "uv run python -m unstructured_momentum.validation.hypotheses --fomc-grid"
+  supersedes: []
+  history:
+    - {date: 2026-08-19, note: "Refuted. The diagnosis matters more than the verdict: these dates are identical for every portfolio and so cannot distinguish one book from another."}
+
+- id: clm-official-warning
+  statement: >
+    Official-sector financial stability commentary does not warn about crowded factors in
+    advance. The review published before the 2007 quant crisis contains one mention of
+    crowding, concerning Taiwanese consumer banking. Word frequencies track the editorial
+    calendar rather than market conditions.
+  one_breath: >
+    Central bank and international body commentary does not flag crowded factors before
+    they unwind.
+  confidence: refuted
+  from_experiment: exp-010
+  evidence:
+    - {label: crowding mentions before the 2007 crisis, value: 1, comparison: "and it concerned Taiwanese consumer banking, not equity factors"}
+    - {label: mentions before the 2019 event, value: 0, comparison: "across every mechanism-related term searched"}
+    - {label: highest-scoring issue in the sample, value: "March 2005", comparison: "a hedge fund feature article two years before the crisis, showing the score tracks editorial choice"}
+  despite_refutation: >
+    The claim is the refutation itself.
+  reproduce: "uv run python -m unstructured_momentum.data.official --scan"
+  supersedes: []
+  history:
+    - {date: 2026-08-18, note: "Refuted. The 2005 false positive is the clearest demonstration that the measure reads the publication schedule."}
+
+- id: clm-10k
+  statement: >
+    Annual report BUSINESS DESCRIPTIONS, Item 1, are recycled between filings and cannot
+    serve as a timestamped monitor input: a measure built on them is a near-static company
+    characteristic and all daily variation would come from portfolio weights already on
+    disk. That objection is correct and applies only to Item 1. It was over-generalised to
+    the whole filing, which was an error. Item 1A risk factors and Item 7A market-risk
+    disclosures are different sections with a different purpose, and Item 7A is where a
+    company is required to state its interest-rate exposure directly. A single 2019 filing
+    from one momentum winner contains 87 mentions of interest rate, 27 of LIBOR and 38 of
+    swap across half a million characters of prose.
+  one_breath: >
+    Annual report business descriptions cannot drive a monitor, and I wrongly extended that
+    to the sections where exposure is actually disclosed.
+  confidence: measured_once
+  from_experiment: null
+  evidence:
+    - {label: source of daily variation in an Item 1 measure, value: portfolio weights, comparison: "not the text, which is recycled between filings; the original objection stands for that section"}
+    - {label: interest-rate mentions in one winner's 2019 filing, value: 87, comparison: "plus 27 LIBOR and 38 swap, in the sections that were never examined"}
+    - {label: characters of prose per filing, value: "499,364", comparison: "against a median of 13 words per item in the news corpus actually used"}
+  reproduce: null
+  supersedes: []
+  traps: [trp-21]
+  history:
+    - {date: 2026-08-19, note: "Demoted from timestamped source to characteristic map, on the basis that Item 1 is boilerplate-recycled."}
+    - {date: 2026-08-22, note: "Corrected. The Item 1 objection was sound and was applied to the entire filing without checking the other sections. Item 7A is a mandatory disclosure of exactly the exposure this project spent a day failing to find in news."}
+
+- id: clm-regsho
+  statement: >
+    Settlement-failure lists cannot identify forced short covering in a large-company book.
+    During the January 2021 squeeze only 34 to 35 securities market-wide appeared on the
+    list, and the two most squeezed names were not among them. A variable that is zero on
+    the very observation being studied cannot explain it.
+  one_breath: >
+    The free hard-to-borrow list was empty of the two most famous squeezed stocks during
+    the squeeze itself.
+  confidence: refuted
+  from_experiment: exp-011
+  evidence:
+    - {label: securities listed market-wide, value: "34 to 35", comparison: "across 26 to 29 January 2021, out of thousands of traded stocks"}
+    - {label: the two most squeezed names, value: absent, comparison: "neither appeared on the list during the squeeze"}
+  despite_refutation: >
+    The claim is the refutation itself.
+  reproduce: "uv run python -m unstructured_momentum.data.shortside --threshold-check 2021-01-26:2021-01-29"
+  supersedes: []
+  history:
+    - {date: 2026-08-19, note: "Refuted decisively. The absence of the obvious names is what made this a one-command check."}
+
+- id: clm-implied-corr
+  statement: >
+    Market-wide implied correlation cannot detect crowding inside one portfolio. On the eve
+    of the September 2019 reversal the index measure sat at the 26th percentile while
+    crowding within the book's winning side was at the 87th. Adding it to the severity
+    model made forecasts worse. This is the direct argument for measuring correlation on
+    the book's own holdings instead.
+  one_breath: >
+    A market-wide correlation index saw nothing while the book itself was severely crowded.
+  confidence: refuted
+  from_experiment: exp-012
+  evidence:
+    - {label: index implied correlation, value: 26th percentile, comparison: "against the book's own crowding at the 87th percentile on the same day"}
+    - {label: effect on forecast score, value: 0.00409, comparison: "against 0.00372 for trailing volatility alone; worse"}
+  despite_refutation: >
+    The claim is the refutation itself.
+  reproduce: "uv run python -m unstructured_momentum.data.cboe --implied-panel"
+  supersedes: []
+  traps: [trp-12]
+  history:
+    - {date: 2026-08-19, note: "Refuted as a predictor and promoted as motivation: it is the reason basket-level option capture began."}
+
+- id: clm-earnings-density
+  statement: >
+    Concentrated earnings dates among the book's own holdings do not predict reversals,
+    on the 69 percent of the winning side and 53 percent of the losing side that could be
+    matched to filings. Across eight event definitions the median effect was a 1.04-fold
+    change, three cells went the wrong way, and none reached significance before or after
+    correction. The unmatched companies are those that have since delisted: small,
+    illiquid, and almost all below the size floor that defines this book, so their earnings
+    dates barely enter a density computed over the actual holdings. Paired with the central
+    bank result, this says scheduled catalysts as a family carry no timing information at
+    the sample sizes available.
+  one_breath: >
+    Earnings clustering among the actual holdings does not predict reversals either, which
+    generalises the earlier calendar null.
+  confidence: refuted
+  from_experiment: exp-014
+  evidence:
+    - {label: median effect across the grid, value: 1.04x, comparison: "against 1.0x for no effect"}
+    - {label: cells below no effect, value: "3 of 8", comparison: "pointing the opposite way to the hypothesis"}
+    - {label: cells reaching significance, value: "0 of 8", comparison: "before correction for multiple testing, and therefore none after"}
+    - {label: filings processed, value: "105,237", comparison: "across 2,439 companies from 2004 to 2026"}
+    - {label: holdings matched to filings, value: "69% and 53%", comparison: "winning and losing side; the gap is delisted companies, which are harder to match"}
+  despite_refutation: >
+    The claim is the refutation itself.
+  reproduce: "uv run python -m unstructured_momentum.validation.hypotheses --earnings-grid"
+  supersedes: []
+  history:
+    - {date: 2026-08-21, note: "Refuted. Recorded with its coverage limitation stated rather than buried."}
+    - {date: 2026-08-21, note: "Coverage folded into the statement itself, with the argument for why the missing names are unlikely to reverse it, because a reviewer will otherwise supply the objection without the answer."}
+    - {date: 2026-08-21, note: "Recovery path noted and declined: filer identifiers are recoverable from the historical daily filing index, which would lift coverage. Not spent, because an effect of 1.04x is not the kind of result that flips at better coverage."}
+
+- id: clm-lowvol-wrong
+  statement: >
+    I twice asserted that the severity model was calm before the September 2019 reversal
+    because volatility was low. Volatility was at the 75th percentile. The actual cause was
+    a separate term detecting the absence of a bear market.
+  one_breath: >
+    My own explanation for the model's complacency was wrong twice before I checked it.
+  confidence: refuted
+  from_experiment: exp-008
+  evidence:
+    - {label: volatility at the time, value: 75th percentile, comparison: "not low, which is what I had claimed"}
+  despite_refutation: >
+    A record of my own wrong explanation, produced by an experiment whose own verdict was separate.
+  reproduce: null
+  supersedes: []
+  traps: [trp-11]
+  history:
+    - {date: 2026-08-18, note: "Refuted by decomposing the model. Kept because an explanation is a claim and mine failed the project's own standard."}
+
+- id: clm-ratebeta-asserted
+  statement: >
+    A model-generated panel reported that interest-rate sensitivity added 19.1 percentage
+    points of explanatory power beyond sector, size and market exposure. Reproducing the
+    calculation gives 3.0 percentage points.
+  one_breath: >
+    A panel's headline explanatory-power number was six times too large.
+  confidence: refuted
+  from_experiment: exp-018
+  evidence:
+    - {label: as asserted, value: "+19.1 percentage points", comparison: "against +3.0 on reproduction, an overstatement of roughly six times"}
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Refuted on reproduction. Kept as the primary evidence for distrusting model-derived aggregates."}
+
+- id: clm-macro-pc1-asserted
+  statement: >
+    The same panel reported that a library of macroeconomic series explained 16.8 percent
+    of the leading common component of portfolio residuals, implying most of it was
+    unexplained. Reproduction gives 32.4 percent, and that component is itself only 23.1
+    percent of residual variance, so the genuinely unexplained share is nearer 16 percent
+    than 83.
+  one_breath: >
+    A panel's claim that most residual risk was unexplained survived reproduction at half
+    the stated size.
+  confidence: refuted
+  from_experiment: exp-018
+  evidence:
+    - {label: as asserted, value: 0.168, comparison: "against 0.324 on reproduction, an understatement of explanatory power by about half"}
+    - {label: share of residual variance in that component, value: "23.1%", comparison: "so the genuinely unexplained portion is about 16%, not the 83% implied"}
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Refuted on reproduction, alongside the interest-rate figure from the same write-up."}
+
+- id: clm-skew-squeeze
+  statement: >
+    A single cross-section gives no evidence that option prices on the losing side of a
+    momentum book mark out squeeze risk. Among the 86 of 95 companies with usable
+    quarter-delta quotes on both wings, the rank correlation between the cost of insuring a
+    sharp rise and how heavily a stock is shorted is -0.130, opposite the predicted
+    direction and not significant. Holding company size and volatility level constant moves
+    it by 0.001. The sign is the part worth carrying forward, because the hypothesis and
+    the confound pre-committed against it both predict a positive one, so a negative
+    estimate is unexplained by either. One snapshot of 86 names is a direction and not a
+    finding, and whether it persists is a registered and unanswered question.
+  one_breath: >
+    One snapshot gives no squeeze signal in short-leg option prices, and leans slightly
+    against the prediction. A direction, not a finding.
+  confidence: measured_once
+  from_experiment: exp-019
+  evidence:
+    - {label: rank correlation, value: "-0.130", comparison: "against a predicted positive; p = 0.231, so not distinguishable from no association"}
+    - {label: holding size and volatility constant, value: "-0.129", comparison: "essentially unchanged, so not a size or volatility artefact"}
+    - {label: sector-clustered 95% interval, value: "-0.253 to +0.020", comparison: "spans zero; 95.2% of resamples fall below it"}
+    - {label: coverage, value: "86 of 95", comparison: "90.5% of the losing side; the 9 dropped names are listed in the output"}
+    - {label: snapshots behind it, value: 1, comparison: "against the 60 the registered follow-up requires before the sign carries weight"}
+  reproduce: "uv run python -m unstructured_momentum.features.skew --cross-section"
+  supersedes: []
+  traps: [trp-16]
+  history:
+    - {date: 2026-08-22, note: "Measured once on a single cross-section."}
+    - {date: 2026-08-22, note: "Softened from refuted to inconclusive. p = 0.231 on one day is a direction; calling it a refutation and attaching a mechanism claimed more than the data carries."}
+
+- id: clm-universe
+  statement: >
+    Monitoring both legs of a large- and mid-cap momentum sort, rather than one leg or the
+    unfiltered index, is a measured choice. Two-thirds of the ranking signal lives in the
+    spread between the legs rather than within either one, and the winner decile carries 45
+    times the index weight of the loser decile, which makes an unfiltered short leg
+    unmonitorable in practice: there is almost nothing there to measure, and what is there
+    has no options and little short volume.
+  one_breath: >
+    Both legs inside the large-cap universe, because the signal sits between the legs and
+    the raw short leg is too small to monitor.
+  confidence: reproduced
+  from_experiment: exp-002
+  evidence:
+    - {label: pooled rank correlation across both legs, value: "+0.461", comparison: "against +0.194 within a single leg, so most of the signal is the between-leg spread"}
+    - {label: winner decile share of index weight, value: "11.68%", comparison: "against 0.26% for the loser decile, a 45-fold dollar asymmetry"}
+    - {label: companies monitored, value: "~200", comparison: "both deciles of the Russell 3000 re-sorted inside the top 1,000 names by index weight"}
+  reproduce: "uv run python -m unstructured_momentum.factor.legs --universe-report"
+  supersedes: []
+  history:
+    - {date: 2026-08-15, note: "Measured when choosing the universe, and reproduced before it was allowed to govern the design."}
+    - {date: 2026-08-22, note: "Migrated into the source of truth after the memo cited it and a cross-check found it was quoted from nowhere the renderer could see."}
+
+- id: clm-vol-skill-concentrated
+  statement: >
+    The 23.4 percent forecasting edge that trailing volatility has over knowing nothing is
+    not earned evenly. Forty-three percent of it accrues in 2008 and 2009 alone, the three
+    largest month-steps account for 37 percent, and only 66 percent of individual steps are
+    positive at all. The edge is real and it is concentrated in crises, which means the one
+    thing that beat every other candidate is mostly telling a practitioner that volatile
+    periods are dangerous. That is worth knowing and it is worth less than the headline
+    number suggests.
+  one_breath: >
+    Trailing volatility's forecasting edge is real but concentrated: two crisis years carry
+    nearly half of it.
+  confidence: measured_once
+  from_experiment: exp-003
+  evidence:
+    - {label: share of the edge earned in 2008 and 2009, value: "43%", comparison: "two years out of thirty-two in the sample"}
+    - {label: share from the three largest month-steps, value: "37%", comparison: "out of 318 refits"}
+    - {label: share of steps that are positive, value: "66%", comparison: "against 100% if the edge were earned evenly"}
+  reproduce: "uv run python build/figures.py"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "Found by plotting the result rather than by testing for it. The figure was first captioned as showing a steady edge; the plot disproved its own caption on sight, which is the case for drawing things rather than quoting summary statistics."}
+
+- id: clm-narrative-flat
+  statement: >
+    The concentration measure over news about a momentum book's holdings produced no
+    separation between the September 2019 window and three matched calm windows, but the
+    measurement is not trustworthy and the reading should not be used. Attribution by
+    organisation name gave 75 percent of winning-side articles to a single newspaper
+    publisher that is itself a holding, and 91 percent to three companies. The theme matrix
+    was therefore dominated by one outlet's general news coverage. The design was also
+    underpowered independently: three matched windows put the smallest attainable p-value
+    at 0.25 against roughly forty specified at registration.
+  one_breath: >
+    The narrative concentration measure returned nothing, on a corpus that turned out to be
+    three-quarters one newspaper.
+  confidence: unverified
+  from_experiment: exp-020
+  evidence:
+    - {label: share of winning-side articles from one publisher holding, value: "75.3%", comparison: "46,024 of 61,095; the top three companies take 91%"}
+    - {label: effective rank, episode window, value: 52.10, comparison: "against a calm mean of 48.59, but computed over the contaminated corpus above"}
+    - {label: smallest attainable p-value, value: 0.25, comparison: "with three matched windows, against roughly forty specified at registration"}
+    - {label: correlation with the count of covered holdings, value: "+0.983", comparison: "across four windows, consistent with a corpus dominated by a few names"}
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --case-control"
+  supersedes: []
+  traps: [trp-18]
+  history:
+    - {date: 2026-08-22, note: "Recorded as unverified. The design could not have detected the effect, so the flat reading carries no weight against the hypothesis."}
+    - {date: 2026-08-22, note: "Downgraded further after inspecting the corpus rather than the statistic. Three-quarters of the winning-side articles are one newspaper publisher, matched because its name appears in every article citing it. The reading is not evidence about anything."}
+
+- id: clm-aboutness-ladder
+  statement: >
+    Deciding whether a news article is about a company, rather than merely naming it, is a
+    task where a language model beats every rule tried. Matching the organisation field is
+    31 percent precise. Adding a business-theme requirement reaches 45 percent. Also
+    requiring the company in the headline reaches 80 percent at 86 percent recall. A model
+    reading that same headline reaches 97 percent precision at full recall. Two of its wins
+    need knowledge no string rule can hold: that a restaurant brand belongs to a listed
+    parent, and that a headline naming two retailers reports on one of them.
+  one_breath: >
+    A model reading a headline is 97 percent precise at deciding whether an article is about
+    a company; the best rule reaches 80.
+  confidence: measured_once
+  from_experiment: exp-022
+  evidence:
+    - {label: name match only, value: "31.1%", comparison: "precision at 100% recall"}
+    - {label: best deterministic rule, value: "80.0%", comparison: "precision at 85.7% recall, F1 82.8%"}
+    - {label: model on the same headline, value: "96.6%", comparison: "precision at 100% recall, F1 98.2%"}
+    - {label: hand labels behind it, value: 90, comparison: "28 positive, assigned blind to rung membership"}
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --score-attribution"
+  supersedes: []
+  traps: [trp-18]
+  history:
+    - {date: 2026-08-22, note: "Measured once. Recorded with the conflict stated: I wrote both the labels and the prompt, so part of the agreement measures the model reproducing my own definition."}
+
+- id: clm-text-no-exposure
+  statement: >
+    News about a company does not appear to encode the factor exposure that company
+    contributes to a portfolio, at the resolution this corpus can measure. On the eve of the
+    September 2019 reversal the book was a concentrated bet on falling interest rates,
+    established from cross-sectional rate betas of the holdings. Coverage of those same
+    companies is 0.32 percent rate-themed, below its own losing side at 0.60 percent. The
+    claim is bounded rather than absolute: the theme vocabulary is coarse, a single
+    hand-picked theme family was the probe, and the data-driven alternative to that probe
+    turned out to rest on an invalid independence assumption. What can be said is that no
+    rate signal is visible at this resolution, not that none exists.
+  one_breath: >
+    Company news shows no trace of the factor exposure that made the book fragile, at the
+    resolution this corpus can resolve.
+  confidence: measured_once
+  from_experiment: exp-023
+  evidence:
+    - {label: rate themes, 2019 winning side, value: "0.32%", comparison: "against 0.60% on the losing side of the same window"}
+    - {label: rate themes, calm 2016 winning side, value: "0.88%", comparison: "higher than the episode window, so wrong in direction twice"}
+    - {label: articles behind the estimate, value: "2,424", comparison: "model-filtered to those genuinely about the holdings, across 140 companies"}
+    - {label: theme families probed, value: 1, comparison: "hand-picked in advance; the data-driven alternative proved invalid on independence grounds"}
+  despite_refutation: >
+    The refuted prediction was that coverage would be rate-dominated. This claim states the opposite finding, which is what the refutation established.
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --rebuild-corpus"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "A composition measure over thousands of articles, so unlike the comparative half of the same experiment it is not limited by the number of windows."}
+    - {date: 2026-08-22, note: "Scoped down after the robustness audit. It was stated as a general fact about text and factor exposure and rests on one hand-picked theme family, so it now carries its resolution limit in the statement."}
+
+- id: clm-effrank-artefact
+  statement: >
+    Effective rank of a holdings-by-themes matrix does not measure narrative concentration.
+    It correlates +0.997 with the number of companies receiving any coverage, and after
+    matching every window to the same number of companies and articles the measure is
+    identical everywhere: 44.68 in the episode window against a calm mean of 44.74. The
+    apparent differences between windows were a coverage-count artefact. The control that
+    caught this was fixed in advance precisely because the pre-filter version of the
+    statistic had already shown a +0.983 correlation with the same quantity.
+  one_breath: >
+    The concentration statistic was really a count of covered companies; once that is held
+    constant it is flat everywhere.
+  confidence: measured_once
+  from_experiment: exp-023
+  evidence:
+    - {label: correlation with covered-name count, value: "+0.997", comparison: "across four windows, worse than the +0.983 measured before filtering"}
+    - {label: effective rank after density matching, value: 44.68, comparison: "against a calm mean of 44.74, a difference of -0.06"}
+    - {label: spread across all four matched windows, value: "44.35 to 44.98", comparison: "half a point, against unmatched values spanning 44.4 to 53.2"}
+  despite_refutation: >
+    A measurement property of the statistic, established during the same run and unaffected by whether the prediction held.
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --rebuild-corpus"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "The pre-committed density control changed the reading from a weak inverted signal to no signal. Had it been added afterwards it would have looked like explaining away an inconvenient result."}
+
+- id: clm-bounded-null
+  statement: >
+    The absence of narrative concentration before the September 2019 reversal is real up to
+    a stated floor and silent below it. Injecting an artificial concentration into the
+    corpus moves effective rank by 1.19 points when it touches 10 percent of articles,
+    against 0.63 points of noise between real windows, so a convergence of that size would
+    have been visible. Across 96 defensible specifications, 37 point the predicted way,
+    which is indistinguishable from chance. The honest statement is no concentration signal
+    above roughly a 10 percent shift, not the flat absence originally reported.
+  one_breath: >
+    The concentration null holds down to a measurable floor of about a 10 percent shift, and
+    says nothing below it.
+  confidence: measured_once
+  from_experiment: exp-024
+  evidence:
+    - {label: detection floor, value: "10% of articles", comparison: "moves the measure 1.19 points against 0.63 of between-window noise"}
+    - {label: specifications pointing the predicted way, value: "37 of 96", comparison: "39 percent, indistinguishable from a coin flip"}
+    - {label: specifications with a consistent direction, value: "24 of 24", comparison: "mean pairwise similarity is negative in every one of its specifications, opposite to the crowding hypothesis"}
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --audit"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "Produced by auditing a null that had been declared from a single specification. The calibration curve is what converts an absence into a bounded statement."}
+
+- id: clm-syndication
+  statement: >
+    News articles are not independent observations and treating them as such invents
+    significance. In the theme comparison, 286 of 421 themes cleared multiplicity
+    correction, a proportion that marks a broken error model rather than a rich finding. The
+    single strongest theme was carried by 50 articles, all from one company and one press
+    release syndicated across outlets. Clustering by company and day at most halves the
+    effective sample from 1,030 to 484, and the true figure is far smaller because
+    syndication operates within a day.
+  one_breath: >
+    Syndicated copies of one press release were counted as fifty independent observations,
+    which is how two thirds of all themes became significant.
+  confidence: measured_once
+  from_experiment: exp-024
+  evidence:
+    - {label: themes clearing correction, value: "286 of 421", comparison: "68 percent, which no real effect produces"}
+    - {label: articles behind the strongest theme, value: 50, comparison: "all from one company, one press release"}
+    - {label: effective sample after clustering by company-day, value: 484, comparison: "against 1,030 articles treated as independent, and still an upper bound"}
+  reproduce: "uv run python -m unstructured_momentum.features.narrative --audit"
+  supersedes: []
+  traps: [trp-19]
+  history:
+    - {date: 2026-08-22, note: "Found by asking why so many themes were significant rather than by reading the list of them."}
+
+- id: clm-overlap-inference
+  statement: >
+    The severity backtest evaluates ten-day forward returns at monthly refits, so
+    consecutive observations share most of their evaluation window and are not independent.
+    Correcting for that autocorrelation cuts the t-statistic on the volatility edge from
+    3.29 to 2.56 and the effective sample from 318 refits to 193. The result survives and
+    is weaker than reported. The same correction applies to every forecast comparison in
+    this project, none of which carried it, and it is the time-series form of the same
+    error that invalidated the news theme test.
+  one_breath: >
+    Overlapping forecast windows were treated as independent, overstating the precision of
+    every severity comparison here.
+  confidence: measured_once
+  from_experiment: exp-003
+  evidence:
+    - {label: t-statistic assuming independence, value: 3.29, comparison: "against 2.56 after a Newey-West correction at lag 5"}
+    - {label: effective sample, value: "193 of 318", comparison: "61 percent of the refits actually carry independent information"}
+    - {label: autocorrelation of the loss differential at lag 1, value: "+0.34", comparison: "against 0 if refits were independent"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --overlap-diagnostic"
+  supersedes: []
+  traps: [trp-19]
+  history:
+    - {date: 2026-08-22, note: "Found by applying the independence critique from the text audit to the claim the project rests on, rather than treating that critique as being about text."}
+
+- id: clm-framework-insensitive
+  statement: >
+    The severity comparison cannot resolve realistic differences between predictors. A
+    signal blended with noise is not preferred to trailing volatility alone until its
+    signal share approaches 100 percent; at 40 percent the forecast is still worse. The
+    cause is mechanical: adding a regressor to a quantile regression at the fifth
+    percentile costs estimation variance, and the observations genuinely in the tail are a
+    small fraction of the training window, so the parameter penalty outweighs what a noisy
+    feature carries. A larger effective sample or a more sensitive estimator would move
+    this; more candidate features would not.
+  one_breath: >
+    The horse race can only see a near-perfect predictor, so its verdicts on realistic
+    features carry little information.
+  confidence: measured_once
+  from_experiment: exp-025
+  evidence:
+    - {label: signal share at which the framework still prefers volatility alone, value: "40%", comparison: "the blended predictor is worse, with a Newey-West t of -0.07"}
+    - {label: signal share at which it is finally detected, value: "100%", comparison: "a noiseless predictor, with a Newey-West t of +4.50"}
+    - {label: effective sample after overlap correction, value: "188 of 318 refits", comparison: "median across 54 specifications"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --audit"
+  supersedes: [clm-nothing-beats-vol]
+  history:
+    - {date: 2026-08-22, note: "The positive control that should have accompanied the original horse race. It was not run because nobody asks whether a null result came from a blind instrument."}
+
+- id: clm-vol-robust
+  statement: >
+    Trailing volatility beating a no-information baseline is robust to specification. Across
+    54 combinations of horizon, quantile, volatility transform and training-window length,
+    it wins in every one, with skill from 14.1 to 26.3 percent. Overlap-corrected
+    t-statistics run from 1.84 to 2.69 and 51 of 54 clear the conventional threshold. This
+    is the claim the system should rest on, and it is materially weaker than the 3.29
+    implied by treating overlapping evaluation windows as independent.
+  one_breath: >
+    Trailing volatility beats knowing nothing in every specification tried, though less
+    decisively than naive standard errors suggested.
+  confidence: reproduced
+  from_experiment: exp-025
+  evidence:
+    - {label: specifications where volatility wins, value: "54 of 54", comparison: "skill from +14.1% to +26.3%"}
+    - {label: overlap-corrected t-statistics, value: "1.84 to 2.69", comparison: "51 of 54 clear 1.96, against a naive 3.29 at the headline specification"}
+    - {label: specifications where an alternative wins, value: "1 of 54", comparison: "the shortest horizon paired with the shortest training window"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --audit"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "Produced by the audit that weakened the neighbouring claim. The specification curve strengthens this one because it never depended on detecting a small effect."}
+
+- id: clm-date-blinding-fails
+  statement: >
+    Stripping dates from text does not blind a language model to when the text was written.
+    Given headlines about company news with every year, month and explicit date removed, and
+    company identities replaced by letters, a current model named the exact calendar year of
+    all four windows in all forty draws, at a self-rated confidence of 8.4 out of 10 that
+    proved correct every time. Period fingerprints survive in company names, products,
+    events and vocabulary. Any retrospective judgement a current model makes about
+    historical text may therefore rest on knowing what happened next, and the standard
+    mitigation of removing dates is not a mitigation.
+  one_breath: >
+    Removing dates does not hide the date: a model placed every historical window to the
+    exact year, forty times from forty.
+  confidence: measured_once
+  from_experiment: exp-026
+  evidence:
+    - {label: exact year identified, value: "40 of 40", comparison: "four windows, ten draws each, never off by one year"}
+    - {label: self-rated confidence, value: "8.4 of 10", comparison: "and correct every time, so it was calibrated rather than overconfident"}
+    - {label: de-identification applied, value: "years, months, dates, tickers", comparison: "all removed before the model saw anything; it still placed every window"}
+  reproduce: "uv run python -m unstructured_momentum.llm.synthesis --common-thread"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "The hindsight test described as necessary in the first plan and run for the first time here. It converts a ceiling asserted from vendor training cutoffs into a measured one."}
+
+- id: clm-contamination-inert
+  statement: >
+    A model's knowledge of when text was written is present but does not move its factual
+    classifications. Told the true year, a year five years wrong, or nothing at all, it
+    labelled 152 headlines identically in every case, with the positive rate matching to
+    three decimal places. Contamination being detectable is therefore not the same as
+    contamination being used, and the two require separate tests. The caveat is that only
+    six headlines were positive in any condition, so the informative sample is six and a
+    stratified rerun is required before this bears weight.
+  one_breath: >
+    Lying to the model about the year changed none of its factual labels, so its
+    foreknowledge is present but inert here.
+  confidence: measured_once
+  from_experiment: exp-027
+  evidence:
+    - {label: agreement, true date versus false date, value: "100.0%", comparison: "against a 95 percent threshold fixed before the run"}
+    - {label: positive rate by condition, value: "0.039 in all three", comparison: "identical to three decimal places across no date, true date and a five-year-wrong date"}
+    - {label: informative sample, value: "6 of 152", comparison: "the rest were negative in every condition and carry no information about invariance"}
+  reproduce: "uv run python -m unstructured_momentum.llm.synthesis --invariance"
+  supersedes: []
+  history:
+    - {date: 2026-08-22, note: "Separates presence of contamination from use of it. The previous experiment established presence at 40 out of 40; this one finds it inert for factual labelling."}
+
+- id: clm-exposure-not-describable
+  statement: >
+    The concentration that made the September 2019 book fragile is visible in return
+    covariance and not in description. Given the largest holdings and an explicit option to
+    decline, a model reports no coherent shared exposure at confidence 8 out of 10, and
+    reports the same for randomly drawn companies. Company news does not carry the rate
+    exposure either, on two independent representations. The bet was statistical rather
+    than descriptive: nothing written about these companies, and nothing in their sector
+    labels or business descriptions, reveals that they were the same position. Only their
+    joint return behaviour does.
+  one_breath: >
+    The 2019 concentration is a fact about return covariance that no description of the
+    companies contains.
+  confidence: measured_once
+  from_experiment: exp-023
+  evidence:
+    - {label: model naming a shared driver from news, when allowed to decline, value: "none in 37 of 40 draws", comparison: "concentration 2.5 out of 10 on the episode window against 2.0 to 2.6 on three matched calm windows; rates never named"}
+    - {label: CORRECTION to an earlier version of this claim, value: "the input was news, not holdings", comparison: "and the 'confidence 8 out of 10' previously quoted here was the HINDSIGHT PROBE's dating confidence, a different number measuring whether the model could identify the year. The exposure result carries no such confidence figure."}
+    - {label: rate themes in the winning side's news, value: "0.32%", comparison: "below its own losing side at 0.60%, on a corpus filtered to genuine coverage"}
+    - {label: rate-related headlines, independent classification, value: "3%", comparison: "against 11% in a calm window, the same ordering by a different method"}
+  despite_refutation: >
+    Established by three routes sharing no representation, only one of which is the refuted experiment.
+  reproduce: "uv run python -m unstructured_momentum.llm.synthesis --name-exposure"
+  supersedes: []
+  traps: [trp-20]
+  history:
+    - {date: 2026-08-22, note: "Established by three routes that do not share a representation: theme composition, headline classification, and characteristic-based naming with a null option."}
+    - {date: 2026-08-25, note: "Two errors corrected. The input was per-holding NEWS with dates and tickers stripped, not holdings, and the statement said holdings. And the quoted confidence of 8 out of 10 was the hindsight probe's DATING confidence, which the same prompt collects to check whether the model recognises the period; it was never a confidence about the exposure. The direction of the finding is unaffected and the underlying numbers are stronger than the misquote: no driver named in 37 of 40 draws, rates never named."}
+
+- id: clm-filings-exposure
+  statement: >
+    Model-extracted exposure from mandatory filings does not track measured equity rate
+    sensitivity. It correlated at +0.210 on the 2019 book and at +0.011 on the 2017 book,
+    which overlaps the first by only 23 percent, and on the second it falls below the
+    keyword floor of -0.121 recomputed on those companies. The first estimate is treated as
+    noise: its interval had a lower bound of +0.024, and the parser repair that produced it
+    was made after the first estimate was seen. The extraction instrument itself is sound,
+    passing a verified placebo and a per-stratum positive control. What it measures is
+    disclosed funding exposure, and that is a different object from equity duration
+    exposure, exactly as the pre-committed caveat said it might be.
+  one_breath: >
+    Filings disclose what happens to a company's interest bill, which does not predict what
+    happens to its share price when rates move.
+  confidence: refuted
+  from_experiment: exp-029
+  evidence:
+    - {label: 2019 book, value: "+0.210", comparison: "p = 0.021, sector-clustered interval +0.024 to +0.407"}
+    - {label: 2017 book, value: "+0.011", comparison: "p = 0.916, interval -0.277 to +0.238, on a book overlapping the first by 23 percent"}
+    - {label: keyword floor on the 2017 book, value: "-0.121", comparison: "the extraction no longer clears the bar it was required to beat"}
+    - {label: measurement environment, value: "3.89 versus 3.83 basis points", comparison: "daily yield volatility in the two windows, so 2017 is not the quieter environment an excuse would need"}
+  reproduce: "uv run python -m unstructured_momentum.llm.exposure --replicate 2017-08-30"
+  supersedes: []
+  traps: [trp-22]
+  history:
+    - {date: 2026-08-22, note: "Recorded as the first positive-signed text result at +0.210, with three stated warning signs."}
+    - {date: 2026-08-22, note: "Withdrawn after a registered replication on a 23 percent overlapping book returned +0.011. All three warning signs were reporting accurately."}
+
+- id: clm-risktext-relatedness
+  statement: >
+    Similarity between companies' risk-factor disclosures predicts how much they move
+    together on the worst days for a momentum book, beyond what sharing a GICS sector
+    explains. The rank-partial correlation is +0.094 on the 2019 book and +0.095 on the 2017
+    book, which overlap by 23 percent, with company-label permutation p-values of 0.010 and
+    0.004. It is the first text measure here to survive a registered replication. What it is
+    NOT is a measure of tail fragility: the contrast registered to test that failed, because
+    on the 2017 book the same statistic on full-sample correlation is +0.076 rather than the
+    zero seen in 2019. The measure captures economic relatedness at a finer grain than
+    eleven sector labels, and nothing in this project shows it is specific to tails.
+  one_breath: >
+    Companies with similar disclosed risks move together beyond their shared sector, though
+    not specifically in the tail.
+  confidence: reproduced
+  from_experiment: exp-030
+  evidence:
+    - {label: risk-text against downside correlation given sector, 2019 book, value: "+0.0939", comparison: "permutation p 0.010 against a null of mean +0.0011, sd 0.0400"}
+    - {label: same on the 2017 book, value: "+0.0952", comparison: "permutation p 0.004; replicates within 0.002 on a 23 percent overlapping sample"}
+    - {label: full-sample placebo, 2017, value: "+0.0762", comparison: "against -0.0004 in 2019; the tail-specific interpretation fails"}
+    - {label: same-sector baseline it must beat, value: "+0.223 and +0.250", comparison: "text adds to the sector dummy on both books rather than restating it"}
+  reproduce: "uv run python -m unstructured_momentum.features.riskpairs --replicate 2017-08-30"
+  supersedes: []
+  history:
+    - {date: 2026-08-23, note: "First text measure in the project to replicate under registration. Recorded as relatedness rather than fragility, because the contrast built to separate those failed."}
+
+- id: clm-textcov-null
+  statement: >
+    Risk-disclosure similarity does not improve a covariance estimate beyond what sector
+    membership already provides, at this universe size. Shrinking the sample covariance
+    toward a fitted text target lowers realised minimum-variance volatility by 13 percent
+    against Ledoit-Wolf on one filing set, but an identical estimator built from sector
+    membership alone matches it to within one part in a thousand, and on the second filing
+    set the construction is 39 percent worse than the baseline. The improvement is a
+    property of shrinking toward a fitted target rather than a constant one, and carries no
+    information from the disclosures.
+  one_breath: >
+    A text-based covariance estimate beat the standard benchmark, and an identical one using
+    only sector labels beat it by the same amount.
+  confidence: refuted
+  from_experiment: exp-032
+  evidence:
+    - {label: text against sector-only target, value: "0.989 to 1.001", comparison: "four cases across two filing sets and two weightings; identical portfolios"}
+    - {label: text against Ledoit-Wolf, 2017 filings, value: 0.869, comparison: "the apparent 13 percent gain, entirely reproduced by the sector-only control"}
+    - {label: text against Ledoit-Wolf, 2019 filings, value: 1.393, comparison: "39 percent worse; the direction reverses on the second period"}
+    - {label: rolling windows in total, value: 7, comparison: "too few to support a claim in either direction, which is itself the finding"}
+  reproduce: "uv run python -m unstructured_momentum.features.riskpairs --covariance"
+  supersedes: []
+  traps: [trp-24]
+  history:
+    - {date: 2026-08-23, note: "Refuted by a control that was not in the registration. The registered gate put a sector indicator inside the regression, which does not test the increment of text over sector."}
+
+- id: clm-lit-divergence
+  statement: >
+    Of two published results this project attempted, one replicated and one was not really
+    tested. Text similarity predicting tail co-movement beyond sector replicated twice, at
+    +0.094 and +0.095 with permutation probabilities of 0.010 and 0.004. The covariance
+    result did not, but our comparison against Ledoit-Wolf had seven quarterly windows
+    against roughly fifty-six in the published study and could only have detected a 32
+    percent improvement unconstrained, so it says almost nothing about their claim. What our
+    run does establish precisely is different: an estimator built from sector membership
+    alone matches the text estimator to within one part in a thousand, four times over. That
+    is a precise null rather than an underpowered one, and it bears on the published
+    conclusion that disclosures carry information beyond price history.
+  one_breath: >
+    One published result replicated and the other we never really tested, but sector labels
+    reproduce the text estimator exactly.
+  confidence: measured_once
+  from_experiment: exp-032
+  evidence:
+    - {label: tail co-movement result, replicated, value: "+0.094 and +0.095", comparison: "permutation p 0.010 and 0.004 on books overlapping 23 percent"}
+    - {label: smallest improvement our covariance test could detect, value: "32.2 percent", comparison: "unconstrained, at seven windows; the published gain is far smaller than that"}
+    - {label: windows available, value: "7 against roughly 56", comparison: "so the published study can resolve effects about 2.8 times smaller"}
+    - {label: text against sector-only estimator, value: "0.989 to 1.001", comparison: "four measurements within 1.2 percent of each other; a precise null, not a shortage of data"}
+  despite_refutation: >
+    The experiment refuted the hypothesis that text improves a covariance estimate. This
+    claim is about what that run can and cannot support, and its central number is the
+    text-against-sector ratio, which is a precise measurement rather than the refuted
+    comparison against the external benchmark.
+  reproduce: "uv run python -m unstructured_momentum.features.riskpairs --covariance"
+  supersedes: []
+  history:
+    - {date: 2026-08-23, note: "Separates a genuine replication from an underpowered non-test, after I had been describing both as failures."}
+    - {date: 2026-08-23, note: "Corrects my own earlier suggestion that universe size explained the divergence. The published study uses the S&P 100 and ours is 94 to 118 names, so size is not the difference. Time span is: fifteen years against two."}
+    - {date: 2026-08-23, note: "Recorded from published abstracts and summaries rather than the full paper. The claim that the industry control appears absent is a statement about what is visible in those summaries and would need the paper to confirm."}
+
+- id: clm-text-is-industry
+  statement: >
+    Risk-factor text similarity is best understood as a finer industry classification, not
+    as a risk measure. It adds a positive increment over GICS sector membership in every one
+    of thirteen quarterly panels, averaging +0.044 against a sector baseline of +0.182, and
+    it replicated on two separate momentum books before that. But the increment is no larger
+    around reversal episodes than elsewhere: +0.035 against +0.055, with a permutation
+    probability of 0.948 and the point estimate in the wrong direction. And an estimator
+    built from sector labels alone reproduces its entire economic value in a covariance
+    exercise. Real, small, stable, and spanned by information already available.
+  one_breath: >
+    Text similarity is a better industry classification: consistently real, about a quarter
+    the size of sector, and no larger in a crisis.
+  confidence: reproduced
+  from_experiment: exp-033
+  evidence:
+    - {label: quarters with a positive text increment, value: "13 of 13", comparison: "mean +0.044, range +0.018 to +0.078"}
+    - {label: size against the sector effect, value: "24 percent", comparison: "+0.044 against a sector baseline of +0.182"}
+    - {label: episode quarters against other quarters, value: "+0.035 versus +0.055", comparison: "permutation p 0.948; a real concentration needed to exceed +0.021"}
+    - {label: independent replications of the level effect, value: 3, comparison: "the 2019 book, the 2017 book, and thirteen quarterly panels"}
+  despite_refutation: >
+    The experiment refuted the hypothesis that text advantage concentrates at episodes. This
+    claim states what the same run established instead, which is the level effect replicated
+    in all thirteen quarters, and it reports the refutation as part of its own content.
+  reproduce: "uv run python -m unstructured_momentum.features.riskpairs --time-varying"
+  supersedes: []
+  history:
+    - {date: 2026-08-23, note: "Consolidates three replications of the level effect with two refutations of the interpretations built on it, into one statement about what the measure is."}
+
+- id: clm-referee
+  statement: >
+    A model reading a pre-registration, with every result withheld, names the structural
+    flaw that later made the experiment uninterpretable in three of eight cases, and raises
+    a genuine unexamined flaw in two more. In the covariance experiment it named the precise
+    control that was added mid-run and overturned the result. In the filing-change
+    experiment it identified that the panel and the momentum book would not intersect, a
+    fault that cost a completed run to discover. This is the one AI application in the
+    project that operates where foreknowledge cannot help, since the question is about a
+    design rather than an outcome.
+  one_breath: >
+    A model refereeing our own registrations named three of eight design flaws before the
+    experiments ran, and found two nobody had checked.
+  confidence: measured_once
+  from_experiment: exp-035
+  evidence:
+    - {label: recorded defect named from the registration alone, value: "3 of 8", comparison: "against a generic checklist, which would name none of the eight"}
+    - {label: previously unexamined defects surfaced, value: 2, comparison: "including short volume being a flow measure rather than short interest, which this project documented elsewhere and never applied"}
+    - {label: results withheld from the prompt, value: "all", comparison: "result, verdict, reasoning, caveats, history and peek notes removed before the call"}
+  reproduce: "uv run python -m unstructured_momentum.llm.referee --score"
+  supersedes: []
+  history:
+    - {date: 2026-08-25, note: "The design's one hard requirement -- that no result field reaches the prompt -- became MACHINE-CHECKED at the 2026-08-25 rebuild, and was previously unverifiable. One leak would have turned a referee test into reading comprehension. The evidence chain survived and was re-scored under the verified-blind rebuild; the blinding was not asserted in code when the result was first produced, and that distinction is stated rather than smoothed."}
+    - {date: 2026-08-23, note: "Recorded with the scoring bias stated: I wrote the ground truth, scored the output, and knew the answers. The three hits are checkable from the output text without trusting the scoring."}
+
+- id: clm-episode-ceiling-binds
+  statement: >
+    Conditional skewness of momentum looks like it separates tail risk exactly where the
+    severity model is documented to fail. In the calm state, no bear market and below-median
+    volatility, the most negative skew tercile carries 22 tail days against 4, a 5.5-fold
+    difference. Those 22 days are 2 distinct episodes and the 4 are 3, because forward
+    windows overlap. A circular-block permutation of the skew series gives a probability of
+    0.069. The lead is 2 episodes wearing the clothes of 1,332 observations, and this is the
+    general shape of the problem: any conditional split of two dozen independent regimes
+    lands on a handful of episodes, whatever the day count says.
+  one_breath: >
+    A 5.5-fold tail lift from conditional skewness turned out to rest on two independent
+    episodes, which is what every conditional split here does.
+  confidence: measured_once
+  from_experiment: exp-001
+  evidence:
+    - {label: tail days by skew tercile in the calm state, value: "22 versus 4", comparison: "a 5.5-fold difference across 1,332 days per tercile"}
+    - {label: distinct episodes behind those days, value: "2 versus 3", comparison: "after collapsing overlapping forward windows separated by less than 21 days"}
+    - {label: circular-block permutation probability, value: 0.069, comparison: "z of +1.60; the autocorrelation of the skew series is preserved by the shift"}
+    - {label: skew increment inside volatility buckets, value: "+0.004, +0.015, +0.020", comparison: "low, mid and high volatility; monotone and in the predicted direction"}
+  reproduce: "uv run python -m unstructured_momentum.model.severity --skew-diagnostic"
+  supersedes: []
+  history:
+    - {date: 2026-08-23, note: "Recorded because the direction is right and the sample is not. Skew is more negative before tails, monotonically across volatility buckets, and none of it survives counting episodes rather than days."}
+    - {date: 2026-08-23, note: "Generalises the power ceiling from a statement about timing tests to a statement about every conditional analysis attempted here."}
+
+- id: clm-mechanism-map
+  statement: >
+    Momentum reversals have five distinct market mechanisms, and separating them requires
+    different data for each. A shared factor exposure being revalued shows up in what
+    companies say they depend on. A catalyst that inverts the basis of the sort shows up as a
+    drawdown concentrated into a single dated day. Loser-leg optionality after a bear market
+    shows up in trailing market state. Crowded deleveraging shows up in nobody's company
+    filings, because companies do not write about who owns them, but it is directly visible
+    in investor-side records: 13F holdings from 2001, short interest on the loser leg,
+    momentum-ETF creations, and within-leg residual correlation from prices. The earlier
+    version of this claim said crowding was structurally unobservable. That was wrong, and
+    the error came from checking only company-filed text and generalising from it.
+  one_breath: >
+    Company text cannot see who owns a book, but investor filings can, and those go back to
+    2001.
+  confidence: unverified
+  from_experiment: null
+  evidence:
+    - {label: "conferred tilt at the November 2020 reversal", value: "55th percentile of its own placebo null", comparison: "|spread| 0.0185 against a placebo 95th of 0.0386, in a month where the sort clears 81 percent of the time. CONSISTENT WITH catalyst inversion rather than a conferred-concentration unwind, and explicitly one observation rather than a test of the separation"}
+    - {label: mechanisms enumerated, value: 5, comparison: "shared exposure, crowded deleveraging, loser-leg optionality, catalyst inversion, valuation spread"}
+    - {label: 13F-HR filings on EDGAR, 2007 Q2, value: 3180, comparison: "1666 accepted 2007-05-1x, holding Q1 positions, available three months before the quant quake"}
+    - {label: 13F holdings table parses, value: "113 of 113 lines", comparison: "CUSIP, market value and share count on a 2007 fixed-width filing; the format is usable, not merely present"}
+    - {label: episode coverage of 13F, value: "13 of 15 episodes", comparison: "all but 1999-04 and 2000-03, which predate electronic 13F"}
+    - {label: comomentum panel coverage, value: "2014-01 to 2026-07, monthly", comparison: "covers no panic-rebound episode and not 2007; the price-derived crowding measure has the shorter history"}
+    - {label: what 13F cannot see, value: "short positions and leverage", comparison: "long US equity only, above a 100M dollar threshold, so the loser leg needs FINRA short interest instead"}
+    - {label: distress language, loser leg versus winner leg, value: "0.412 vs 0.421 per 1k words", comparison: "Mann-Whitney p 0.68; keyword distress measures capital structure, not financial condition"}
+    - {label: mechanism labels in the episode registry, value: definitional, comparison: "A and B are defined by prior market state and market return during, so separating them with those variables is circular and is not evidence"}
+    - {label: non-definitional split inside B, value: "2 of 6 episodes", comparison: "2020-11 vaccine and 2022-11 CPI are the only episodes whose worst day exceeds the whole drawdown; catalyst separates from grind, on two observations"}
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-23, note: "Written after testing loser-leg distress language on 2019 data and finding no separation. Two faults: the keyword measure tracks leverage rather than distress, since tower and mall REITs top the list, and the date has no bear market so the mechanism was not live."}
+    - {date: 2026-08-23, note: "Recorded as unverified. It is a framework for choosing what to test next, not a finding, and it is written down so the next test is chosen by mechanism rather than by data availability."}
+    - {date: 2026-08-24, note: "Corrected. The claim that crowding leaves no observable trace was wrong. It leaves none in COMPANY-filed text, which is what had been searched, but investor-side records are free and long: 13F from 2001, FINRA short interest, ETF creations, price-derived comomentum. Generalising from one corpus to all data was the error, and it is the same shape as the trap where a null on one specification was read as a null on the question."}
+    - {date: 2026-08-24, note: "Also recorded that the registry's own A/B mechanism labels are definitional. Trailing two-year market return separates them perfectly, which is circular, since that variable is part of the label definition at registry.py lines 29 and 32. Any mechanism discrimination has to be demonstrated on statistics the labelling rule does not use."}
+
+- id: clm-13f-legs-no-asymmetry
+  statement: >
+    Institutional co-ownership does not distinguish the momentum legs. Across seven tests on
+    two independent leg constructions, the LOSER leg is more commonly co-owned than the
+    winner leg every time, which reverses the direction a crowded-unwind account predicts;
+    and a permutation holding the size distribution fixed then declines to call that a
+    crowding asymmetry in either direction. The quantity that is large is common to both
+    legs: momentum-leg constituents are co-owned seven to eighteen times more than
+    independent holder selection implies. The result is bounded by what the form reports.
+    Form 13F covers long US equity only, so the loser leg it describes is the set of fallen
+    stocks institutions are LONG rather than the set momentum investors are short, and the
+    leverage that converts crowding into forced selling does not appear on the form at all.
+  one_breath: >
+    Both momentum legs are heavily co-owned and the legs do not differ once size is held
+    fixed.
+  confidence: measured_once
+  from_experiment: exp-036
+  despite_refutation: >
+    The experiment refutes its own hypothesis, which was that the winner leg would show
+    greater co-ownership. What the claim records is the measurement that produced the
+    refutation, and that measurement is well determined: seven of seven tests agree on sign,
+    two leg constructions agree, and the permutation is unambiguous about size.
+  evidence:
+    - {label: tests where the loser leg is more co-owned, value: "7 of 7", comparison: "four dates on 13F-implied-price legs, three on IWV legs"}
+    - {label: absolute co-ownership lift, value: "7 to 18 times", comparison: "against 1.0 under independent selection, in both legs alike"}
+    - {label: permutation probabilities, value: "0.111 to 0.983", comparison: "scattered across the range on both constructions, which is a size effect rather than a crowding one"}
+    - {label: what the form cannot see, value: "shorts and leverage", comparison: "the two things the crowded-unwind mechanism runs on"}
+  reproduce: uv run python scripts/run_exp036.py
+  supersedes: []
+  history:
+    - {date: 2026-08-24, note: "Recorded from exp-036 on eight quarters of 13F holdings spanning 2005-12-31 to 2007-09-30, 8.33 million rows from 84.7 percent of indexed filings, every quarter reproducing a known close to the cent."}
+    - {date: 2026-08-24, note: "The limit was written into the source record before the test ran rather than after it failed, so the negative result is consistent with a stated constraint rather than an excuse constructed for it."}
+
+- id: clm-model-partition
+  statement: >
+    A model given only tickers, weights and sectors partitions a momentum book into groups
+    that co-move more than groups matched on count, size and sector composition, on 44 of 44
+    quarters. Most of that is a finer industry classification: the median group is 87 percent
+    one sector and only 29 of 433 span sectors genuinely. The part that is not industry is
+    real but thin — the cross-sector groups carry a lift of 0.054 over nulls matched on their
+    own sector mix, indistinguishable from what single-sector groups achieve, on 17 groups at
+    a probability of 0.036. The model is finding exposures as well as sub-industries, and the
+    evidence for the former is a fraction of the evidence for the latter.
+  one_breath: >
+    A model can group a book into things that fall together, mostly by finding finer
+    industries and partly by finding real cross-sector exposures.
+  confidence: measured_once
+  from_experiment: exp-038
+  evidence:
+    - {label: quarters beating a size-and-sector matched null, value: "44 of 44", comparison: "median lift +0.0305, median z about 10, permutation below 0.05 throughout"}
+    - {label: median top-sector share of a group, value: "87.1 percent", comparison: "so the bulk of the effect is sub-industry, which this project has now replicated four times"}
+    - {label: cross-sector groups and their lift, value: "29 of 433 groups, +0.0540", comparison: "against +0.0580 for single-sector groups, a difference undetectable at 0.851; the new part of the result and the thinnest"}
+    - {label: post-2023 subsample, value: "12 of 12, median lift +0.0466", comparison: "stronger where contamination is weakest, the opposite of what outcome recall would produce"}
+  reproduce: uv run python scripts/run_exp038.py
+  supersedes: []
+  history:
+    - {date: 2026-08-24, note: "Recorded from exp-038 over 44 quarters between 2014 and 2026, with 4 dropped on the registered coverage gate and 28 skipped by upstream filters."}
+    - {date: 2026-08-24, note: "The claim is deliberately split into the replication and the new part, because the headline number belongs to the replication and reporting it alone would overstate what is new."}
+
+- id: clm-knowledge-boundary
+  statement: >
+    A model's willingness to classify a portfolio falls off at the edge of what it knows.
+    Partition coverage holds between 84 and 100 percent of book weight for every year from
+    2013 to 2024 and drops to 77 percent in 2025, because the model cannot say what a company
+    is exposed to when it does not know the company. This matters more than it first appears:
+    a live monitor always operates at that boundary, since the book anyone cares about is
+    today's book, so a method of this shape degrades precisely where it would be used.
+  one_breath: >
+    The model classifies less of the book as it approaches its knowledge cutoff, which is
+    exactly where a live monitor runs.
+  confidence: measured_once
+  from_experiment: exp-038
+  evidence:
+    - {label: median coverage 2013 to 2024, value: "84 to 100 percent", comparison: "every year in that span"}
+    - {label: median coverage 2025, value: "76.6 percent", comparison: "three quarters, minimum 71 percent, and one further quarter dropped at 58 percent"}
+    - {label: quarters behind the 2025 figure, value: 3, comparison: "thin, and 2026 quarters are consistent with recovery rather than continued decline, so this is a flag rather than a finding"}
+  reproduce: uv run python scripts/run_exp038.py
+  supersedes: []
+  history:
+    - {date: 2026-08-24, note: "Noticed while the run was still going, from the coverage-by-year diagnostic rather than from the headline statistic."}
+    - {date: 2026-08-24, note: "Recorded as measured_once and explicitly thin. The remedy if it holds is a retrieval layer over recent filings for unknown names, and reporting the unclassifiable share to the user as a confidence signal rather than hiding it."}
+
+- id: clm-audit-needs-output
+  statement: >
+    A model shown source code finds faults that live in the code and misses faults that live
+    in the code's encounter with data. Across six real commit states of one parser, five
+    containing a fault found later by hand, it named a fault actually present once in fifteen
+    chances and matched already-fixed faults four times. It reported the maximum permitted
+    five faults in every state including the one where all were fixed, having been told an
+    empty list was valid. The single genuine hit was the only fault of the five deducible from
+    the source alone, a metric computed and never consumed, and the model named it four
+    commits before it was found by hand. The other four required seeing output: a CUSIP that
+    was a fragment of the words DIVERSIFIED REIT, a price bound admitting both Berkshire
+    Hathaway and a misparsed Conoco. The design consequence is that an auditing layer should
+    be shown distributions and outputs, not source.
+  one_breath: >
+    The model audits code it can read and cannot audit an encounter with data it has not
+    seen.
+  confidence: measured_once
+  from_experiment: exp-039
+  despite_refutation: >
+    The experiment refutes its hypothesis, which was that the model would find the fault. The
+    claim records what the refutation measured rather than asserting the hypothesis survived,
+    and that measurement is the useful part: the model missed four faults of one kind and
+    caught the one fault of the other kind, before a human did. The rate is a null; the
+    pattern in which fault it caught is the finding, and it rests on one hit and so is
+    recorded as measured once rather than reproduced.
+  evidence:
+    - {label: faults present and named, value: "1 of 15", comparison: "against a registered target of at least three of five on the narrower question of the fault fixed next, which scored zero"}
+    - {label: matches to faults already fixed, value: 4, comparison: "more than the single match to a present fault, so the matching is loose"}
+    - {label: faults reported per state, value: "5 of a permitted 5, in all six states", comparison: "including the control with everything fixed; the count carries no information"}
+    - {label: the one hit, value: "a validation gate computed but never enforced", comparison: "named four commits before it was found by hand, and the only one of the five visible without running the code"}
+  reproduce: uv run python scripts/run_exp039.py
+  supersedes: []
+  history:
+    - {date: 2026-08-24, note: "Recorded from exp-039. The ground truth is unusual: five faults in one module found and fixed in sequence in a single day, each fix landing in a later commit than the state containing it, so the answers were invisible to the model and too recent to recall."}
+    - {date: 2026-08-24, note: "This does not contradict the earlier finding that a model can referee a registration and name its flaw. It sharpens it. A registration is reasoning written down and therefore readable; a parsing fault is a property of an encounter the model did not witness."}
+
+- id: clm-embeddings-are-sector
+  statement: >
+    WITHDRAWN. This claimed that leak-free embeddings of risk-factor text find industry and
+    nothing beyond it, and that the September 2019 rates exposure is therefore absent from
+    the text rather than hidden by hindsight. An adversarial audit showed the second half is
+    unsupported: the text carrying the exposure was never embedded. Item 7A, where a company
+    states its interest-rate exposure directly, sits on disk for 99 percent of the sample at
+    a median 1,125 tokens — short enough to read whole inside the window that was used — and
+    carries 42 times the density of rate language that Item 1A does. The experiment truncated
+    the wrong section to seven percent of its length while the right one went untouched.
+    Three further defects are recorded separately. The claim is withdrawn rather than amended
+    because its central assertion, that the exposure is absent from disclosure, was never
+    tested.
+  one_breath: >
+    Withdrawn: the section that states interest-rate exposure was never embedded, so the
+    claim that text lacks it was never tested.
+  confidence: refuted
+  from_experiment: exp-040
+  falsification_attempted: >
+    Withdrawn BY a falsification attempt rather than surviving one. Three consultants were
+    commissioned to audit the approach; one reproduced the headline exactly from the stored
+    vectors and then broke it, showing the sign flips under two independent corrections.
+  evidence:
+    - {label: Item 7A availability and length, value: "99 percent of the pool, median 1,125 tokens", comparison: "against Item 1A at 24,646 tokens; the right section fits whole in the 2,048-token window that truncated the wrong one to seven percent"}
+    - {label: rate-language density, value: "42x", comparison: "19.1 rate terms per 10,000 characters in Item 7A against 0.5 in Item 1A, measured independently on a 220-filing sample"}
+    - {label: what the withdrawal does NOT establish, value: "nothing about whether text carries the exposure", comparison: "the question is reopened, not answered in the other direction"}
+  reproduce: null
+  supersedes: []
+  history:
+    - {date: 2026-08-25, note: "Recorded from exp-040 gate 1 as a measured_once finding."}
+    - {date: 2026-08-25, note: "Withdrawn the same day after an adversarial audit. The sentence that mattered — that the exposure is absent from the text rather than hidden by hindsight — asserted something the experiment had not tested, and the chronologically consistent checkpoint made it sound better evidenced than it was."}
+
+- id: clm-selection-confers-exposure
+  statement: >
+    The momentum sort manufactures factor exposure rather than discovering it. On the
+    2019-08-30 book the 12-1 ranking produced a beta spread of 1.46 points between the legs
+    after formation, winners at 0.554 and losers at 2.016, from a universe whose median beta
+    is 1.09. Through the formation window itself the winner leg's beta FELL from 1.103 to
+    0.887 while the loser leg's ROSE from 1.431 to 1.635. That is the opposite of Chen,
+    Singal and Whitelaw, who report winner-decile betas rising 0.167 across the formation
+    year and read apparent excess comovement among winners as a manifestation of momentum.
+    The direction differs; the mechanism is the same and larger here. A selection rule
+    applied to past returns confers a factor loading on the names it selects, and in 2019 it
+    conferred a defensive tilt, which is what the rate bet was.
+    This is why the text programme failed five times. The exposure did not exist in any
+    document because it did not exist until the ranking was computed.
+  one_breath: >
+    The momentum sort manufactures the exposure it is later blamed for; in 2019 it built a
+    1.46-point beta spread.
+  confidence: reproduced
+  from_experiment: null
+  falsification_attempted: >
+    The prediction going in was a RISE in winner-leg beta, following the published result. It
+    fell. That is recorded rather than reframed: the specific published number does not
+    reproduce here. Corporate actions were removed before ranking, 113 names carrying
+    single-day moves above 45 percent in an unadjusted price series, because two of them had
+    previously ranked as the strongest winners in the book. Beta is measured in two separate
+    halves of the formation window so that "rose through formation" is a comparison rather
+    than an assertion, and the universe median is reported alongside so the spread is read
+    against a baseline.
+  evidence:
+    - {label: post-formation beta spread between the legs, value: "1.46 points", comparison: "winners 0.554 against losers 2.016, on a universe median of 1.09"}
+    - {label: winner-leg beta through formation, value: "1.103 to 0.887", comparison: "a fall of 0.215, against the published +0.167 for the winner decile; the direction does not reproduce"}
+    - {label: loser-leg beta through formation, value: "1.431 to 1.635", comparison: "a rise of 0.204, which is the Daniel and Moskowitz shape rather than the Chen, Singal and Whitelaw one"}
+    - {label: corporate actions removed before ranking, value: 113, comparison: "names with a single-day move above 45 percent in the unadjusted series; two had previously ranked as the strongest winners"}
+    - {label: dates tested, value: "1 for the mechanism exhibit, 128 for the placebo test", comparison: "the original demonstration was one book on one date; the placebo bundle put the mechanism against a matched null on every month-end the panel supports"}
+    - {label: "PLACEBO, 2019 cell", value: "100th percentile", comparison: "the real book's conferred spread of 0.3585 against 200 cap-matched placebo books whose MAXIMUM is 0.1592; the claim had no null until 2026-08-25"}
+    - {label: "PLACEBO, regenerated panel", value: "105 of 137 months clear", comparison: "76.6 percent, median month at the 100th percentile; n_eff 36 after a variance inflation of 3.78, block CI [0.635, 0.876] excluding the 5 percent chance rate at every block length tried. Supersedes 104 of 128 (81.2 percent, n_eff 23) after the panel was regenerated under point-in-time index membership."}
+    - {label: "what does NOT confer it", value: "selection on market cap, 0.0579", comparison: "below the random null's median of 0.0855; the negative half the claim never had"}
+    - {label: "what DOES confer it", value: "every return window tested", comparison: "1, 3, 6, 9 and 12-month look-backs all clear their own cap-matched nulls at the 100th percentile, so the 12-1 sort is one point on a continuum rather than a special case"}
+  reproduce: uv run python scripts/verify_beta_rise.py
+  supersedes: []
+  history:
+    - {date: 2026-08-25, note: "Measured after five text experiments failed to recover the 2019 exposure and a literature review suggested the exposure might be conferred by the selection rule rather than disclosed by issuers."}
+    - {date: 2026-08-25, note: "One date. The claim is about a mechanism being visible, not about its generality, and the published direction it was meant to confirm was not reproduced."}
+    - {date: 2026-09-02, note: "REGENERATED under point-in-time index membership and the number moved, from 104 of 128 (81.2 percent) to 105 of 137 (76.6 percent). The claim survives and its effective sample nearly doubles: variance inflation falls 5.66 to 3.78 and n_eff rises 23 to 36, with the block CI [0.635, 0.876] still excluding 0.05 at every length. The move is NOT mainly the membership change. Of nine month-ends whose verdict flipped, only one is a June reconstitution date; the committed panel had gone stale against its own generator, which now resolves sectors for 7,433 of 7,456 tickers where the stored version resolved 5,808. The clean membership-only effect is the conferred-tilt comparison: all 144 months move, mean absolute change in beta spread 0.0074, concentrated in June at 0.032 against roughly 0.004 elsewhere."}
+- id: clm-defensive-is-modal
+  statement: >
+    A defensive tilt is the momentum sort's normal output, not a 2019 anomaly. Across 134
+    month-ends from September 2013 to December 2025, the 12-1 ranking confers a NEGATIVE
+    market-beta spread between its legs in 63 percent of months, mean -0.119 against a
+    standard deviation of 0.467. The tilt is partly, not wholly, set by what the market did
+    during formation: the correlation between formation-window market return and conferred
+    spread is +0.455, so about a fifth of the variation is the mechanical consequence of
+    which names a past-return sort selects after a given market path. The August 2019 book
+    sits at the 20th percentile of defensiveness on a formation window whose market return
+    was flat at -0.002, so it was more defensive than its own formation path accounts for.
+    This is computable from an index holdings file and a factor series, both available the
+    same day, with every loading estimated on a window that closes before the book forms.
+  one_breath: >
+    The sort's defensive tilt looked modal at 63 percent of months; at its effective sample
+    size that is not distinguishable from a coin flip.
+  confidence: unverified
+  from_experiment: null
+  falsification_attempted: >
+    Two ways it could have been trivial were tested. If the conferred spread were merely the
+    formation market path restated, the correlation would approach one; it is +0.455, leaving
+    most of the variation unexplained. And the spread is negative in both market states,
+    averaging -0.302 after down formation windows and -0.091 after up ones, so the sign is
+    not an artefact of the sample being mostly bull markets. A units error inflating every
+    loading a hundredfold was caught and fixed before these numbers were taken.
+  evidence:
+    - {label: months where the sort confers a negative beta spread, value: "63 percent", comparison: "134 month-ends, mean spread -0.119, standard deviation 0.467"}
+    - {label: correlation with the formation-window market return, value: "+0.455", comparison: "about a fifth of the variation; the tilt is not simply the market path restated"}
+    - {label: conferred spread by market state, value: "-0.302 down, -0.091 up", comparison: "negative in both, on 18 and 116 windows respectively"}
+    - {label: the August 2019 book, value: "20th percentile", comparison: "more defensive than its flat formation market return of -0.002 would account for"}
+    - {label: coverage gap, value: "2013-09 onward, with 2017 and 2018 thin at 6 and 4 month-ends", comparison: "the holdings panel is incomplete in those years; no claim is made before September 2013"}
+  reproduce: uv run python scripts/effective_sample.py
+  supersedes: []
+  history:
+    - {date: 2026-08-25, note: "Built as the regime readout that survives regardless of how the naming question resolves, since it needs no model and no text."}
+    - {date: 2026-08-25, note: "Distinct from the single-date beta measurement recorded earlier. That one measured what the legs BECAME after formation, at a spread of 1.46; this measures what the sort CONFERRED during formation. Different estimands and they should not be quoted interchangeably."}
+    - {date: 2026-08-31, note: "CORRECTED AND DEMOTED. An adversarial review of the submission memo asked what effective sample the 63 percent rests on. The conferred-tilt series has lag-1 autocorrelation 0.606 and variance inflation 10.36, giving n_eff of about 13 against a raw 134. The naive t of -2.95 becomes -0.92, and a circular block bootstrap puts the share-negative at [0.418, 0.836] at a 12-month block, including a coin flip at every block length tried. The direction claim is NOT distinguishable from chance and is demoted from measured_once to unverified -- unverified rather than refuted, because a confidence interval containing 0.5 means the measurement cannot support the inference, not that the tilt is absent. What survives is the separate MECHANISM claim, a within-date rather than a time-series comparison: the real book lies outside its own cap-matched placebo null in 104 of 128 months against a 5 percent chance rate, n_eff about 23, block CI [0.664, 0.930] excluding 0.05 at every length. The two had been quoted together as though they stood or fell together. They do not."}
+
+- id: clm-naming-beats-composition
+  statement: >
+    Given a book's holdings and sector labels, a model names groups that co-move more than
+    groups it names from companies of the same sectors and sizes. On the 2019 winner leg the
+    lift is 0.032 at a t of 5.00; on the 2021 leg it is 0.070 at a t of 9.17, measured as mean
+    within-group correlation of market-residualised returns over the quarter FOLLOWING the
+    partition. The partition is stable rather than a sampling artefact, at ensemble agreement
+    of 0.722 and 0.784 across ten runs, and it is not a relabelling of sectors, at 0.617
+    against GICS. The largest group runs to a median of 48 names across four sectors and is
+    named a long-duration growth variant with discount-rate sensitivity in ten of the
+    surviving runs, which is the exposure the 2019 book is independently documented to carry.
+    Three limits are part of the claim. Roughly three fifths of the partition's structure IS
+    sector, so what survives the control is a real minority component rather than the bulk of
+    what the model produces. Two books are not a sample of regimes. And the design cannot
+    separate naming what these companies are from naming what the sort selected, because a
+    null matched on momentum rank is unbuildable when the leg is the top momentum decile.
+  one_breath: >
+    A model reading holdings names groups that co-move beyond what the book's own sector and
+    size composition implies.
+  confidence: reproduced
+  from_experiment: exp-043
+  falsification_attempted: >
+    The predecessor measured this same contrast at a t of 6.79 and could not use it, because
+    it also declared an unmatched random arm and lost to it, with nothing said in advance about
+    which comparison carried the claim. This design names the control before the run and keeps
+    the unmatched arm as a labelled difficulty reference that cannot refute the primary,
+    because dropping the arm that embarrassed the predecessor would be choosing a null after
+    seeing a result.
+    The explanation for the unmatched arm's advantage was registered as a checkable prediction
+    on a model-free within-sector correlation rather than offered afterwards. It confirms on
+    2019 and fails on 2021, where the unmatched arm has no advantage to explain; the sign
+    correspondence between block structure and performance holds on both books but rests on
+    two points and was noticed after the run.
+    A coverage gate written before the predecessor ran, and unchanged here, dropped 7 of 60
+    runs.
+  evidence:
+    - {label: "PLACEBO, peer-network cell", value: "40 of 40 placebo books clear", comparison: "cap-matched legs no sort constructed clear their own sector floor at p<=0.05, and 38 of 40 out-lift the momentum leg; the network structure is a property of large-cap filings, not something momentum selection assembled"}
+    - {label: "where the momentum leg IS extreme", value: "100th percentile on absolute cohesion", comparison: "0.1432 against a placebo median of 0.0761, while its LIFT sits at the 5th; a raised baseline leaves any grouping less to add, which is a second reading of why text experiments on momentum books find little"}
+    - {label: lift over a sector-and-cap-matched control, 2019 book, value: "+0.0316", comparison: "t of +5.00 on eight or more surviving runs per arm"}
+    - {label: lift over the same control, 2021 book, value: "+0.0695", comparison: "t of +9.17; a different regime and a different leg composition"}
+    - {label: ensemble agreement across ten runs, value: "0.722 and 0.784", comparison: "adjusted Rand; a single partition can be quoted because the ten agree"}
+    - {label: share of the partition that is sector, value: "0.617 adjusted Rand against GICS", comparison: "below the 0.9 that would make it a relabelling, but the majority of the structure is still sector"}
+    - {label: what the design cannot separate, value: "companies from selection", comparison: "no null can hold momentum rank fixed when the leg IS the top momentum decile, so the naming seat is validated as useful and not as reading the conferred tilt"}
+    - {label: independent reproduction of the 2019 contrast, value: "+0.0406 then +0.0316", comparison: "t of 6.79 in the inconclusive predecessor and 5.00 here, on different basket draws and different model runs; the predecessor could not use its number because it had declared no priority between two nulls"}
+  reproduce: uv run python scripts/run_exp043.py
+  supersedes: []
+  history:
+    - {date: 2026-08-26, note: "Recorded from exp-043, the successor to an inconclusive predecessor whose fault was declaring two nulls and no priority between them."}
+    - {date: 2026-08-26, note: "This validates the naming seat on the composition question only. It says nothing about whether the model reads the tilt the sort confers, which is a separate channel measured statistically and without a model."}
+
+- id: clm-certificates-bind
+  statement: >
+    A certification layer materially changed a stated detectable effect within a week of
+    existing, which is the evidence that it does work rather than decorate. When the corpus
+    doubled from 1,323 tickers to 2,622, every power certificate on file went stale silently:
+    each still read as valid and still named a plausible effect size. Re-issued on a pool matched
+    to the old one in size and basket, so that ONLY the universe changed, every minimum
+    detectable effect moved. Mean pairwise cosine went from resolving a forty-percent sub-bet at
+    cosine 0.10 to 0.05; a densest-subset scan from 0.40 to 0.25; and the leading eigenvalue from
+    detecting NOTHING anywhere on the tested grid to resolving 0.40. A verdict run on the new
+    corpus under an old certificate would have carried the wrong power statement and no reader
+    could have seen it.
+    The instrument ranking is therefore pool-dependent, not a property of the statistics. On this
+    centred 900-vector pool with a 168 basket, mean pairwise cosine is MORE sensitive than the
+    leading eigenvalue, inverting the earlier ordering. The mechanism is legible: the
+    eigenvalue's null sits at 0.183 with a relative spread of 0.06, so a planted direction must
+    out-compete structure already in the pool, while mean pairwise cosine sits near zero with a
+    relative spread of 2.1.
+  one_breath: >
+    Every detectable effect moved when only the universe changed, so certificates bind rather
+    than decorate.
+  confidence: measured_once
+  from_experiment: null
+  falsification_attempted: >
+    The comparison was built to isolate the universe: same instruments, same basket of 168, same
+    pool size of 900, same grid, same alpha, so nothing varied but the population. The inversion
+    in instrument ranking was checked rather than reported -- null distributions were inspected
+    directly and the eigenvalue's small relative spread against a large baseline explains it
+    mechanistically. It is consistent with trp-47 rather than contradicting it: mean pairwise
+    cosine is pinned only when the centred set IS the measured set, and here a 168 basket is
+    measured inside a centred 900 pool.
+  evidence:
+    - {label: "mean pairwise cosine, MDE at a forty-percent sub-bet", value: "0.10 to 0.05", comparison: "old pool against new; same instrument, same basket, universe doubled"}
+    - {label: "densest-subset scan, same target", value: "0.40 to 0.25", comparison: "same"}
+    - {label: "leading eigenvalue, same target", value: "nothing detectable to 0.40", comparison: "the starkest move: an instrument that certified as blind on one pool resolves on another"}
+    - {label: why the ranking inverts, value: "null baseline 0.183, relative spread 0.06", comparison: "against mean pairwise cosine near zero at relative spread 2.1; a plant must out-compete structure already present"}
+    - {label: what the certificates do NOT cover, value: "vector layer, one vintage, one basket, one section, one measurement layer", comparison: "the 2019 measurement-date pool of Item 7A sections under the 2019 checkpoint at basket 168; non-embedding representations need their own, any claim starting at text needs a text-layer plant, and a verdict statistic measured on RETURNS needs a returns-layer plant -- exp-044 was registered citing these certificates and the citation was wrong, which is the scope line earning its keep on the first experiment to test it"}
+  reproduce: uv run python scripts/reissue_certificates.py
+  supersedes: []
+  history:
+    - {date: 2026-08-25, note: "Recorded on the certification layer's first real use. The universe-hash rule was added on the same day and is justified empirically by this result rather than by argument."}
+    - {date: 2026-08-25, note: "Consequence for design: a registration must not hard-code a statistic by reputation. The verdict-bearing statistic for each arm is the one with the best certified MDE at the registered target on THAT arm's pool, chosen before results exist."}
+
+
+- id: clm-harvest-schema-honesty
+  statement: >
+    The dual-harvest reader is mechanically sound, and two rounds of schema repair moved it from
+    agreeing on a default to agreeing on the text. Across 120 records per round, every record
+    returned a valid schema with all eight anchored themes, and the mechanical quote gate passed on
+    99.3 percent of opus's stated exposures and 98.2 percent of sonnet's.
+    The first schema had four direction levels and no way to say `exposed, direction not stated`.
+    On sixty passages read by both tiers, 28 of 73 disagreements cited the IDENTICAL quote, and on
+    fx_dollar -- where disclosure is almost always two-sided -- nine of twelve did. The schema was
+    guessing, not the reader. It also collapsed an explicit denial into silence, which the
+    firm-by-quarter panel's three-state missingness cannot tolerate.
+    The repair exposed a second defect underneath it. `hurt_by_rising` was serving as a generic
+    `this is bad for us` label, so passages describing harm from a FALL -- `a substantial or
+    extended decline in metals prices would have a material adverse effect` -- were signed
+    backwards. Filings describe risk as harm from a fall far more often than harm from a rise, so
+    this inverted a whole class of disclosure, concentrated in energy_commodities. The
+    direction-unstated label could not fix it: it halved the hurt_by_rising denominator while the
+    flagged count barely moved, removing the unsupported signs and leaving the inverted ones.
+    The third schema states that direction is about which way the DRIVER moves, and beats the first
+    on overall agreement across a strictly finer partition -- six labels give more ways to disagree,
+    and agreement still rose.
+    What the repair bought is visible in one comparison. Under the first schema, when both tiers saw
+    an exposure, opus signed it 94.2 percent of the time and sonnet 83.9 percent: two readers
+    agreeing because the schema left them no escape. Under the third, direction agreement is
+    essentially restored at 0.810 while the signed share is 0.393 and 0.310. Most of the original
+    signed exposure was manufactured by the instrument, and what survives is the part a feature can
+    honestly use.
+  one_breath: >
+    The reader now says `direction not stated` when that is true, and signs less than half as
+    often as it did.
+  confidence: reproduced
+  from_experiment: null
+  evidence:
+    - {label: records returning a valid schema, value: "120 of 120 per round", comparison: "all eight anchored themes present, both tiers, all three schema versions"}
+    - {label: stated exposures carrying a verbatim source quote, value: "99.3% opus, 98.2% sonnet", comparison: "checked mechanically against the filing text on every claim"}
+    - {label: overall direction agreement, value: "0.840 -> 0.772 -> 0.846", comparison: "v3 beats v1 on a six-label partition against v1's four"}
+    - {label: agreement that an exposure exists at all, value: "0.897 -> 0.890 -> 0.917", comparison: "the question both schemas can express; detection was never the problem"}
+    - {label: share signed where both tiers saw an exposure, value: "0.942/0.839 -> 0.393/0.310", comparison: "opus/sonnet; the collapse is the finding, not the agreement number"}
+    - {label: disagreements citing the identical quote, value: "28 (38%) -> 25 (24%) -> 11 (16%)", comparison: "same evidence, different label -- the schema guessing rather than the reader"}
+    - {label: sign-inversion screen, upper bound, value: "0.089 -> 0.146 -> 0.103", comparison: "opus; absolute flags 17 -> 14 -> 6, and about three in five flags are true on inspection"}
+    - {label: weakest remaining theme, value: "credit_refinancing at 0.684", comparison: "only 3 of its 18 disagreements are same-quote, so this is one label spanning three exposures rather than a schema fault"}
+    - {label: ai_compute coverage on DESIGN tier, value: "near zero", comparison: "one of eight anchored themes is close to inert on pre-2023 text"}
+    - {label: cost of the 47,000-passage run via Batch, value: "$4,944 opus, $1,592 sonnet", comparison: "sonnet 3.1x cheaper and 1.9x slower, at 2,941 output tokens against 1,231"}
+  reproduce: uv run python scripts/analyse_d5_agreement.py harvest-v3
+  supersedes: []
+  history:
+    - {date: 2026-08-26, note: "First pilot reported 22 of 60 sonnet passages failing. That was a 4,000-token ceiling binding on the more verbose tier, not a capability gap -- {{trp-64}} -- and would have entered the tier decision as a 37 percent failure rate. Fixed before any number left the run."}
+    - {date: 2026-08-26, note: "Three schema versions, three rounds of sixty passages on two tiers. Each round found a defect that would otherwise have propagated to 47,000 passages, which is what a pilot is for. Reproduced rather than measured_once because the same passages were re-read under each schema and the arc is monotone on every axis except the one the second round was expected to disturb."}
+
+- id: clm-checks-cut-both-ways
+  statement: >
+    The project's own validation machinery blocked an overclaimed NEGATIVE, not only
+    overclaimed positives. The text-retrieval write-up was first committed with a verdict of
+    refuted, on the strength of a re-ranking demonstration where text moved the right
+    precedent down in three of three queries. The validator rejected it, because a refuted
+    verdict in this repo requires a power statement and a planted-effect recovery, and three
+    paired queries with a sign-test floor of p=0.125 support neither. The registration had
+    said in its own words that this part was a demonstration and explicitly not a verdict;
+    the rule caught the author disregarding a constraint the author had written. The verdict
+    became supported for the powered half and the use question was recorded as open.
+    This matters beyond the entry. Every earlier application of the same machinery deflated a
+    result the project wanted: seven instrument bugs, a withdrawn subset claim, a retracted
+    encoder finding. A reader entitled to ask whether the discipline is real rather than
+    decorative can now be answered with a case where it cost a clean, publishable-sounding
+    negative.
+  one_breath: >
+    The validator refused a refuted verdict that three queries could not support, so the
+    checks demonstrably run in both directions.
+  confidence: measured_once
+  from_experiment: exp-066
+  falsification_attempted: >
+    The alternative reading is that the rejection was pedantic and the negative was sound.
+    It was not: the sign-test floor at three paired observations is 0.125, so the design
+    could not have reached significance in the unfavourable direction even at a clean sweep,
+    which is the definition of a claim the data cannot carry.
+  evidence:
+    - {label: verdict first committed, value: refuted, comparison: "on 3 of 3 queries moving in the unfavourable direction"}
+    - {label: what the validator demanded, value: "power statement and planted effect", comparison: "neither exists for a three-query re-ranking test"}
+    - {label: arithmetic floor at that sample, value: "p=0.125", comparison: "one-sided sign test on 3 paired observations; 0.05 is unreachable"}
+    - {label: verdict after correction, value: supported, comparison: "for the powered half; the use question recorded as open"}
+  reproduce: "uv run python build/validate.py"
+  supersedes: []
+  history:
+    - {date: 2026-08-30, note: "Recorded because the audience for this work has stated that unexamined model output is the risk they are hiring against. A case where the checks stopped the agent from over-claiming in the pessimistic direction is the evidence that they are symmetric."}
+
+- id: clm-text-boundary
+  statement: >
+    Text's information about this book is real, orthogonal to the numeric state, and useless
+    at every seat tested. Real: a month leaves a recoverable signature in what its
+    constituents filed, recognisable at 0.283 top-1 across 60 months against a chance rate of
+    0.017, holding at 0.100 under a calendar control whose own placebo has been run.
+    Orthogonal: text and numeric pair distances share 5.8 percent of their variance across
+    1,770 month pairs, so it is not a restatement of the price state. Useless so far: across
+    seven measurements the text layer has been weaker than prices, additive of nothing, or
+    actively unhelpful at every seat it has been offered. The seventh is the only one on a
+    task text had never been tested at -- resemblance rather than measurement -- and it is the
+    one that established the precondition and the enabling condition before testing the use,
+    which is why its remaining gap is a data gap and not an instrument excuse.
+    The two arms differ in mechanism, and the evidence for that subtracts nothing: item-type
+    errors land on the same calendar month in another year 47.7 percent of the time against
+    6.8 by chance, while narrative errors do so 9.3 percent of the time, which is chance. The
+    item MIX repeats annually; the narrative CONTENT of each earnings season does not.
+  one_breath: >
+    Text carries a real, orthogonal signature of a month and has helped at none of the seven
+    seats tested.
+  confidence: measured_once
+  from_experiment: exp-066
+  falsification_attempted: >
+    The obvious rescue was refused rather than tried. The re-ranking blend weight was fixed
+    at half and half before the run; sweeping it after seeing that text hurt would very
+    likely have produced a weight at which text appeared to help, and a weight found that way
+    is the failure mode the protocol exists to prevent. No additional queries were added
+    either: only three episode queries have a same-mechanism precedent inside the 8-K era,
+    and all three share 2019-09 among their targets. One favourable cell -- text alone ranked
+    the right precedent first for 2021-03 -- is left unremarked, because one query proves
+    nothing and mining it would spend the credibility the refusal just earned.
+  evidence:
+    - {label: month recognition, narrative arm, value: "0.283 top-1 on 60 months", comparison: "chance 0.017; 0.100 under the calendar control, permuted p95 0.050"}
+    - {label: month recognition, item arm, value: "0.249 top-1", comparison: "0.072 under the calendar control; no model, leak-free by construction"}
+    - {label: orthogonality to the numeric key, value: "5.8 percent shared variance", comparison: "r=+0.241 over 1,770 pairs from 60 months; below the 0.50 pre-committed redundancy gate"}
+    - {label: mechanism split, subtraction-free, value: "47.7 vs 9.3 percent", comparison: "share of errors landing on the same calendar month in another year, against 6.8 percent chance"}
+    - {label: the use test, value: "0 up, 3 down", comparison: "target ranks 5, 2, 2 became 8, 6, 6 at a pre-fixed 50/50 blend; sign-test floor p=0.125, so a direction and not an answer"}
+    - {label: seats tested, value: 7, comparison: "six measurement families refuted earlier; the seventh is retrieval, and the only one where the precondition was established first"}
+  reproduce: "uv run python scripts/text_fingerprint.py --gate"
+  supersedes: []
+  history:
+    - {date: 2026-08-30, note: "The closing sentence of the text programme. It ends on a constructive result and an honestly open question rather than on a rescue or a funeral, and the open question is bounded by corpus depth: the current-events corpus begins in 2018."}
+
+- id: clm-positioning-describes
+  statement: >
+    The conferred-exposure measurement describes what the momentum book is betting on and does
+    not predict what happens to it. Across 98 design-tier months, trailing volatility alone
+    explains 0.058 of an indicator for the worst quintile of next-month outcomes; adding the
+    conferred beta spread takes that to 0.072. The partial correlation between the tilt and
+    that indicator, controlling for volatility, is -0.119 with p=0.244, and the tilt series has
+    an effective sample of about 13 against a raw 98, so the true standard error is larger
+    still. The same pattern has already been measured on a different positioning statistic: the
+    published crowding measure that replicates cleanly out of sample stops paying at zero basis
+    points, while the identical rule driven by trailing volatility survives 150.
+    Two positioning measures, two independent routes, one answer: positioning describes the
+    bet, volatility predicts the damage. That is not a failure of the measurement, it is a
+    statement about what kind of object it is, and it means the system is two products rather
+    than one -- a description of the exposure a reader may or may not have a view on, and a
+    conditional loss distribution that comes from somewhere else.
+  one_breath: >
+    The positioning measure says what the book is betting on; it adds nothing to trailing
+    volatility for predicting the loss.
+  confidence: measured_once
+  from_experiment: null
+  falsification_attempted: >
+    The test was run in the direction that would have been favourable: if the tilt carried
+    tail information beyond volatility, the incremental R-squared and the partial correlation
+    would both have shown it, and the partial correlation would have been positive because a
+    more defensive book should be more exposed to a rebound. The point estimate is negative
+    and insignificant. The check was also run against an alternative already in the record
+    rather than in isolation: the crowding measure's zero-basis-point breakeven is an
+    independent route to the same conclusion on a different statistic.
+  evidence:
+    - {label: variance explained by trailing volatility alone, value: "0.058", comparison: "indicator for the worst quintile of next-month outcomes, 98 design-tier months"}
+    - {label: variance explained by volatility plus the conferred tilt, value: "0.072", comparison: "an increment of 0.013 on 98 months, with the tilt's effective sample about 13"}
+    - {label: partial correlation of the tilt given volatility, value: "-0.119", comparison: "p=0.244; the sign is opposite to the one a tail story predicts"}
+    - {label: the independent route, value: "0 basis points against 150", comparison: "breakeven trading cost for the published crowding measure against the same rule driven by trailing volatility"}
+  reproduce: uv run python scripts/effective_sample.py
+  supersedes: []
+  history:
+    - {date: 2026-08-31, note: "Run because an adversarial review of the submission memo asked why a memo whose finding is a positioning measure has an actionable number conditioned on realised volatility, and observed that nothing in the document reconciled the two. The answer is that they do not need reconciling because they are different products, and the memo now says so rather than leaving the seam for a reader to find."}

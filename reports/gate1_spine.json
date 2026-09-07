@@ -1,0 +1,78 @@
+{
+  "sanity": "PASS",
+  "sharpe_multiple": 2.1129450436177644,
+  "published_form": {
+    "unscaled": {
+      "name": "WML unscaled",
+      "n_days": 25172,
+      "ann_return": 0.06433948832035595,
+      "ann_vol": 0.12433649084177724,
+      "sharpe": 0.517462636147825,
+      "monthly_skew": -0.9312965680592833,
+      "monthly_kurtosis": 8.114766868151998,
+      "worst_month": -0.30199937490716844,
+      "max_drawdown": -0.7074424230316634
+    },
+    "constant_vol": {
+      "name": "WML constant-vol (BSC)",
+      "n_days": 25172,
+      "ann_return": 0.14758358965363919,
+      "ann_vol": 0.13498044988844976,
+      "sharpe": 1.0933701123059294,
+      "monthly_skew": 0.11402027449186942,
+      "monthly_kurtosis": 1.5410207376952405,
+      "worst_month": -0.23615380165158706,
+      "max_drawdown": -0.4690087087823871
+    }
+  },
+  "baseline_family": [
+    {
+      "name": "constant-vol (real-time)",
+      "n_days": 22652,
+      "ann_return": 0.1409354153198497,
+      "ann_vol": 0.14073815953687271,
+      "sharpe": 1.0014015799526306,
+      "monthly_skew": -0.06893606384182772,
+      "monthly_kurtosis": 2.210503971339561,
+      "worst_month": -0.320343365509524,
+      "max_drawdown": -0.5949248206676392
+    },
+    {
+      "name": "dynamic mean-variance (DM)",
+      "n_days": 22400,
+      "ann_return": 0.18919988630574694,
+      "ann_vol": 0.1559912609042874,
+      "sharpe": 1.2128877297929888,
+      "monthly_skew": 1.398850734716589,
+      "monthly_kurtosis": 7.081020425316311,
+      "worst_month": -0.21635469612303648,
+      "max_drawdown": -0.499377597485548
+    },
+    {
+      "name": "skewness-adjusted (Bianchi)",
+      "n_days": 22400,
+      "ann_return": 0.15773382509441466,
+      "ann_vol": 0.17219689756745202,
+      "sharpe": 0.9160085188679317,
+      "monthly_skew": 1.0890727332712278,
+      "monthly_kurtosis": 4.614528817070613,
+      "worst_month": -0.22665986944200178,
+      "max_drawdown": -0.6836760225607373
+    },
+    {
+      "name": "WML unscaled",
+      "n_days": 22652,
+      "ann_return": 0.06024103831891224,
+      "ann_vol": 0.11709299160097993,
+      "sharpe": 0.514471767227511,
+      "monthly_skew": -0.867295543185072,
+      "monthly_kurtosis": 8.462662577746299,
+      "worst_month": -0.30199937490716844,
+      "max_drawdown": -0.6323261632640235
+    }
+  ],
+  "family_span": [
+    "1935-09-27",
+    "2022-12-30"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "n_control": 120,
+  "n_positive": 120,
+  "n_negative": 120,
+  "control_unplanted_reread": {
+    "flag_rate": 0.016666666666666666,
+    "keyword_flag_rate": 0.4666666666666667,
+    "note": "every host was DECLINED on the committed run, so a fresh read that flags is run-to-run variance; this is the baseline the plant lift is measured against and the reliability number the design defines"
+  },
+  "model": {
+    "recall_on_planted_conditions": 0.19166666666666668,
+    "span_localisation": 0.175,
+    "specificity_on_planted_boilerplate": 0.975
+  },
+  "keyword": {
+    "recall_on_planted_conditions": 0.5416666666666666,
+    "span_localisation": null,
+    "specificity_on_planted_boilerplate": 0.625
+  },
+  "leakage_split": {
+    "n_pre_cutoff": 91,
+    "n_post_release": 19,
+    "recall_pre_cutoff": 0.16483516483516483,
+    "recall_post_release": 0.3157894736842105
+  }
+}

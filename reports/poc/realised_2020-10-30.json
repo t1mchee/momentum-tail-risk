@@ -1,0 +1,104 @@
+{
+  "what": "realised 10-trading-day return of the reconstructed book from the page's formation",
+  "outside_the_information_set": "This file is the answer key to the 2020-10-30 page. None of it was available to a reader standing on that date, and it is not an input to any forecast in this package.",
+  "anchor_session": "2020-10-30",
+  "formation": "2020-10-31",
+  "horizon_trading_days": 10,
+  "window": {
+    "start": "2020-11-02",
+    "end": "2020-11-13",
+    "sessions": 10
+  },
+  "formation_carried_by_every_session_in_window": "2020-10-31",
+  "realised_return": -0.14578936557250055,
+  "daily_path": [
+    {
+      "date": "2020-11-02",
+      "r": -0.02977849161620984
+    },
+    {
+      "date": "2020-11-03",
+      "r": 0.00879835132684179
+    },
+    {
+      "date": "2020-11-04",
+      "r": 0.0582762800726155
+    },
+    {
+      "date": "2020-11-05",
+      "r": 0.013758926055056173
+    },
+    {
+      "date": "2020-11-06",
+      "r": 0.019477532472283152
+    },
+    {
+      "date": "2020-11-09",
+      "r": -0.2021117576197973
+    },
+    {
+      "date": "2020-11-10",
+      "r": -0.03336929670700593
+    },
+    {
+      "date": "2020-11-11",
+      "r": 0.05069862297775729
+    },
+    {
+      "date": "2020-11-12",
+      "r": 0.028600182021166307
+    },
+    {
+      "date": "2020-11-13",
+      "r": -0.04269376237116552
+    }
+  ],
+  "worst_session": {
+    "date": "2020-11-09",
+    "book": -0.2021117576197973,
+    "winner_leg": -0.04183708423657229,
+    "loser_leg": 0.160274673383225,
+    "n_winner": 262,
+    "n_loser": 263,
+    "note": "The loss is the short half. The page's 'what would change this reading' named this mechanism before the fact: a vaccine or treatment readout resolves the shared condition and the loser leg reprices upward together."
+  },
+  "against_the_lines_the_page_printed": {
+    "var_scaled": {
+      "level": -0.1928610960987851,
+      "breached": false
+    },
+    "var_uncond": {
+      "level": -0.0757313590618727,
+      "breached": true
+    },
+    "es_scaled": {
+      "level": -0.3193146823588078,
+      "note": "the expected shortfall beyond the scaled VaR, for scale only"
+    },
+    "reading": "The realised loss is worse than the unconditional 5% VaR and inside the volatility-scaled one. One formation is one observation and settles nothing about either line; the coverage tests in exp-089 are the evidence."
+  },
+  "french_reference": {
+    "series": "Ken French daily momentum (Mom), the published factor",
+    "days": 10,
+    "compounded_over_the_same_window": -0.09562655776248818,
+    "on_the_worst_session": -0.1439,
+    "note": "The reconstructed book falls further than the published factor on both measures. It is value-weighted top and bottom deciles of the Russell 3000; French's is built on 30/70 breakpoints over a broader universe, and is the less concentrated portfolio."
+  },
+  "provenance": {
+    "script": "scripts/poc_e10_realised.py",
+    "reproduce": "uv run python scripts/poc_e10_realised.py",
+    "inputs": [
+      "data/processed/book_returns.parquet",
+      "reports/poc/e5_book_tail.csv",
+      "Ken French daily momentum via unstructured_momentum.data.french"
+    ],
+    "agrees_with_stored_target": {
+      "file": "reports/poc/e5_book_tail.csv",
+      "column": "realised",
+      "value": -0.1457893655725005,
+      "recomputed_independently": -0.14578936557250055
+    },
+    "experiment": "exp-089",
+    "written_at": "2026-09-07T10:26:21.787289+00:00"
+  }
+}

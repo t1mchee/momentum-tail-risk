@@ -1,0 +1,836 @@
+{
+ "date": "2016-08-31",
+ "kind": "calm",
+ "built": true,
+ "reasons": [],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 126,
+  "start": "2016-03-03",
+  "end": "2016-08-31"
+ },
+ "constant_series_dropped": {
+  "n": 2,
+  "tickers": [
+   "GRB",
+   "UDF"
+  ]
+ },
+ "market_check": {
+  "series": "capitalisation-weighted point-in-time IWV universe",
+  "corr_with_fama_french_mkt_rf": 0.9979,
+  "ff_days_available": 126
+ },
+ "book": {
+  "winners_registered": 273,
+  "losers_registered": 273,
+  "winners_used": 273,
+  "losers_used": 272,
+  "universe": 2774,
+  "caps_snapshot": "2016-08-31"
+ },
+ "random_books": {
+  "n": 200,
+  "cells_short_total": 0
+ },
+ "components": [
+  {
+   "k": 1,
+   "VS_k": 0.3444086932229326,
+   "VS_k_placebo_q95": 0.38131985382886574,
+   "VS_k_percentile_vs_random": 0.9,
+   "above_noise": false,
+   "g_k": 0.021781054230679615,
+   "sigma_k": 0.25397530148897957,
+   "set_size": 137,
+   "bridge": {
+    "instrument": "mega_cap_pair",
+    "r2": 0.651834356513163,
+    "b_k": 31.97769445381002,
+    "beta_H": -0.671125867934788,
+    "source": "panel: ten largest positions equally weighted, minus the equal-weighted universe",
+    "top5": [
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.6518
+     },
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.5118
+     },
+     {
+      "instrument": "sector_energy",
+      "r2": 0.485
+     },
+     {
+      "instrument": "sector_industrials",
+      "r2": 0.403
+     },
+     {
+      "instrument": "sector_materials",
+      "r2": 0.308
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "VS_k": 0.0005956056986295295,
+   "VS_k_placebo_q95": 0.07968563578963074,
+   "VS_k_percentile_vs_random": 0.13,
+   "above_noise": false,
+   "g_k": 0.0011797041222399497,
+   "sigma_k": 0.21749785703916227,
+   "set_size": 137,
+   "bridge": {
+    "instrument": "sector_energy",
+    "r2": 0.44665404765532124,
+    "b_k": 6.792684501699416,
+    "beta_H": 2.331751795168527,
+    "source": "panel: equally-weighted Energy members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_energy",
+      "r2": 0.4467
+     },
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.2796
+     },
+     {
+      "instrument": "sector_materials",
+      "r2": 0.2428
+     },
+     {
+      "instrument": "wti",
+      "r2": 0.1596
+     },
+     {
+      "instrument": "dollar",
+      "r2": 0.1107
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "VS_k": 0.00851963076180075,
+   "VS_k_placebo_q95": 0.03047996150317209,
+   "VS_k_percentile_vs_random": 0.62,
+   "above_noise": false,
+   "g_k": 0.004837170608687066,
+   "sigma_k": 0.1576540745934665,
+   "set_size": 137,
+   "bridge": {
+    "instrument": "sector_health_care",
+    "r2": 0.13720695770765834,
+    "b_k": -5.008438155722826,
+    "beta_H": 1.592055531766867,
+    "source": "panel: equally-weighted Health Care members of the universe (stands in for the sector ETF)",
+    "top5": [
+     {
+      "instrument": "sector_health_care",
+      "r2": 0.1372
+     },
+     {
+      "instrument": "sector_utilities",
+      "r2": 0.0516
+     },
+     {
+      "instrument": "sector_consumer_staples",
+      "r2": 0.0396
+     },
+     {
+      "instrument": "sector_information_technology",
+      "r2": 0.0282
+     },
+     {
+      "instrument": "mega_cap_pair",
+      "r2": 0.0192
+     }
+    ]
+   }
+  }
+ ],
+ "decomposition": {
+  "shrinkage": 0.5353440559130065,
+  "condition_number": 21487.58749934379,
+  "w_norm_l2": 0.33777464966240484,
+  "n_names": 545,
+  "w_norm_l2_convention": "spec node `sort`: value-weighted within each leg, dollar-neutral across them, from RAW price * quantity",
+  "w_norm_l2_exp089_joint_convention": 0.1962719570542684,
+  "leg_concentration": {
+   "winner": {
+    "n": 273,
+    "top1_share": 0.2324451979462234,
+    "effective_n": 15.782588965291009,
+    "largest": "AMZN"
+   },
+   "loser": {
+    "n": 272,
+    "top1_share": 0.17382451748475203,
+    "effective_n": 19.711909184823337,
+    "largest": "NKE"
+   }
+  }
+ },
+ "news": {
+  "file": null,
+  "titles_total": 0,
+  "titles_kept": 0,
+  "risk_statements_rule_b": 0,
+  "risk_statements_rule_a_exp085": 0
+ },
+ "filings": {
+  "tickers_in_any_component_set": 1567,
+  "tickers_with_item_1a_as_of_date": 40,
+  "tickers_used": 11,
+  "sentences_total": 840,
+  "risk_statements_rule_b": 373,
+  "risk_statements_rule_a_exp085": 8,
+  "excerpt_chars": 18000
+ },
+ "population": {
+  "n": 373,
+  "news": 0,
+  "filing": 373
+ },
+ "clustering_variants": {
+  "umap10_min_samples_5": {
+   "variant": "umap10_min_samples_5",
+   "min_samples": 5,
+   "reducer": "umap n_components=10 metric=cosine seed=0",
+   "clusters": {
+    "n": 6,
+    "noise_share": 0.43699731903485256,
+    "largest_cluster_share": 0.1260053619302949,
+    "degenerate": false,
+    "d_star": 1.000781774520874,
+    "d_star_c": 1.9750224351882935,
+    "min_cluster_size": 25,
+    "n_boilerplate_excluded": 0,
+    "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+    "boilerplate_vocabulary": [
+     "ability",
+     "additional",
+     "adverse",
+     "adversely",
+     "affect",
+     "affected",
+     "affecting",
+     "business",
+     "businesses",
+     "cash",
+     "certain",
+     "companies",
+     "company",
+     "condition",
+     "conditions",
+     "could",
+     "customer",
+     "customers",
+     "finances",
+     "financial",
+     "flows",
+     "future",
+     "harm",
+     "harmed",
+     "impact",
+     "impacted",
+     "including",
+     "material",
+     "materially",
+     "may",
+     "operate",
+     "operating",
+     "operations",
+     "product",
+     "products",
+     "result",
+     "results",
+     "revenue",
+     "revenues",
+     "risk",
+     "risks",
+     "service",
+     "services",
+     "significant",
+     "significantly"
+    ],
+    "detail": [
+     {
+      "id": 0,
+      "size": 39,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "regulations",
+       "operations",
+       "gaming",
+       "subject",
+       "licenses",
+       "business"
+      ]
+     },
+     {
+      "id": 1,
+      "size": 41,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "steel",
+       "foreign",
+       "materials",
+       "products",
+       "raw",
+       "demand"
+      ]
+     },
+     {
+      "id": 2,
+      "size": 28,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "debt",
+       "credit",
+       "financing",
+       "capital",
+       "meet",
+       "dividends"
+      ]
+     },
+     {
+      "id": 3,
+      "size": 26,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "gas",
+       "natural",
+       "actual",
+       "risk",
+       "future",
+       "prices"
+      ]
+     },
+     {
+      "id": 4,
+      "size": 47,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "products",
+       "consumer",
+       "sales",
+       "adverse",
+       "product",
+       "business"
+      ]
+     },
+     {
+      "id": 5,
+      "size": 29,
+      "news_members": 0,
+      "company_specific": true,
+      "boilerplate_excluded": false,
+      "label": [
+       "health",
+       "healthcare",
+       "federal",
+       "reimbursement",
+       "medicaid",
+       "care"
+      ]
+     }
+    ]
+   },
+   "degenerate_clustering": false,
+   "degeneracy_rule": "one cluster holds more than 90% of the clustered population (excess-of-mass returning the root of the condensed tree); the noise share is recorded beside it",
+   "largest_cluster_share": 0.1260053619302949,
+   "themes": [
+    {
+     "k": 1,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "regulations",
+      "operations",
+      "gaming",
+      "subject",
+      "licenses",
+      "business"
+     ],
+     "Q_e": 0.0,
+     "P_e": 0.0,
+     "E_e": 0.0,
+     "placebo_q95_of_random_max": 0.0,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 137,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 4,
+      "label": [
+       "products",
+       "consumer",
+       "sales",
+       "adverse",
+       "product",
+       "business"
+      ],
+      "E_e": 0.0
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 2,
+     "statistic_is_informative": false,
+     "quotes": [
+      "We are subject to extensive regulation and the cost of compliance or failure to comply with such regulations that govern our operations in any jurisdiction where we operate may have a material adverse effect on our business, financial condition, results of operations and cash flows."
+     ]
+    },
+    {
+     "k": 2,
+     "above_noise": false,
+     "theme_cluster": 0,
+     "theme_label": [
+      "regulations",
+      "operations",
+      "gaming",
+      "subject",
+      "licenses",
+      "business"
+     ],
+     "Q_e": 0.0,
+     "P_e": 4.404044858853353e-05,
+     "E_e": -4.404044858853353e-05,
+     "placebo_q95_of_random_max": -4.404044858853353e-05,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 137,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 4,
+      "label": [
+       "products",
+       "consumer",
+       "sales",
+       "adverse",
+       "product",
+       "business"
+      ],
+      "E_e": -4.404044858853353e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 2,
+     "statistic_is_informative": false,
+     "quotes": [
+      "We are subject to extensive regulation and the cost of compliance or failure to comply with such regulations that govern our operations in any jurisdiction where we operate may have a material adverse effect on our business, financial condition, results of operations and cash flows."
+     ]
+    },
+    {
+     "k": 3,
+     "above_noise": false,
+     "theme_cluster": 5,
+     "theme_label": [
+      "health",
+      "healthcare",
+      "federal",
+      "reimbursement",
+      "medicaid",
+      "care"
+     ],
+     "Q_e": 0.0,
+     "P_e": 2.669776920460808e-05,
+     "E_e": -2.669776920460808e-05,
+     "placebo_q95_of_random_max": 0.0031845964330590886,
+     "risen": false,
+     "news_members": 0,
+     "company_specific": true,
+     "filing_only": true,
+     "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+     "set_coverage": {
+      "set_size": 137,
+      "set_companies_with_item_1a": 0,
+      "set_coverage_share": 0.0,
+      "share_of_set_absolute_loading_covered": 0.0
+     },
+     "runner_up": {
+      "cluster": 1,
+      "label": [
+       "steel",
+       "foreign",
+       "materials",
+       "products",
+       "raw",
+       "demand"
+      ],
+      "E_e": -3.9933509098898386e-05
+     },
+     "expected_label_terms": null,
+     "label_matches_expected": null,
+     "label_generic_term_count": 0,
+     "statistic_is_informative": false,
+     "quotes": [
+      "It is possible that we may need to provide discounts or rebates to such plans in order to maintain favorable formulary access for our products for this patient population, which could have an adverse impact on our sales and results of operations."
+     ]
+    }
+   ],
+   "named_component": null,
+   "any_theme_risen": false,
+   "risen_on_component_above_noise": false
+  },
+  "registered": {
+   "variant": "registered",
+   "min_samples": null,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [registered] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  },
+  "min_samples_5": {
+   "variant": "min_samples_5",
+   "min_samples": 5,
+   "reducer": "none (raw encoder space)",
+   "clusters": {
+    "n": 0,
+    "noise_share": 1.0,
+    "min_cluster_size": 25
+   },
+   "reason": "HDBSCAN [min_samples_5] found no cluster at a minimum cluster size of 25 (noise share 1.000)"
+  }
+ },
+ "primary_variant": "umap10_min_samples_5",
+ "clusters": {
+  "n": 6,
+  "noise_share": 0.43699731903485256,
+  "largest_cluster_share": 0.1260053619302949,
+  "degenerate": false,
+  "d_star": 1.000781774520874,
+  "d_star_c": 1.9750224351882935,
+  "min_cluster_size": 25,
+  "n_boilerplate_excluded": 0,
+  "boilerplate_rule": "a cluster is boilerplate, and cannot be a theme, when at least 5 of its 6 top c-TF-IDF terms are in the declared generic risk-factor vocabulary",
+  "boilerplate_vocabulary": [
+   "ability",
+   "additional",
+   "adverse",
+   "adversely",
+   "affect",
+   "affected",
+   "affecting",
+   "business",
+   "businesses",
+   "cash",
+   "certain",
+   "companies",
+   "company",
+   "condition",
+   "conditions",
+   "could",
+   "customer",
+   "customers",
+   "finances",
+   "financial",
+   "flows",
+   "future",
+   "harm",
+   "harmed",
+   "impact",
+   "impacted",
+   "including",
+   "material",
+   "materially",
+   "may",
+   "operate",
+   "operating",
+   "operations",
+   "product",
+   "products",
+   "result",
+   "results",
+   "revenue",
+   "revenues",
+   "risk",
+   "risks",
+   "service",
+   "services",
+   "significant",
+   "significantly"
+  ],
+  "detail": [
+   {
+    "id": 0,
+    "size": 39,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "regulations",
+     "operations",
+     "gaming",
+     "subject",
+     "licenses",
+     "business"
+    ]
+   },
+   {
+    "id": 1,
+    "size": 41,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "steel",
+     "foreign",
+     "materials",
+     "products",
+     "raw",
+     "demand"
+    ]
+   },
+   {
+    "id": 2,
+    "size": 28,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "debt",
+     "credit",
+     "financing",
+     "capital",
+     "meet",
+     "dividends"
+    ]
+   },
+   {
+    "id": 3,
+    "size": 26,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "gas",
+     "natural",
+     "actual",
+     "risk",
+     "future",
+     "prices"
+    ]
+   },
+   {
+    "id": 4,
+    "size": 47,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "products",
+     "consumer",
+     "sales",
+     "adverse",
+     "product",
+     "business"
+    ]
+   },
+   {
+    "id": 5,
+    "size": 29,
+    "news_members": 0,
+    "company_specific": true,
+    "boilerplate_excluded": false,
+    "label": [
+     "health",
+     "healthcare",
+     "federal",
+     "reimbursement",
+     "medicaid",
+     "care"
+    ]
+   }
+  ]
+ },
+ "themes": [
+  {
+   "k": 1,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "regulations",
+    "operations",
+    "gaming",
+    "subject",
+    "licenses",
+    "business"
+   ],
+   "Q_e": 0.0,
+   "P_e": 0.0,
+   "E_e": 0.0,
+   "placebo_q95_of_random_max": 0.0,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 137,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 4,
+    "label": [
+     "products",
+     "consumer",
+     "sales",
+     "adverse",
+     "product",
+     "business"
+    ],
+    "E_e": 0.0
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 2,
+   "statistic_is_informative": false,
+   "quotes": [
+    "We are subject to extensive regulation and the cost of compliance or failure to comply with such regulations that govern our operations in any jurisdiction where we operate may have a material adverse effect on our business, financial condition, results of operations and cash flows."
+   ]
+  },
+  {
+   "k": 2,
+   "above_noise": false,
+   "theme_cluster": 0,
+   "theme_label": [
+    "regulations",
+    "operations",
+    "gaming",
+    "subject",
+    "licenses",
+    "business"
+   ],
+   "Q_e": 0.0,
+   "P_e": 4.404044858853353e-05,
+   "E_e": -4.404044858853353e-05,
+   "placebo_q95_of_random_max": -4.404044858853353e-05,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 137,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 4,
+    "label": [
+     "products",
+     "consumer",
+     "sales",
+     "adverse",
+     "product",
+     "business"
+    ],
+    "E_e": -4.404044858853353e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 2,
+   "statistic_is_informative": false,
+   "quotes": [
+    "We are subject to extensive regulation and the cost of compliance or failure to comply with such regulations that govern our operations in any jurisdiction where we operate may have a material adverse effect on our business, financial condition, results of operations and cash flows."
+   ]
+  },
+  {
+   "k": 3,
+   "above_noise": false,
+   "theme_cluster": 5,
+   "theme_label": [
+    "health",
+    "healthcare",
+    "federal",
+    "reimbursement",
+    "medicaid",
+    "care"
+   ],
+   "Q_e": 0.0,
+   "P_e": 2.669776920460808e-05,
+   "E_e": -2.669776920460808e-05,
+   "placebo_q95_of_random_max": 0.0031845964330590886,
+   "risen": false,
+   "news_members": 0,
+   "company_specific": true,
+   "filing_only": true,
+   "coverage_note": "This theme is filing-only: only 0 news risk statements exist for this date, so no cluster can reach 25 news members and every cluster is company-specific by construction.",
+   "set_coverage": {
+    "set_size": 137,
+    "set_companies_with_item_1a": 0,
+    "set_coverage_share": 0.0,
+    "share_of_set_absolute_loading_covered": 0.0
+   },
+   "runner_up": {
+    "cluster": 1,
+    "label": [
+     "steel",
+     "foreign",
+     "materials",
+     "products",
+     "raw",
+     "demand"
+    ],
+    "E_e": -3.9933509098898386e-05
+   },
+   "expected_label_terms": null,
+   "label_matches_expected": null,
+   "label_generic_term_count": 0,
+   "statistic_is_informative": false,
+   "quotes": [
+    "It is possible that we may need to provide discounts or rebates to such plans in order to maintain favorable formulary access for our products for this patient population, which could have an adverse impact on our sales and results of operations."
+   ]
+  }
+ ],
+ "named_component": null,
+ "any_theme_risen": false,
+ "risen_on_component_above_noise": false,
+ "numeric_built": true,
+ "expected_label_terms": null,
+ "expected_label_phrase": null,
+ "expected_label_source": null,
+ "label_matches_expected": null,
+ "label_match_basis": "no expected label was registered for this date",
+ "expected_terms_in_top_theme_label": null,
+ "expected_label_carried_at": "2026-09-07T10:27:42.572308+00:00"
+}

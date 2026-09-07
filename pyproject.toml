@@ -1,0 +1,46 @@
+[project]
+name = "momentum-tail-risk"
+version = "1.0.0"
+description = "An AI-assisted system for identifying, explaining and monitoring reversal risk in the US equity momentum factor"
+requires-python = ">=3.12"
+# Only what the proof of concept runs. The working repository also carries torch,
+# transformers, faiss and sentence-transformers for the embedding experiments that were run
+# and closed; none of them is on the path from data to the PM page, so none is here.
+dependencies = [
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "scipy>=1.13",
+    "statsmodels>=0.14",
+    "pyarrow>=17.0",
+    "requests>=2.32",
+    "tenacity>=9.0",
+    "pydantic>=2.9",
+    "python-dateutil>=2.9",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.3",
+    "matplotlib>=3.9",
+    "anthropic>=0.40",
+    "platformdirs>=4.3",
+    "pyyaml>=6.0.3",
+    "jinja2>=3.1.6",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3", "ruff>=0.7"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unstructured_momentum"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

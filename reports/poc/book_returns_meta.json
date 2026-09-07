@@ -1,0 +1,13 @@
+{
+  "first": "2014-02-03",
+  "last": "2026-08-19",
+  "n_days": 2997,
+  "n_formations": 144,
+  "ann_vol": 0.3224868244634651,
+  "median_weight_missing_winner": 0.000555870414416626,
+  "median_weight_missing_loser": 1.772028274871218e-05,
+  "p95_weight_missing_loser": 0.010465547538331732,
+  "note": "weights are index weights at formation, renormalised within the leg over names priced that day; the dropped share is recorded because a delisting is often a large realised move the panel cannot see, and on the short leg the sign matters",
+  "corr_daily_vs_french": 0.8801599288929894,
+  "corr_monthly_vs_french": 0.8339566715202699
+}

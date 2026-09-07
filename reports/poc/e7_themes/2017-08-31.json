@@ -1,0 +1,26 @@
+{
+ "date": "2017-08-31",
+ "kind": "calm",
+ "built": false,
+ "reasons": [
+  "holdings panel holds only 22 observations in the 126-day window; the declared minimum is 100, so the decomposition is refused"
+ ],
+ "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+ "classifier_run": false,
+ "runs": [
+  "keyword"
+ ],
+ "window": {
+  "target_days": 126,
+  "observations": 22,
+  "start": "2017-08-02",
+  "end": "2017-08-31"
+ },
+ "expected_label_terms": null,
+ "expected_label_phrase": null,
+ "expected_label_source": null,
+ "label_matches_expected": null,
+ "label_match_basis": "no expected label was registered for this date",
+ "expected_terms_in_top_theme_label": null,
+ "expected_label_carried_at": "2026-09-07T10:27:42.574073+00:00"
+}

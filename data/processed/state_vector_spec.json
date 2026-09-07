@@ -1,0 +1,123 @@
+{
+  "experiment": "exp-063",
+  "burn_in_months": 36,
+  "seal": "2023-01-01",
+  "blocks": {
+    "tilt": [
+      "tilt_signed",
+      "tilt_placebo_pctile"
+    ],
+    "comovement": [
+      "comom_avg",
+      "comom_spread"
+    ],
+    "dispersion": [
+      "factor_dispersion"
+    ],
+    "valuation": [
+      "valuation_spread"
+    ],
+    "volregime": [
+      "rv126"
+    ],
+    "mechanism": [
+      "joint_z",
+      "wml_asymmetry"
+    ],
+    "shortside": [
+      "short_ratio"
+    ],
+    "options": [
+      "iv_level",
+      "iv_term_slope",
+      "iv_skew"
+    ],
+    "textmacro": [
+      "epu",
+      "gprh"
+    ]
+  },
+  "column_weights": {
+    "tilt_signed": 0.05555555555555555,
+    "tilt_placebo_pctile": 0.05555555555555555,
+    "comom_avg": 0.05555555555555555,
+    "comom_spread": 0.05555555555555555,
+    "factor_dispersion": 0.1111111111111111,
+    "valuation_spread": 0.1111111111111111,
+    "rv126": 0.1111111111111111,
+    "joint_z": 0.05555555555555555,
+    "wml_asymmetry": 0.05555555555555555,
+    "short_ratio": 0.1111111111111111,
+    "iv_level": 0.037037037037037035,
+    "iv_term_slope": 0.037037037037037035,
+    "iv_skew": 0.037037037037037035,
+    "epu": 0.05555555555555555,
+    "gprh": 0.05555555555555555
+  },
+  "weighting": "equal per block; a block's weight split evenly across its own columns",
+  "standardisation": "expanding mean/sd through t inclusive, min_periods=36",
+  "alignment": "last observation dated on or before each calendar month-end",
+  "min_formation_obs": 120,
+  "dropped_columns": {
+    "tilt_own_pctile": "Dropped at the Stage 1 redundancy gate: r=+0.939 against z_tilt_signed on 45 shared months (Spearman 0.963 on 68). An expanding own-history percentile and an expanding z-score of the same series are both monotone standardisations of it. tilt_placebo_pctile was checked the same way and kept at r=+0.056."
+  },
+  "conferred_gate": "Conferred loadings are masked where the formation window carries fewer than 120 observations. This drops 72 of 219 rows of conferred_monthly.parquet (2007-10 to 2013-05, plus thin 2017) where a beta was estimated from twelve monthly returns. The tilt and valuation blocks therefore begin 2013-06, not 2007-10.",
+  "rows": 1476,
+  "span": [
+    "1900-01-31",
+    "2022-12-31"
+  ],
+  "first_valid_raw": {
+    "tilt_signed": "2013-06-30",
+    "tilt_placebo_pctile": "2013-09-30",
+    "comom_avg": "2014-01-31",
+    "comom_spread": "2014-01-31",
+    "factor_dispersion": "1927-03-31",
+    "valuation_spread": "2013-06-30",
+    "rv126": "1927-03-31",
+    "joint_z": "1927-03-31",
+    "wml_asymmetry": "1927-06-30",
+    "short_ratio": "2018-08-31",
+    "iv_level": "1990-01-31",
+    "iv_term_slope": "2009-09-30",
+    "iv_skew": "1990-01-31",
+    "epu": "1900-01-31",
+    "gprh": "1900-01-31"
+  },
+  "first_valid_z": {
+    "tilt_signed": "2016-05-31",
+    "tilt_placebo_pctile": "2016-08-31",
+    "comom_avg": "2016-12-31",
+    "comom_spread": "2016-12-31",
+    "factor_dispersion": "1930-02-28",
+    "valuation_spread": "2016-05-31",
+    "rv126": "1930-02-28",
+    "joint_z": "1930-02-28",
+    "wml_asymmetry": "1930-05-31",
+    "short_ratio": "2021-07-31",
+    "iv_level": "1992-12-31",
+    "iv_term_slope": "2012-08-31",
+    "iv_skew": "1992-12-31",
+    "epu": "1902-12-31",
+    "gprh": "1902-12-31"
+  },
+  "n_valid_raw": {
+    "tilt_signed": 103,
+    "tilt_placebo_pctile": 92,
+    "comom_avg": 80,
+    "comom_spread": 80,
+    "factor_dispersion": 1150,
+    "valuation_spread": 103,
+    "rv126": 1150,
+    "joint_z": 1150,
+    "wml_asymmetry": 1147,
+    "short_ratio": 53,
+    "iv_level": 396,
+    "iv_term_slope": 160,
+    "iv_skew": 396,
+    "epu": 1476,
+    "gprh": 1476
+  },
+  "live_availability": "French publishes daily factors with a ~50-day lag, so blocks derived from it (dispersion, volregime, mechanism) are not available for the two most recent month-ends in a live reading. Constraint on the newest rows, not a leak in the archive.",
+  "sha256": "5310cca66f63190a624cb4ca73f34f26d975398fac7cb5e7c6d8f9dd2810c4a6"
+}

@@ -1,0 +1,534 @@
+{
+  "record": {
+    "query": {
+      "date": "2020-10-31",
+      "n_records": 19,
+      "n_names": 9,
+      "conditions": [
+        {
+          "ticker": "AAL",
+          "condition": "impacts of the COVID-19 pandemic",
+          "quote": "These notices are part of American s response to the impacts of the COVID-19 pandemic on its business."
+        },
+        {
+          "ticker": "AMC",
+          "condition": "theatre attendance levels approaching approximately three-quarters of normalized levels",
+          "quote": "We currently estimate that unless theatre attendance levels improve significantly from the third quarter of 2020 to the fourth quarter of 2020 and again into 2021 and we achieve levels of attendance approaching approximately three-quarters of normalized levels, we will continue to require additional sources of liquidity to meet our obligations as they become due"
+        },
+        {
+          "ticker": "AMC",
+          "condition": "significant increases in attendance from current levels",
+          "quote": "given the reduced movie slate for the fourth quarter, in the absence of significant increases in attendance from current levels or incremental sources of liquidity, at the existing cash burn rate, the Company anticipates that existing cash resources would be largely depleted by the end of 2020 or early 2021"
+        },
+        {
+          "ticker": "AMC",
+          "condition": "significant increases in attendance from current levels or the availability of significant additional sources of liquidity",
+          "quote": "in the absence of significant increases in attendance from current levels or the availability of significant additional sources of liquidity, at the existing cash burn rate, the Company anticipates that existing cash resources would be largely depleted by the end of 2020 or early 2021"
+        },
+        {
+          "ticker": "BTU",
+          "condition": "recovery of steelmaking fundamentals in traditional markets from COVID-19 pandemic",
+          "quote": "While metallurgical coal prices have recently appreciated, steelmaking fundamentals, particularly in traditional markets, are in the early stages of recovery from the COVID-19 pandemic. As a result, customer demand this year has been and continues to be severely impacted."
+        },
+        {
+          "ticker": "CCL",
+          "condition": "ability to re-commence normal cruise operations in the near-term",
+          "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021"
+        },
+        {
+          "ticker": "CCL",
+          "condition": "resuming normal cruise operations in the near-term",
+          "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021"
+        },
+        {
+          "ticker": "CCL",
+          "condition": "resumption of normal cruise operations in the near-term",
+          "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021"
+        },
+        {
+          "ticker": "CCL",
+          "condition": "re-commencement of normal cruise operations in the near-term",
+          "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021"
+        },
+        {
+          "ticker": "CCL",
+          "condition": "ability to re-commence normal cruise operations in the near-term",
+          "quote": "As a result of the COVID-19 outbreak, we have paused our guest cruise operations, and if we are unable to re-commence normal operations in the near-term, we may be out of compliance with a maintenance covenant in certain of our debt facilities as of May 31, 2021"
+        },
+        {
+          "ticker": "CCL",
+          "condition": "COVID-19 outbreak's effect on the ability or desire of people to travel",
+          "quote": "The current, and uncertain future, impact of the COVID-19 outbreak, including its effect on the ability or desire of people to travel (including on cruises), is expected to continue to impact our results, operations, outlooks, plans, goals, growth, reputation, litigation, cash flows, liquidity, and stock price"
+        },
+        {
+          "ticker": "DVN",
+          "condition": "future commodity prices",
+          "quote": "The Amended Agreement also provides for contingent earnout payments to the Seller of up to $260 million based upon future commodity prices, with upside participation beginning at a $2.75 Henry Hub natural gas price or a $50 WTI oil price."
+        },
+        {
+          "ticker": "HP",
+          "condition": "uncertainties related to COVID-19 and the resulting high market volatility",
+          "quote": "In response to the uncertainties related to COVID-19 and the resulting high market volatility, performance under the STI Plan for fiscal year 2021 will be based on two six-month measurement periods, which allows the Company to more effectively establish performance goals under the plan."
+        },
+        {
+          "ticker": "KSS",
+          "condition": "COVID-19 crisis continuing to impact business",
+          "quote": "As we look ahead, we are planning for the crisis to continue to impact our business in the near-term"
+        },
+        {
+          "ticker": "KSS",
+          "condition": "pace of recovery after COVID-19",
+          "quote": "the short and long-term impact of COVID-19 on the economy and the pace of recovery thereafter"
+        },
+        {
+          "ticker": "SLB",
+          "condition": "oil and natural gas demand and production growth",
+          "quote": "forward-looking statements address matters that are, to varying degrees, uncertain, such as statements about Schlumberger s financial and performance targets and other forecasts or expectations regarding, or dependent on, Schlumberger s business outlook; the growth for Schlumberger as a whole and for each of its divisions (and for specified business lines or geographic areas within each division); oil and natural gas demand and production growth; oil and natural gas prices"
+        },
+        {
+          "ticker": "SLB",
+          "condition": "demand recovery",
+          "quote": "Improving demand recovery supported by various government measures to stimulate economic activity and continued supply discipline from the major producers set the conditions for a long-term activity rebound."
+        },
+        {
+          "ticker": "UAL",
+          "condition": "widely accepted treatment and/or vaccine for COVID-19",
+          "quote": "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine for COVID-19 is widely available"
+        },
+        {
+          "ticker": "UAL",
+          "condition": "vaccine availability and international market reopening",
+          "quote": "it is unlikely the aviation industry will see significant return of passengers until a vaccine is widely available to the public and international markets reopen to travel"
+        }
+      ]
+    },
+    "encoder": "manelalab/chrono-bert-v1-20191231",
+    "n_candidates_after_embargo": 5,
+    "state_matches": [
+      {
+        "date": "2009-08-31",
+        "rank": 1,
+        "distance": 0.0391,
+        "block_closeness": {
+          "dispersion": 0.002,
+          "volregime": 0.0,
+          "mechanism": 0.002
+        },
+        "forward_21d_return": -0.0403,
+        "condition_record": null,
+        "condition_record_status": "NO RECORD"
+      },
+      {
+        "date": "2009-05-31",
+        "rank": 2,
+        "distance": 0.0698,
+        "block_closeness": {
+          "dispersion": 0.009,
+          "volregime": 0.001,
+          "mechanism": 0.004
+        },
+        "forward_21d_return": 0.0391,
+        "condition_record": null,
+        "condition_record_status": "NO RECORD"
+      },
+      {
+        "date": "2009-01-31",
+        "rank": 3,
+        "distance": 0.0852,
+        "block_closeness": {
+          "dispersion": 0.001,
+          "volregime": 0.0,
+          "mechanism": 0.013
+        },
+        "forward_21d_return": 0.1124,
+        "condition_record": null,
+        "condition_record_status": "NO RECORD"
+      },
+      {
+        "date": "2008-10-31",
+        "rank": 4,
+        "distance": 0.0883,
+        "block_closeness": {
+          "dispersion": 0.017,
+          "volregime": 0.001,
+          "mechanism": 0.006
+        },
+        "forward_21d_return": 0.0633,
+        "condition_record": null,
+        "condition_record_status": "NO RECORD"
+      },
+      {
+        "date": "2000-05-31",
+        "rank": 5,
+        "distance": 0.1102,
+        "block_closeness": {
+          "dispersion": 0.003,
+          "volregime": 0.0,
+          "mechanism": 0.021
+        },
+        "forward_21d_return": 0.1609,
+        "condition_record": null,
+        "condition_record_status": "NO RECORD"
+      }
+    ],
+    "condition_matches": [
+      {
+        "date": "2018-12-31",
+        "rank": 1,
+        "condition_similarity": -0.0724,
+        "forward_21d_return": -0.0743,
+        "condition_record": {
+          "n_records": 4,
+          "n_names": 1,
+          "conditions": [
+            {
+              "ticker": "BW",
+              "condition": "Achieving customer concessions generating $25 million of incremental benefits",
+              "quote": "we are required to achieve certain concessions from our renewable contract customers that will generate at least $25.0 million of incremental benefits to us from September 30, 2018 to October 31, 2018"
+            },
+            {
+              "ticker": "BW",
+              "condition": "obtaining and maintaining sufficient financing",
+              "quote": "our ability to obtain and maintain sufficient financing to provide liquidity to meet our business objectives, surety bonds, letters of credit and similar financing; our ability to satisfy the liquidity and other requirements under U.S. revolving credit facility as recently amended, including our ability to successfully enter into and borrow under a new term loan and receive concessions from customers on our Renewable energy loss contracts"
+            },
+            {
+              "ticker": "BW",
+              "condition": "achieving certain concessions from renewable loss contract customers",
+              "quote": "require us to achieve certain concessions from certain of our renewable loss contract customers by February 15, 2019 that will generate at least $25.0 million of incremental benefits to us"
+            },
+            {
+              "ticker": "BW",
+              "condition": "refinancing of revolving credit facility",
+              "quote": "require us to commence a process by February 28, 2019 to refinance our revolving credit facility"
+            }
+          ]
+        },
+        "condition_record_status": "present"
+      },
+      {
+        "date": "2018-09-30",
+        "rank": 2,
+        "condition_similarity": -0.073,
+        "forward_21d_return": -0.0263,
+        "condition_record": {
+          "n_records": 1,
+          "n_names": 1,
+          "conditions": [
+            {
+              "ticker": "BW",
+              "condition": "achieving certain concessions from renewable contract customers",
+              "quote": "require us to achieve certain concessions from our renewable contract customers by September 30, 2018 that will generate at least $25.0 million of incremental benefits to us"
+            }
+          ]
+        },
+        "condition_record_status": "present"
+      },
+      {
+        "date": "2019-04-30",
+        "rank": 3,
+        "condition_similarity": -0.5762,
+        "forward_21d_return": 0.0898,
+        "condition_record": {
+          "n_records": 8,
+          "n_names": 6,
+          "conditions": [
+            {
+              "ticker": "AAL",
+              "condition": "return of Boeing 737 MAX aircraft to service",
+              "quote": "Due to the continuing uncertainty regarding the timing of the return of these aircraft to service, on March 24, 2019 we announced flight cancellations through April 24, 2019 assuming that our 737 MAX 8 aircraft will not be available through that date."
+            },
+            {
+              "ticker": "AAL",
+              "condition": "return of Boeing 737 MAX aircraft to service",
+              "quote": "Due to the continuing uncertainty regarding the timing of the return of these aircraft to service, on April 14, 2019 we announced flight cancellations through August 19, 2019 assuming that our 737 MAX 8 aircraft will not be available through that date."
+            },
+            {
+              "ticker": "AAOI",
+              "condition": "changes in Chinese government regulations",
+              "quote": "the amount of available credit under the Credit Line and the approval of each draw may be reduced or declined by the Bank due to changes in Chinese government regulations and/or changes in Global Technology s financial and operational condition at the time of each requested draw"
+            },
+            {
+              "ticker": "AGEN",
+              "condition": "FDA approval of AGEN2034 by the end of 2021",
+              "quote": "In the event that AGEN2034 is not approved by the FDA by the end of 2021 and all Tokens are converted into Agenus stock, a total of 1.85 Million shares would be issued"
+            },
+            {
+              "ticker": "BW",
+              "condition": "shareholder approval",
+              "quote": "The issuance of any shares of the Company s common stock (or other securities) in connection with the Equitization Transactions is subject to the receipt of all required shareholder approvals, and no shares of the Company s common stock (or other securities) will be issued before such approvals have been obtained."
+            },
+            {
+              "ticker": "CNC",
+              "condition": "regulatory approvals",
+              "quote": "The consummation of the First Merger is subject to certain conditions, including the adoption of the Merger Agreement by WellCare s stockholders, the approval of the issuance of the shares of Company Common Stock forming part of the Merger Consideration, as required by the listing standards of the New York Stock Exchange (the Company Stock Issuance ), by the Company s stockholders, the approval for listing on the New York Stock Exchange of the shares of the Company Common Stock to be issued in connection with the First Merger, the receipt of U.S. federal antitrust clearance and certain other required regulatory approvals, the absence of any law or order prohibiting the consummation of the Mergers or the Company Stock Issuance"
+            },
+            {
+              "ticker": "PCG",
+              "condition": "Bankruptcy Court final approval of DIP Facilities",
+              "quote": "There can be no assurances that the Bankruptcy Court will grant final approval of the DIP Facilities at the final hearing, or at all."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "CPUC or California legislature actions to materially reduce wildfire risk-related challenges",
+              "quote": "The Utility proposed to amend its cost of capital application with an updated cost of capital if the CPUC or the California legislature implemented actions to materially reduce the extent of the wildfire risk-related challenges and structural problems facing customers, the Utility, and its shareholders."
+            }
+          ]
+        },
+        "condition_record_status": "present"
+      },
+      {
+        "date": "2019-03-31",
+        "rank": 4,
+        "condition_similarity": -0.6575,
+        "forward_21d_return": -0.0205,
+        "condition_record": {
+          "n_records": 11,
+          "n_names": 7,
+          "conditions": [
+            {
+              "ticker": "AFL",
+              "condition": "regulatory approvals",
+              "quote": "The Company anticipates regulatory approvals in the second half of 2019."
+            },
+            {
+              "ticker": "AGEN",
+              "condition": "FDA approval of AGEN2034 by the end of 2021",
+              "quote": "In the event that AGEN2034 is not approved by the FDA by the end of 2021 and all Tokens are converted into Agenus stock, a total of 1.85 Million shares would be issued"
+            },
+            {
+              "ticker": "AXGN",
+              "condition": "FDA review completion and agreement on next steps for the RECON study",
+              "quote": "The Company will provide further updates upon completion of the review, the timing of which is uncertain based upon near-term funding issues faced by the FDA."
+            },
+            {
+              "ticker": "BW",
+              "condition": "raising additional capital through equity, subordinated debt, or asset sales",
+              "quote": "require us to raise additional capital in an amount and within a time frame acceptable to the lenders under the Amended Credit Agreement through the issuance of equity or subordinated debt or the sale of assets"
+            },
+            {
+              "ticker": "CNC",
+              "condition": "required regulatory approvals and U.S. federal antitrust clearance",
+              "quote": "The consummation of the First Merger is subject to certain conditions, including the adoption of the Merger Agreement by WellCare s stockholders, the approval of the issuance of the shares of Company Common Stock forming part of the Merger Consideration, as required by the listing standards of the New York Stock Exchange (the Company Stock Issuance ), by the Company s stockholders, the approval for listing on the New York Stock Exchange of the shares of the Company Common Stock to be issued in connection with the First Merger, the receipt of U.S. federal antitrust clearance and certain other required regulatory approvals, the absence of any law or order prohibiting the consummation of the Mergers or the Company Stock Issuance, the effectiveness of the registration statement on Form S-4 to be filed with the Securities and Exchange Commission (the SEC ) by Company for the registration of the Company Stock Issuance under the Securities Act of 1933 (the Securities Act ), the absence of a material adverse effect on the Company or WellCare, and other conditions customary for a transaction of this type."
+            },
+            {
+              "ticker": "COHR",
+              "condition": "completion of the proposed transaction with Finisar",
+              "quote": "the ability of II-VI and Finisar Corporation ( Finisar ) to complete the proposed transaction on the anticipated terms and timing or at all"
+            },
+            {
+              "ticker": "COHR",
+              "condition": "consummation of the Merger",
+              "quote": "The funding obligations of the lenders under the New Senior Credit Facilities are subject to certain currently unsatisfied conditions, including the consummation of the Merger. Accordingly, no borrowings are currently outstanding under the New Senior Credit Facilities, and the Company currently is not able to borrow under the New Senior Credit Facilities."
+            },
+            {
+              "ticker": "COHR",
+              "condition": "regulatory approvals in China, Mexico, and Romania",
+              "quote": "The merger filing is under review in China by the State Administration for Market Regulation (SAMR), in Mexico by the Federal Economic Competition Commission, and in Romania by the Romanian Competition Council."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "CPUC authorization of securitization for wildfire costs",
+              "quote": "PG E believes that any securitization of costs relating to the 2017 Northern California wildfires would not occur, if at all, until (a) PG E has paid claims relating to the 2017 Northern California wildfires, (b) PG E has filed application for recovery of such costs and (c) the CPUC makes a determination that such costs are just and reasonable or in excess of the Disallowance Threshold."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "Bankruptcy Court final approval of the DIP Facilities",
+              "quote": "The remainder of the DIP Revolving Facility (including the remainder of the $750 million letter of credit subfacility), and the DIP Initial Term Loan Facility and the DIP Delayed Draw Term Loan Facility, are currently unavailable for borrowing and will remain unavailable until and unless the Bankruptcy Court approves the availability thereof following a final hearing."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "Utility's ability to timely recover costs incurred in connection with 2017 and 2018 Northern California wildfires",
+              "quote": "the impact of the 2017 and 2018 Northern California wildfires, including whether the Utility will be able to timely recover costs incurred in connection therewith in excess of the Utility's currently authorized revenue requirements"
+            }
+          ]
+        },
+        "condition_record_status": "present"
+      },
+      {
+        "date": "2019-08-31",
+        "rank": 5,
+        "condition_similarity": -0.6704,
+        "forward_21d_return": -0.0595,
+        "condition_record": {
+          "n_records": 11,
+          "n_names": 8,
+          "conditions": [
+            {
+              "ticker": "AA",
+              "condition": "buyer-provided credit facility to support future operations",
+              "quote": "However, a final acquisition is subject to a buyer-provided credit facility to support future operations."
+            },
+            {
+              "ticker": "AAOI",
+              "condition": "changes in Chinese government regulations",
+              "quote": "draws under the 100M Credit Facility may become due and repayable to the Bank at the Bank s discretion due to changes in Chinese government regulations and/or changes in Global Technology s financial and operational condition"
+            },
+            {
+              "ticker": "ABEO",
+              "condition": "FDA resolution of outstanding items",
+              "quote": "The Company will utilize the increased clarity it obtained from these recent interactions with the FDA to promptly address the few remaining items and now expects to initiate the VITAL Phase 3 trial for its EB-101 program in the fourth quarter of 2019."
+            },
+            {
+              "ticker": "AMRX",
+              "condition": "industry challenges, including increased competition, downward pricing pressure and resulting volume reductions",
+              "quote": "The restructuring plan resulted from a company-wide review of our organizational structure, operational budgets, current and future capital projects and existing capability and infrastructure undertaken in response to industry challenges, including increased competition, downward pricing pressure and resulting volume reductions."
+            },
+            {
+              "ticker": "AXGN",
+              "condition": "transition of Avance Nerve Graft from a 361 HCT/P tissue product to a biologic product",
+              "quote": "to support the transition of Avance Nerve Graft from a 361 HCT/P tissue product to a biologic product"
+            },
+            {
+              "ticker": "BTU",
+              "condition": "receipt of required regulatory approvals",
+              "quote": "Formation of the joint venture is subject to customary closing conditions, including the termination or expiration of the waiting period under the Hart-Scott-Rodino Antitrust Improvements Act of 1976, as amended, the receipt of certain other required regulatory approvals and the absence of injunctions or other legal restraints preventing the formation of the joint venture."
+            },
+            {
+              "ticker": "NWL",
+              "condition": "Company's closing stock price exceeding 125% of baseline price",
+              "quote": "during any 30-day period between the date that is eighteen calendar months following the grant date and the third anniversary of the grant date of the Employment Transition Award, the average of the Company s closing stock price must exceed 125% of the closing stock price on July 29, 2019"
+            },
+            {
+              "ticker": "PCG",
+              "condition": "U.S. Bankruptcy Court approval and confirmation of a Chapter 11 plan of reorganization",
+              "quote": "Any such claim by Mr. Soto, if allowed, would be treated under the terms of a confirmed and effective Chapter 11 plan of reorganization."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "satisfying eligibility conditions to participate in the Wildfire Fund",
+              "quote": "whether the Utility will satisfy the eligibility conditions to participate in the Wildfire Fund"
+            },
+            {
+              "ticker": "PCG",
+              "condition": "CPUC approval of cost of capital application",
+              "quote": "The Utility is unable to predict the timing and outcome of this proceeding."
+            },
+            {
+              "ticker": "PCG",
+              "condition": "Bankruptcy Court approval",
+              "quote": "The terms and conditions of Mr. Vesey s compensation arrangements are subject to the approval of the U.S. Bankruptcy Court for the Northern District of California (the Bankruptcy Court ), where the Chapter 11 cases of the Corporation and the Utility are pending."
+            }
+          ]
+        },
+        "condition_record_status": "present"
+      }
+    ],
+    "corpus_note": "The condition corpus begins 2018-09-30, where the 8-K body archive begins. A state match earlier than that carries condition_record_status NO RECORD, and no claim about what it was priced on can be made from this record.",
+    "similarity_note": "condition_similarity is a RANK, not a level. Vectors are centred on the embargoed candidate pool, so with a pool this small the mean similarity is forced negative by construction and the absolute value carries no information. Only the ordering does, and the ordering is what the two-encoder agreement test scores."
+  },
+  "planted_control": {
+    "planted": 6,
+    "expected_kept": 3,
+    "actually_kept": 3,
+    "correct": true,
+    "detail": [
+      {
+        "about": "2018-12-31",
+        "expected": true,
+        "kept": true,
+        "claim": "2018-12-31 was priced on Achieving customer concessions generating $25"
+      },
+      {
+        "about": "2018-09-30",
+        "expected": true,
+        "kept": true,
+        "claim": "2018-09-30 was priced on achieving certain concessions from renewable "
+      },
+      {
+        "about": "2019-04-30",
+        "expected": true,
+        "kept": true,
+        "claim": "2019-04-30 was priced on return of Boeing 737 MAX aircraft to service."
+      },
+      {
+        "about": "2009-08-31",
+        "expected": false,
+        "kept": false,
+        "claim": "2009-08-31 was priced on the credit crisis resolving."
+      },
+      {
+        "about": "2009-05-31",
+        "expected": false,
+        "kept": false,
+        "claim": "2009-05-31 was priced on the credit crisis resolving."
+      },
+      {
+        "about": "2009-01-31",
+        "expected": false,
+        "kept": false,
+        "claim": "2009-01-31 was priced on the credit crisis resolving."
+      }
+    ],
+    "drop_reasons": [
+      "field 'conditions' is absent or null for 2009-08-31",
+      "field 'conditions' is absent or null for 2009-05-31",
+      "field 'conditions' is absent or null for 2009-01-31"
+    ]
+  },
+  "proponent": {
+    "kept": [
+      {
+        "about": "query",
+        "field": "n_records",
+        "quote": "",
+        "claim": "The query month has 19 going concern records from 9 distinct issuers, reflecting widespread stress across multiple sectors including airlines, cruise lines, and energy."
+      },
+      {
+        "about": "query",
+        "field": "conditions",
+        "quote": "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine for COVID-19 is widely available",
+        "claim": "The query month's conditions are tied to COVID-19 pandemic recovery dynamics, including vaccine availability and demand normalization."
+      },
+      {
+        "about": "2009-08-31",
+        "field": "condition_record_status",
+        "quote": "",
+        "claim": "The nearest state match from August 2009 has no condition record available, preventing comparison of the circumstances companies cited."
+      },
+      {
+        "about": "2009-08-31",
+        "field": "distance",
+        "quote": "",
+        "claim": "The top state match is remarkably close with a distance of only 0.0391, indicating very similar market structure in terms of dispersion, volatility regime, and mechanism."
+      }
+    ],
+    "dropped": []
+  },
+  "dissent": {
+    "kept": [
+      {
+        "about": "query",
+        "field": "conditions",
+        "quote": "expects demand to remain suppressed and plateau at levels of around 50%, relative to 2019 levels, until a widely accepted treatment and/or vaccine for COVID-19 is widely available",
+        "claim": "The query month's filings cited pandemic recovery conditions requiring vaccines or treatments that had not yet materialized."
+      },
+      {
+        "about": "2009-08-31",
+        "field": "condition_record_status",
+        "quote": "",
+        "claim": "The nearest STATE match from 2009-08-31 carries NO RECORD status, so we cannot compare what conditions its filers stated."
+      },
+      {
+        "about": "2009-08-31",
+        "field": "distance",
+        "quote": "",
+        "claim": "The STATE retrieval engine found 2009-08-31 at distance 0.0391, but without condition records we cannot verify whether similar numerical dispersion and volatility states were driven by comparable fundamental uncertainties."
+      }
+    ],
+    "dropped": [
+      {
+        "about": "2018-12-31",
+        "field": "conditions",
+        "quote": "require us to achieve certain concessions from our renewable contract customers by September 30, 2018 that will generate at least $25.0 million of incremental benefits to us",
+        "claim": "The top CONDITIONS match from 2018-12-31 was priced on meeting specific contractual concession deadlines, not pandemic-driven demand recovery.",
+        "reason": "mechanism claim about 2018-12-31 carries no grounded span"
+      }
+    ]
+  },
+  "verdict": {
+    "state_match_is_apt": false,
+    "mechanism_is_rulable": false,
+    "fails_on": "condition_record_status",
+    "reasoning": "The nearest STATE match from 2009-08-31 carries condition_record_status of NO RECORD, preventing any comparison of what fundamental uncertainties filers cited. Without knowing whether the August 2009 stress was driven by comparable recovery-contingent conditions or entirely different circumstances, mechanism cannot be ruled on from this record."
+  }
+}

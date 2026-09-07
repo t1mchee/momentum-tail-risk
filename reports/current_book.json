@@ -1,0 +1,47 @@
+{
+  "as_of": "2026-07-31",
+  "dominant": "concentration",
+  "direction": "LONG",
+  "z": {
+    "mkt": 9.246969893936006,
+    "d10y": 5.35777828623879,
+    "wti": 7.854770485161072,
+    "usd": 12.73781682539278,
+    "ig": 1.941490003784131,
+    "concentration": 15.377150154964587,
+    "pc1": 2.714369463857857,
+    "pc2": 11.836343295621154
+  },
+  "spread": {
+    "mkt": 0.6879483545976677,
+    "d10y": -0.035253241666146004,
+    "wti": -0.08925937431933806,
+    "usd": -1.6116410033107773,
+    "ig": -0.028257542628014373,
+    "concentration": 0.30560734270294665,
+    "pc1": -0.0005022898440721069,
+    "pc2": 0.0024759883673030753
+  },
+  "winner_top_sectors": {
+    "Health Care": 81,
+    "Information Technology": 67,
+    "Industrials": 40
+  },
+  "loser_top_sectors": {
+    "Information Technology": 64,
+    "Health Care": 34,
+    "Industrials": 31
+  },
+  "winner_top10": [
+    "AMD",
+    "AMAT",
+    "LRCX",
+    "CAT",
+    "KLAC",
+    "MRVL",
+    "DELL",
+    "GLW",
+    "VRT",
+    "HPE"
+  ]
+}

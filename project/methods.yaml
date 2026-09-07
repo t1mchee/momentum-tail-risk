@@ -1,0 +1,873 @@
+# Every feature, transformation and estimator, with its actual specification.
+# Parameters here are read off the implementation, not recalled. If code and entry
+# disagree the entry is wrong.
+
+# ---- universe and portfolio construction ------------------------------------------
+
+- id: mth-momentum
+  name: 12-1 momentum score
+  stage: construction
+  one_breath: Cumulative return over the past year, excluding the most recent month.
+  spec: >
+    Compound daily total returns over t-252 to t-21 trading days, skipping the most recent
+    21 days to avoid the short-horizon reversal effect. Formation requires at least 80
+    percent of the 252-day window populated.
+  formula: "score_i = prod_{s=t-252}^{t-21} (1 + r_{i,s}) - 1"
+  parameters: {lookback_days: 252, skip_days: 21, min_obs_fraction: 0.8}
+  transformations: >
+    Returns are computed from the provider's adjusted price series, never from a raw price
+    ratio. Daily moves beyond +/-60 percent are masked to zero for that day only, leaving
+    the rest of the window intact; an unmasked reverse split once put a failing pharmacy
+    chain into the top decile at an apparent +1,900 percent. Tickers must match
+    ^[A-Z][A-Z0-9.]{0,6}$ before a row can be ranked.
+  module: factor/legs.py
+  used_by: [exp-002, exp-008, exp-019, exp-020]
+
+- id: mth-legs
+  name: Decile leg formation
+  stage: construction
+  one_breath: Sort the investable universe on momentum and take the top and bottom tenth.
+  spec: >
+    Rank the Russell 3000 constituents whose index weight places them in the top 1,000 by
+    weight, then take the top and bottom deciles, roughly 98 names each. Delisted companies
+    remain in the universe at their last observed weight.
+  formula: "winners = top decile by score; losers = bottom decile; WML = r_win - r_los"
+  parameters: {cap_floor_rank: 1000, deciles: 10, rebalance: monthly, held: daily}
+  transformations: Value-weighted within leg by index weight, renormalised to sum to one.
+  module: factor/legs.py
+  used_by: [exp-002, exp-008, exp-012]
+
+- id: mth-constructions
+  name: Twelve parallel constructions
+  stage: construction
+  one_breath: The same sort built twelve ways, because the event set depends on the choice.
+  spec: >
+    Value-weighted and equal-weighted, large-cap and all-cap, deciles and quintiles, legs
+    combined and separated. Each episode is scored in all twelve; none is treated as
+    canonical.
+  parameters: {weightings: [value, equal], size_splits: [large, all], cuts: [decile, quintile]}
+  module: factor/constructions.py
+  used_by: [exp-002, exp-006]
+
+# ---- state variables ---------------------------------------------------------------
+
+- id: mth-realised-vol
+  name: Trailing realised volatility
+  stage: feature
+  one_breath: Annualised standard deviation of factor returns over the past six months.
+  spec: Rolling standard deviation of daily factor returns, annualised by root-252.
+  formula: "sigma_t = sqrt(252) * sd(r_{t-125..t})"
+  parameters: {window_days: 126, annualisation: 252}
+  module: model/severity.py
+  used_by: [exp-003, exp-005]
+
+- id: mth-panic
+  name: Panic-state indicators
+  stage: feature
+  one_breath: Whether the market is in a two-year bear market, and how volatile it is.
+  spec: >
+    Two regressors following Daniel and Moskowitz. A bear indicator equal to one when the
+    cumulative two-year market return is negative, and the annualised market variance over
+    the past six months. Their interaction is what the literature reports as carrying the
+    crash signal.
+  formula: "bear_t = 1{prod_{s=t-504}^{t}(1+mkt_s) - 1 < 0};  mvar_t = 252 * var(mkt_{t-125..t})"
+  parameters: {window_bear: 504, window_var: 126}
+  module: model/severity.py
+  used_by: [exp-003, exp-005, exp-007]
+
+- id: mth-comomentum
+  name: Comomentum
+  stage: feature
+  one_breath: Average pairwise correlation of factor-adjusted returns inside one leg.
+  spec: >
+    The Lou and Polk construction. Take weekly returns of the names in a leg over a
+    52-week formation window, residualise each against the contemporaneous Fama-French
+    factors by ordinary least squares, and average the pairwise correlations of the
+    residuals. Abnormal means after stripping common factor exposure, so the measure is
+    not simply picking up market beta.
+  formula: "comom_t = mean_{i<j} corr(e_i, e_j) over the 52-week window, e = residual from FF regression"
+  parameters: {formation_weeks: 52, min_weeks: 40, min_names: 20, frequency: weekly}
+  transformations: >
+    Weekly returns are compounded from daily. Pairwise correlations require 40 overlapping
+    weeks. Legs with fewer than 20 usable names return a missing value rather than a
+    thin estimate.
+  module: features/comomentum.py
+  used_by: [exp-012]
+
+- id: mth-effective-rank
+  name: Effective rank of the theme matrix
+  stage: feature
+  one_breath: How many genuinely distinct stories the news is telling about a leg's holdings.
+  spec: >
+    Build a holdings-by-themes occurrence matrix over one leg, normalise each row to unit
+    length so a heavily covered company cannot dominate by volume, take the singular
+    values, normalise them to sum to one, and exponentiate their Shannon entropy. Equals
+    the number of holdings when every company has an orthogonal story, and one when all
+    coverage is collinear.
+  formula: "erank(M) = exp(-sum_k p_k log p_k),  p_k = s_k / sum_j s_j,  s = singular values of row-normalised M"
+  parameters: {min_covered_names: 10, vocabulary: GDELT V1Themes}
+  transformations: >
+    Articles are attributed to a holding by exact match on a normalised company name after
+    stripping corporate suffixes. Names shorter than six characters, and names mapping to
+    more than one holding, are refused rather than guessed.
+  module: features/narrative.py
+  used_by: [exp-020]
+
+- id: mth-skew
+  name: 25-delta option skew
+  stage: feature
+  one_breath: The implied-volatility gap between equally out-of-the-money calls and puts.
+  spec: >
+    For each expiry, linearly interpolate implied volatility in absolute-delta space to the
+    0.25 point on each wing, then take the call value minus the put value. Averaged across
+    every qualifying expiry rather than read off a single one, which would add a free
+    parameter the registration does not contain. Positive means upside protection is dearer
+    than downside, the squeeze-risk direction for a short position.
+  formula: "skew = IV_call(|delta|=0.25) - IV_put(|delta|=0.25), averaged over expiries in [21,90] days"
+  parameters: {target_delta: 0.25, delta_bounds: [0.10, 0.45], dte_bounds: [21, 90]}
+  transformations: >
+    Quotes with a zero bid, a zero ask or a crossed market are discarded. The 0.25 point
+    must be bracketed by observed contracts or the expiry is skipped; no extrapolation. A
+    company must supply both wings at the same expiry or it is dropped whole.
+  module: features/skew.py
+  used_by: [exp-019]
+
+- id: mth-carry
+  name: Implied carry from put-call parity
+  stage: feature
+  one_breath: The continuous rate the option market charges to hold a stock.
+  spec: >
+    Solve European put-call parity at the strike nearest the money for the continuous carry
+    rate. Conflates the dividend yield with the borrow cost and does not separate them.
+    These are American options, so parity holds as an inequality; early-exercise value sits
+    mostly in the put and biases the estimate upward, most on hard-to-borrow names.
+  formula: "q = -ln[(C - P + K e^{-rT}) / S] / T"
+  parameters: {risk_free: 0.04, strike: nearest-the-money, quote: mid}
+  module: features/skew.py
+  used_by: [exp-019]
+
+# ---- estimators ---------------------------------------------------------------------
+
+- id: mth-quantile-reg
+  name: Conditional quantile regression
+  stage: model
+  one_breath: Predicts a bad outcome directly instead of predicting the average.
+  spec: >
+    Linear quantile regression of the forward h-day factor return on the state variables,
+    fitted by statsmodels at the target quantile. On non-convergence, which happens on
+    collinear or degenerate training windows, the fit falls back to the unconditional
+    sample quantile rather than returning an unstable coefficient vector. Expected
+    shortfall is the mean of training residuals below the fitted quantile, so it inherits
+    the quantile fit rather than adding a second parametric assumption.
+  formula: "min_beta sum_t rho_q(y_t - x_t'beta),  rho_q(u) = u(q - 1{u<0})"
+  parameters: {quantiles: [0.05, 0.10], horizons: [5, 10, 21], max_iter: 5000, fallback: unconditional-quantile}
+  module: model/severity.py
+  used_by: [exp-003, exp-005]
+
+- id: mth-expanding
+  name: Expanding-window refit
+  stage: model
+  one_breath: Every forecast is fitted only on data that preceded it.
+  spec: >
+    Refit monthly on all history available at the forecast date, with a minimum training
+    length before the first forecast. Produces 318 out-of-sample forecasts over 1990 to
+    2022 at the ten-day horizon. No forecast sees its own future and no parameter is chosen
+    using the evaluation period.
+  parameters: {min_train_days: 1500, refit_frequency: monthly, n_forecasts: 318}
+  module: model/severity.py
+  used_by: [exp-003, exp-005]
+
+- id: mth-garch
+  name: GJR-GARCH(1,1,1) with skewed-t innovations
+  stage: model
+  one_breath: The conventional volatility model that anything cleverer has to beat.
+  spec: >
+    Constant-mean GJR-GARCH with one ARCH, one asymmetry and one GARCH term, fitted with
+    Hansen skewed-t innovations so that negative shocks raise variance more than positive
+    ones and the innovation distribution is itself left-skewed. Multi-day value at risk is
+    the fitted innovation quantile scaled by the square root of cumulated forecast
+    variance.
+  formula: "sigma^2_t = omega + alpha e^2_{t-1} + gamma e^2_{t-1} 1{e_{t-1}<0} + beta sigma^2_{t-1}"
+  parameters: {p: 1, o: 1, q: 1, dist: skewt, mean: constant, horizon: 10}
+  module: model/baselines.py
+  used_by: [exp-004]
+
+- id: mth-christoffersen
+  name: Christoffersen coverage tests
+  stage: model
+  one_breath: Checks a risk model is breached at the right rate, and not in clusters.
+  spec: >
+    Three likelihood-ratio tests on the sequence of breach indicators. Unconditional
+    coverage asks whether the breach rate equals the nominal quantile. Independence asks
+    whether a breach makes the next breach more likely, using a first-order Markov
+    alternative. Conditional coverage is the joint test. A model can pass the first and
+    fail the second, which is the case a practitioner should care about.
+  formula: "LR_uc ~ chi2(1);  LR_ind ~ chi2(1);  LR_cc = LR_uc + LR_ind ~ chi2(2)"
+  parameters: {nominal_quantile: 0.05, n_forecasts: 325}
+  module: model/baselines.py
+  used_by: [exp-004]
+
+- id: mth-pinball
+  name: Pinball loss
+  stage: model
+  one_breath: The scoring rule for quantile forecasts that cannot be gamed.
+  spec: >
+    Asymmetric absolute loss that is minimised in expectation by the true quantile. A
+    proper rule, so a forecaster cannot improve its score by systematically predicting
+    disaster. Reported as a mean over forecasts, and as skill against the unconditional
+    baseline.
+  formula: "L_q(y, f) = (y - f)(q - 1{y < f});  skill = 1 - L_model / L_unconditional"
+  parameters: {quantile: 0.05, lower_is_better: true}
+  module: model/severity.py
+  used_by: [exp-003, exp-005]
+
+- id: mth-degross
+  name: Costed exposure-reduction backtest
+  stage: model
+  one_breath: Turns a statistical signal into money, after paying to trade it.
+  spec: >
+    Halve gross exposure when the signal exceeds a rolling percentile of its own history,
+    charge a round-trip cost on every change in position, and report risk-adjusted return,
+    worst drawdown and the cost at which the rule stops paying. A signal that survives
+    zero cost and nothing more has no economic content.
+  parameters: {threshold_lookback: 252, min_periods: 126, threshold_percentile: 80, costs_bp: [0, 25, 50, 100, 150, 200]}
+  module: model/baselines.py
+  used_by: [exp-012]
+
+# ---- inference -----------------------------------------------------------------------
+
+- id: mth-grid
+  name: Grid test with multiplicity correction
+  stage: inference
+  one_breath: Runs a hypothesis across every reasonable definition and corrects for looking.
+  spec: >
+    Cross event horizons with severity thresholds, compute the reversal-rate lift in
+    windows near the calendar dates against all other windows in each cell, and apply
+    Benjamini-Hochberg across the full grid. Reporting the best cell of nine without
+    correction finds something roughly every time whether or not anything is there.
+  formula: "lift = P(reversal | within +/-w days of an event) / P(reversal | otherwise)"
+  parameters: {window_days: [1, 3, 5], horizons: [5, 10, 21], correction: benjamini-hochberg, alpha: 0.05}
+  module: validation/hypotheses.py
+  used_by: [exp-013, exp-014]
+
+- id: mth-mdl
+  name: Minimum detectable lift
+  stage: inference
+  one_breath: The smallest effect the sample could ever have found, stated before testing.
+  spec: >
+    Given the number of independent observations and the base rate, the lift required to
+    reach significance at the stated level. Computed and recorded before a test runs, so a
+    null can be distinguished from a failure to look. At 24 observations against a 15.4
+    percent base rate the requirement is a 2.2-fold lift.
+  parameters: {n_effective: 24, base_rate: 0.154, alpha: 0.05, mdl: 2.2}
+  module: validation/hypotheses.py
+  used_by: [exp-001, exp-013, exp-014, exp-020]
+
+- id: mth-spearman
+  name: Spearman rank correlation with partial controls
+  stage: inference
+  one_breath: Rank association between two measures, holding other measures constant.
+  spec: >
+    Rank-transform every variable, then residualise the two of interest against the
+    controls by ordinary least squares and correlate the residuals. Rank-based throughout,
+    so a handful of extreme names cannot drive the result and no linearity in levels is
+    assumed.
+  formula: "rho_partial = corr(rank(x) - X_c b_x, rank(y) - X_c b_y)"
+  parameters: {controls: [log market cap, at-the-money implied volatility], n: 86}
+  module: features/skew.py
+  used_by: [exp-019]
+
+- id: mth-cluster-boot
+  name: Sector-clustered bootstrap
+  stage: inference
+  one_breath: Resamples whole sectors, because names in a sector are not independent.
+  spec: >
+    Resample sectors with replacement, take every company in each drawn sector, and
+    recompute the statistic. A single cross-section has no time dimension to block over, so
+    a block bootstrap does not apply; the dependence that remains is sectoral and the
+    resampling unit is chosen to match it.
+  parameters: {draws: 4000, unit: GICS sector, n_sectors: 9, min_names: 12}
+  module: features/skew.py
+  used_by: [exp-019]
+
+- id: mth-permutation
+  name: Seasonality-preserving permutation null
+  stage: inference
+  one_breath: Shuffles dates in a way that keeps calendar structure but destroys timing.
+  spec: >
+    Circular block permutation that preserves position within the quarter or half-year, so
+    a hypothesis about earnings season or a semi-annual rebalance cannot be confirmed by
+    seasonality in news volume or trading activity alone. Paired with a timestamp shuffle
+    that preserves the mix of articles within a window and destroys their ordering.
+  parameters: {scheme: circular block, preserved: position-within-period}
+  module: validation/hypotheses.py
+  used_by: [exp-014, exp-015, exp-020]
+
+- id: mth-tiers
+  name: Three-tier holdout
+  stage: inference
+  one_breath: History split into open, opened-once, and untouched-until-the-end.
+  spec: >
+    DESIGN is inspected freely. VALIDATE is opened once, after the specification is frozen.
+    SEALED covers 2023 onward and is opened exactly once at the end, with the result
+    reported whatever it is. Enforced in code by a tier lookup on every date, and the
+    panel builder truncates at the sealed boundary by default after an early accidental
+    look.
+  parameters: {sealed_start: 2023-01-01, validate_opened: 0, sealed_opened: 0}
+  module: config.py
+  used_by: [exp-011, exp-019, exp-020]
+
+# ---- adopted from the literature, after finding the exact experiment already run --------
+
+- id: mth-boilerplate-split
+  name: Boilerplate and non-boilerplate similarity, separated
+  stage: feature
+  one_breath: >
+    Splits disclosure text into language every firm uses and language specific to this firm,
+    and measures similarity on each separately.
+  spec: >
+    Bushman, Chen and Williams find that both components carry incremental information about
+    future tail co-movement, and that the non-boilerplate component is significantly
+    timelier: it captures commonality in currently evolving fundamentals, while boilerplate
+    captures slowly-evolving structural commonality. This project treated boilerplate as
+    contamination and worried that similarity was merely tracking industry. The literature
+    says the correct move is to decompose rather than to worry, and that both halves are
+    informative for different horizons.
+  formula: "sim = w_b * cos(boilerplate_i, boilerplate_j) + w_n * cos(nonboiler_i, nonboiler_j), reported separately"
+  parameters: {boilerplate_rule: phrases recurring across a large share of filings, components: [boilerplate, non-boilerplate]}
+  module: LOST:features/riskpairs.py
+  module_lost_note: >
+    This module was implemented and run -- its results are on the record -- but it was
+    never committed and is absent from git history. What survives is its output at
+    data/interim/ (risk-pair similarity outputs). The reproduce commands citing it do not run. Recorded rather than
+    deleted, because a method that silently loses its `module` field reads as one that
+    was never built, and this one was.
+  used_by: [exp-030]
+
+- id: mth-risk-peers
+  name: Top-K risk peers rather than mean similarity
+  stage: feature
+  one_breath: >
+    Uses each company's ten most textually similar peers instead of averaging similarity
+    across everything.
+  spec: >
+    Huang, Ma and You define risk-based peers as the ten firms with the highest cosine
+    similarity in risk-factor exposure within a year, and find they explain cross-sectional
+    variation in returns, valuation and profitability better than conventional industry
+    peers. Mean pairwise similarity, which is what this project computed, dilutes a strong
+    signal from a few genuine peers across a hundred unrelated pairs.
+  formula: "peers_i = argmax_K cos(risk_i, risk_j); exposure_i = mean over peers"
+  parameters: {k: 10, refresh: annual, similarity: cosine on tf-idf}
+  module: LOST:features/riskpairs.py
+  module_lost_note: >
+    This module was implemented and run -- its results are on the record -- but it was
+    never committed and is absent from git history. What survives is its output at
+    data/interim/ (risk-pair similarity outputs). The reproduce commands citing it do not run. Recorded rather than
+    deleted, because a method that silently loses its `module` field reads as one that
+    was never built, and this one was.
+  used_by: [exp-030]
+
+- id: mth-textcov
+  name: Covariance estimation from disclosure similarity
+  stage: model
+  one_breath: >
+    Uses text similarity to improve the estimated covariance matrix, benchmarked against
+    shrinkage.
+  spec: >
+    A Journal of Risk study regresses realised return covariances on risk-disclosure
+    similarity for S&P 100 firms over 2006 to 2020 and finds the resulting estimator beats
+    sample-based estimators including Ledoit-Wolf shrinkage, producing a lower realised
+    standard deviation for the minimum-variance portfolio. The stated conclusion is that
+    risk disclosures carry information not already in historical returns, which is precisely
+    the non-return-derived property every failed candidate in this project lacked. It also
+    supplies a hard economic benchmark in place of asking whether text correlates with a
+    beta.
+  formula: "Sigma_hat = f(sample covariance, text similarity); benchmark = Ledoit-Wolf shrinkage"
+  parameters: {benchmark: Ledoit-Wolf, outcome: realised minimum-variance portfolio volatility, universe: large-cap}
+  module: LOST:features/riskpairs.py
+  module_lost_note: >
+    This module was implemented and run -- its results are on the record -- but it was
+    never committed and is absent from git history. What survives is its output at
+    data/interim/ (risk-pair similarity outputs). The reproduce commands citing it do not run. Recorded rather than
+    deleted, because a method that silently loses its `module` field reads as one that
+    was never built, and this one was.
+  used_by: [exp-030]
+
+- id: mth-quarterly-risk
+  name: Quarterly risk-factor updates
+  stage: feature
+  one_breath: >
+    Uses Part II Item 1A of quarterly filings, where companies update risk factors between
+    annual reports.
+  spec: >
+    The objection that annual disclosures cannot drive a monitor is answered by the filings
+    themselves: quarterly reports carry material changes to risk factors, and the Journal of
+    Risk study uses both annual and quarterly filings. The year-over-year and
+    quarter-on-quarter CHANGE in risk language is a timestamped signal in a way the level is
+    not, which converts a static characteristic into something a monitor can consume.
+  formula: "delta_i,t = 1 - cos(risk_i,t, risk_i,t-1)"
+  parameters: {cadence: quarterly, section: Part II Item 1A, availability: second-level acceptance timestamp}
+  module: data/earnings.py
+  used_by: [exp-030]
+
+# ---- the change measure, and what the literature says to expect from it -----------------
+
+- id: mth-filing-change
+  name: Quarter-on-quarter filing change
+  stage: feature
+  one_breath: >
+    How much a company's own disclosure changed since its last filing, measured four ways
+    rather than one.
+  spec: >
+    Cohen, Malloy and Nguyen compare each filing against the same company's previous one and
+    find that firms which change their language underperform those that do not. They use
+    four measures side by side, which is a specification curve built into the method rather
+    than added afterwards. The comparison is same-firm across time, not firm against firm,
+    which makes it a different object from the similarity work this project has been doing
+    and the one version that is genuinely timestamped.
+  formula: "change_{i,t} = 1 - sim(doc_{i,t}, doc_{i,t-1}), for sim in {cosine, Jaccard, minimum edit distance, simple}"
+  parameters: {measures: 4, comparison: same firm consecutive filings, cosine_mean: 0.86, cosine_sd: 0.21}
+  transformations: >
+    Item 1A specifically carries the strongest effect in their results, which is the section
+    already pulled here. The direction matters: the reported strategy is long the
+    non-changers and short the changers, so the informative event is a company rewriting a
+    section it had left alone.
+  module: LOST:features/riskpairs.py
+  module_lost_note: >
+    This module was implemented and run -- its results are on the record -- but it was
+    never committed and is absent from git history. What survives is its output at
+    data/interim/ (risk-pair similarity outputs). The reproduce commands citing it do not run. Recorded rather than
+    deleted, because a method that silently loses its `module` field reads as one that
+    was never built, and this one was.
+  used_by: [exp-033]
+
+- id: mth-anomaly-haircut
+  name: Expected decay on a published anomaly
+  stage: inference
+  one_breath: >
+    What to expect from a published result before testing it, so a weak finding is not read
+    as a failure.
+  spec: >
+    Three corrections apply to the 188 basis points a month reported for the filing-change
+    strategy. McLean and Pontiff find post-publication returns roughly halve. Hou, Xue and
+    Zhang find 65 percent of 452 anomalies fail a t-statistic of 1.96 once microcaps are
+    handled with NYSE breakpoints and value weighting, rising to 82 percent at a
+    multiple-testing hurdle. And this project's universe is deliberately the top thousand
+    names by index weight, which is where anomalies are weakest. The honest prior is a small
+    fraction of the headline, and a test should be designed to detect that rather than the
+    headline.
+  parameters: {publication_decay: 0.5, sample_ends: 2014, published: 2020, our_universe: large-cap only}
+  module: validation/hypotheses.py
+  used_by: [exp-033]
+
+# ---- established LLM methods from the literature, and one we should have been using -----
+
+- id: mth-ppi
+  name: Prediction-powered inference over model labels
+  stage: inference
+  one_breath: >
+    Uses a small hand-labelled sample to remove the bias that model labels introduce into
+    any statistic computed on them.
+  spec: >
+    Egami and coauthors show that even highly accurate model annotations produce biased
+    estimates and invalid confidence intervals when they are simply averaged, because the
+    downstream analysis treats surrogate labels as if they were gold. Prediction-powered
+    inference and design-based supervised learning fix this by estimating the model's error
+    on a probability sample with gold labels and rectifying the full-population estimate by
+    that measured bias. This project has both ingredients already: ninety hand labels and
+    roughly twenty thousand model labels, and has been treating the latter as truth.
+  formula: "theta_ppi = theta_model(all) - (theta_model(labelled) - theta_gold(labelled))"
+  parameters: {gold_labels_available: 90, model_labels: "~20000", library: ppi_py}
+  transformations: >
+    The direction of the uncorrected error matters here. Label noise attenuates association
+    toward zero, and most of this project's text conclusions are nulls, so the bias runs in
+    the direction of the conclusions already drawn. Correcting it can only strengthen an
+    effect, never manufacture one, which makes it a test the existing nulls have not faced.
+  module: validation/hypotheses.py
+  used_by: [exp-022, exp-023]
+
+- id: mth-anonymised-cot
+  name: Anonymised inputs with analyst-style chain of thought
+  stage: feature
+  one_breath: >
+    Strips company identity from the input and asks the model to reason in steps, rather
+    than to answer directly.
+  spec: >
+    Kim, Muhn and Nikolaev give a model standardised and anonymised financial statements and
+    prompt it to reason as an analyst would, reporting that it forecasts earnings changes
+    directionally better than the median analyst and that performance does not come from
+    training memory. The two design choices are separable and both matter here: anonymising
+    removes the firm-recall channel that Glasserman and Lin call the distraction effect, and
+    step-wise reasoning is what lifts performance on inference tasks over direct answering.
+    Their paper was withdrawn for data review in early 2025, which is itself a reason to
+    treat the headline as unsettled while adopting the method.
+  parameters: {anonymisation: firm identity removed, prompting: chain of thought, claim_status: withdrawn for data review}
+  module: llm/extract.py
+  used_by: [exp-027]
+
+- id: mth-llm-annotator-panel
+  name: Model as one labeller among several, not the labeller
+  stage: inference
+  one_breath: >
+    Treats model labels as one noisy annotator to be validated against humans rather than
+    as ground truth.
+  spec: >
+    The computational social science literature converges on a single rule: validate against
+    human labels, and treat the model as one annotator whose agreement rate is measured
+    rather than assumed. Reported human-human agreement sits around 79 percent with
+    Krippendorff alpha near 0.59 on comparable tasks, so a model matching that is matching
+    humans, not exceeding truth. The specific warning is that high agreement can coexist
+    with systematic misclassification, which averages out for a human panel and does not for
+    a single model applied uniformly.
+  parameters: {human_human_agreement_benchmark: 0.79, krippendorff_alpha: 0.59}
+  module: llm/evaluate.py
+  used_by: [exp-009, exp-022]
+
+# ---- generative agent methods with demonstrated results, and their limits here -----------
+
+- id: mth-proposer-evaluator
+  name: Model proposes, deterministic evaluator scores
+  stage: inference
+  one_breath: >
+    The model writes candidate programs, a fixed scorer ranks them, and the best are fed
+    back to be improved.
+  spec: >
+    FunSearch and AlphaEvolve pair a model that generates candidate programs with an
+    automated evaluator that maps each candidate to a quantitative score, keeping the best
+    and feeding them back. The model never asserts a result: it proposes, and a deterministic
+    function verifies. That is the same division of labour this project adopted on principle
+    and can now cite a working precedent for, in extremal combinatorics, bin packing, matrix
+    multiplication and data-centre scheduling.
+    The adaptation here is a feature search. The model proposes candidate state variables as
+    executable functions, the existing expanding-window harness scores them by pinball loss,
+    and survivors are recombined. The harness already exists and takes 52 seconds per
+    evaluation.
+  formula: "score(candidate) = out-of-sample pinball loss vs trailing volatility, on the open tier only"
+  parameters: {evaluator: expanding-window backtest, seconds_per_evaluation: 52, tier: DESIGN only}
+  transformations: >
+    The transplant is not clean and the difference is the whole risk. FunSearch works because
+    a cap-set construction either is or is not valid; verification is exact and free. A
+    factor backtest is noisy and expensive, so an evolutionary search over features will
+    find noise as reliably as signal. The honest version counts every candidate evaluated,
+    applies the multiplicity correction across all of them rather than the survivor, and
+    tests the winner once on held-out data. Without the candidate count the method is a
+    machine for producing spurious features.
+  module: model/severity.py
+  used_by: [exp-005]
+
+- id: mth-generate-debate-rank
+  name: Generate, debate, rank
+  stage: inference
+  one_breath: >
+    Many candidate hypotheses are generated, argued against each other in a tournament, and
+    ranked before any is chosen.
+  spec: >
+    Google's co-scientist generates hypotheses, has agents debate feasibility in a
+    tournament, and evolves the survivors, with expert reviewers rating the output more
+    novel than the baseline. The validation is unusually hard for this class of system: drug
+    repurposing candidates for acute myeloid leukaemia and epigenetic targets for liver
+    fibrosis were confirmed in wet-lab experiments, and a bacterial gene-transfer mechanism
+    was recovered independently.
+    This project generated every hypothesis one at a time, from one author, and several were
+    poorly specified in ways a competing proposal would have exposed: a null that saturates
+    by construction, a panel that intersects the book by three percent, a control variable
+    placed inside a regression instead of built as a twin estimator. The critique half of
+    this pattern is already built and measured here at three of eight; the generation and
+    tournament halves are not.
+  parameters: {stages: [generate, debate, rank, evolve], validated_in: wet-lab confirmation, our_critique_hit_rate: "3 of 8"}
+  transformations: >
+    The binding difference is verification cost. A wet-lab assay settles a biological
+    hypothesis; nothing settles a factor hypothesis except out-of-sample data this project
+    has two dozen independent regimes of. So the tournament is worth adopting for DESIGN
+    quality, where it is cheap, and cannot substitute for evidence.
+  module: LOST:llm/referee.py
+  module_lost_note: >
+    This module was implemented and run -- its results are on the record -- but it was
+    never committed and is absent from git history. What survives is its output at
+    data/interim/referee_{input,output,scored,truth}.json. The reproduce commands citing it do not run. Recorded rather than
+    deleted, because a method that silently loses its `module` field reads as one that
+    was never built, and this one was.
+  used_by: [exp-035]
+
+- id: mth-honest-loss
+  name: Honest loss over silent substitution
+  stage: inference
+  one_breath: >
+    A stage whose inputs did not survive reports the loss and the recorded result, and never
+    substitutes a different file.
+  spec: >
+    When rebuilding a generator from surviving outputs, some stages find their inputs gone. The
+    convention is that such a stage still RESOLVES -- the command runs, names what is missing,
+    and reports the number that was recorded -- rather than crashing, and rather than reaching
+    for a nearby file and presenting its numbers under the old label.
+    The reasoning is asymmetric. A command that admits its evidence is gone costs a reader one
+    sentence of disappointment. A command that quietly returns the wrong thing costs them a
+    false belief they have no way to detect, and it is indistinguishable from a working
+    citation. Silent substitution is the more dangerous failure by a wide margin, and it is the
+    tempting one, because a nearby file usually exists and usually produces a plausible number.
+    Introduced when the leg-concentration stage was rebuilt: its universe file was never
+    committed, two related universe files were on disk, and using either would have produced
+    percentiles under a label they did not belong to.
+  formula: "resolve AND disclose > crash > substitute"
+  parameters: {applies_to: rebuilt generators, states: [recovered, inputs_not_recovered]}
+  module: features/riskpairs.py
+  used_by: [exp-031]
+
+- id: mth-undefined-null
+  name: An absent null is a finding about the rule, not a gap to fill
+  one_breath: >
+    Some rules are so extreme in the characteristic a null must match that the matched null is
+    undefined. Record the absence, never a substitute.
+  stage: inference
+  module: factor/placebo.py
+  formula: "record the absence > substitute a weaker null > report unmatched as matched"
+  parameters:
+    applies_to: characteristic-matched nulls
+    states: [built, unbuildable]
+  spec: >
+    A characteristic-matched null draws replacements from the same cells as the book it matches,
+    excluding the book's own members. A rule that SELECTS ON the matching characteristic empties
+    those cells by construction: selection on market capitalisation puts every chosen name in
+    the extreme cap buckets, so removing the book's own names leaves nothing to draw from, and
+    the matched null for that rule does not exist.
+    The temptation is to widen the buckets, borrow from adjacent ones, or fall back to an
+    unmatched draw and keep calling it matched. All three produce a number where there should be
+    a statement, and the number is worse than the statement because it is quotable.
+    The convention is the same shape as the honest-loss one and the unmapped sector label. The
+    cell RESOLVES: the rule is scored, its raw statistic is reported, and the row says its
+    matched null is unbuildable and why. A reader can then see that this rule was not tested the
+    way the others were, which is true and which no substituted null would have let them see.
+    The absence is also informative on its own. A rule whose matched null collapses is a rule
+    whose selecting characteristic has no comparison group in the universe -- which is a real
+    property of the rule and worth knowing before anything is concluded about it.
+  transformations: >
+    None. The point of the method is that no transformation is applied to rescue the null.
+  used_by: [exp-045]
+
+- id: mth-fake-rigor
+  name: Do not freeze a parameter of a design that does not exist
+  one_breath: >
+    Committing a seed for a draw that cannot yet be defined looks like rigour and is the
+    opposite; it fixes a number to nothing.
+  stage: inference
+  module: build/validate.py
+  formula: "define the design > commit the seed > draw > never reorder these"
+  parameters:
+    applies_to: seeds, thresholds and any parameter frozen for reproducibility
+    states: [design-exists, design-absent]
+  spec: >
+    Committing a draw seed before drawing is correct and this project does it. Committing a seed
+    for a draw whose SAMPLING FRAME does not exist is not the same act. It produces a commit that
+    looks like discipline, a number that can be quoted as frozen, and no reproducibility at all,
+    because the thing it would reproduce has not been specified.
+    The instance: an overnight package specified a false-negative batch and an extraction pilot,
+    both sampling from the outcomes of a lexical screen over a driver taxonomy. No taxonomy was
+    committed. Seeds for those two draws were deliberately NOT committed, and the absence was
+    logged as a reason code, because freezing a parameter of a design that does not exist is
+    fake rigour. The gold-set seed WAS committed in the same night, because that draw had a
+    definable frame.
+    The distinction generalises to thresholds. A registered crash threshold anchored to the
+    unconditional distribution is a frozen parameter of a design; a round number chosen because
+    something had to be chosen is a frozen parameter of nothing.
+  transformations: >
+    None. The method is an ordering constraint on when a parameter may be frozen.
+  used_by: [exp-045]
+
+- id: mth-null-repair
+  name: A repaired null invalidates every number measured under the old one
+  one_breath: >
+    When a null construction is fixed, re-measure prior results through the repaired path;
+    never quote a published number across a null change.
+  stage: inference
+  module: scripts/run_exp045_secondary_b.py
+  formula: "re-measure through the identical repaired path > quote the published number"
+  parameters:
+    applies_to: any comparison spanning a null-construction change
+    states: [re-measured, quoted-across-a-change]
+  spec: >
+    A permutation result is a statement about an observation RELATIVE to a null. Repair the null
+    and the same observation carries a different number, so a comparison between a new result
+    under the repaired null and an old result under the broken one measures the repair, not the
+    thing being compared. The difference in the null wears the appearance of a difference in the
+    data, and it wears it convincingly, because both numbers are correctly computed.
+    The worked example is the placebo bundle's peer-network cell. The comparator had published a
+    lift of
+    +0.0113 for the 2019 momentum leg, measured with characteristic cells that could span a
+    sector boundary -- the leak that let a definitionally-zero sector floor read +0.0030 at
+    p = 0.015. Forty placebo books were then scored under the repaired cells. Quoting +0.0113
+    against them would have been the error. Re-measured through the identical repaired path the
+    real leg reads +0.0114, so in that instance the repair changed nothing and the comparison
+    stood -- but that was established by measuring, not by assuming, and the assumption was
+    available and would have been wrong-shaped even where it happened to be harmless.
+    The rule is therefore unconditional: a published number is never carried across a null
+    change. It is recomputed, and both figures are reported so a reader can see what the repair
+    cost.
+    THE RULE EXTENDS TO SENTENCES, added 2026-08-26 after it was violated within an hour of
+    being written. Re-issuing the certificate is not the end of the repair: every statement
+    quoting it is stale until rewritten FROM THE ARTEFACT. A console log is not an admissible
+    source for a quoted rate, because it records the instrument under whichever null was in force
+    when it printed, and nothing in the number says which.
+    A certificate fingerprints its universe and that caught a stale population. It does not
+    fingerprint its null construction, which is what changed here.
+  transformations: >
+    None. The prior result is re-run through the current code path with the current null, at the
+    same permutation count, and both the published and re-measured figures are recorded. A
+    quoted rate is taken from the artefact and never from a transcript.
+  used_by: [exp-044, exp-045]
+
+- id: mth-adversarial-population
+  name: Do not test a signal on the population that scores lowest for it
+  one_breath: >
+    A text-versus-returns contest on a return-sorted book is biased against text by
+    construction. Stop running them.
+  stage: inference
+  module: factor/placebo.py
+  formula: "test where the signal has headroom > test where the contest is convenient"
+  parameters:
+    applies_to: text-versus-returns comparisons on characteristic-sorted portfolios
+    states: [headroom-checked, adversarial-population]
+  spec: >
+    A permutation-based grouping statistic measures how much a partition adds OVER a baseline of
+    shared co-movement. The original version of this rule explained the momentum winner leg's low
+    score by saying that sorting raises that baseline and leaves the grouping less to add. That
+    explanation was tested and refuted; it is recorded above and does not support the rule.
+    The rule rests on a ranking instead. Text-grouping lift is near-uniform across construction,
+    and one cell is not.
+    The measurement is on file. The 2019 momentum winner leg co-moves at 0.1432 against a
+    placebo median of 0.0761 -- the 100th percentile of random cap-matched draws of the same size
+    -- while its grouping lift sits at the 5th, at +0.0114 against a placebo median of +0.0248.
+    Forty of forty placebo books cleared their own sector floor and thirty-eight out-lifted the
+    leg. A model naming the same books scored the leg at the 60th percentile of ten placebo
+    t-statistics.
+    THE EXPLANATION ABOVE WAS TESTED AND IS WRONG, and the correction matters more than the tidy
+    story it replaces. Across sixty books under six sorting rules there is no relationship between
+    a book's covariance floor and its grouping lift, at Spearman -0.001, and the ordering is
+    reversed where it should be sharpest: low-volatility books carry twice the momentum winner
+    leg's floor and roughly three times its lift. A raised floor does not suppress grouping.
+    THE STANDING RULE SURVIVES, because it never rested on the explanation. It rests on the
+    measurement: momentum WINNER books carry the lowest grouping lift of anything measured here,
+    +0.0060 against +0.0203 for random draws, with two of three depths not significant at all.
+    Momentum loser books lift +0.0179, one-month sorts +0.0153, capitalisation sorts +0.0214.
+    Whatever suppresses text-grouping on the momentum winner leg is specific to that leg and is
+    not currently explained.
+    So: no further text-versus-returns contests on momentum winner books, on the empirical
+    ground that the population scores lowest and a fourth null there would carry no information.
+    Text components are tested where the sort conferred little, or on quantities returns do not
+    contain at all -- stated per-name exposure for names with too little history for a stable
+    beta, dated corroboration, targeted reading. The claim that this generalises to any
+    characteristic-sorted portfolio was the part that failed, and it is withdrawn rather than
+    softened.
+  transformations: >
+    Before a text-versus-returns comparison is run, the target population's covariance floor is
+    measured against random draws matched on size and sector. A population at the top of that
+    distribution is declared adversarial and the comparison is not run there.
+  used_by: [exp-045, exp-047]
+
+- id: mth-flag-the-attribution
+  name: Flag an attribution as unmeasured at the moment it is proposed
+  one_breath: >
+    Naming the untested step inside an explanation turns connective prose into a registrable
+    question, which is what gets it tested.
+  stage: inference
+  module: build/validate.py
+  formula: "flag at proposal > test the flag > correct in place > re-ground what leaned on it"
+  parameters:
+    applies_to: any causal reading attached to a measured result
+    states: [flagged, tested, refuted-and-corrected]
+  spec: >
+    A result arrives with an explanation attached, because an explanation is how a result becomes
+    quotable. The explanation is usually not the thing that was measured. The discipline is to
+    say so in the same sentence, naming which step is measured and which is inferred, at the
+    moment the explanation is written and not when it is challenged.
+    THE WORKED EXAMPLE, and it is the cleanest instance this project has. A placebo cell found
+    that the momentum winner leg co-moves at twice the rate of a random draw while gaining the
+    least from being grouped. The reading offered was that a conferred loading raises the
+    covariance floor and leaves any grouping less room. It was recorded as "the natural candidate
+    rather than a demonstration: the compression is measured, the attribution of it to the
+    conferred loading is not."
+    That flag is what produced the test. It named an untested step, which made the step a
+    question with a shape, which made it registrable -- and the registration became a cell whose
+    prediction was a single downward-sloping relationship between covariance floor and grouping
+    lift across sorting rules. Sixty books later the relationship is Spearman -0.001, and the
+    ordering is reversed where it should be sharpest: low-volatility books carry twice the
+    winner leg's floor and about three times its lift.
+    Four steps follow a refutation of this kind and all four are required. The refuted
+    explanation is corrected IN PLACE rather than deleted, because the flag attached to it is the
+    evidence that the process worked. The refutation carries its own power statement, so a reader
+    knows what was excluded: here, a strong relationship at 80 percent power for rho at or below
+    -0.50, with a modest one not excluded. Everything that leaned on the explanation is swept and
+    re-grounded, including standing rules, parked registrations that cited it as motivation, and
+    any prose artefact already rendered. And what survives is stated at its true size, which was
+    smaller and stranger than the story it replaced.
+    This is the fourth time the machinery has caught the project's own best story. It is the
+    first time the reasoning that caught it was written down before it was needed.
+  transformations: >
+    None to the data. The transformation is to the sentence: every causal reading names the
+    measured step and the inferred step separately.
+  used_by: [exp-045, exp-047]
+
+- id: mth-crash-threshold
+  name: A crash threshold anchored to the unconditional distribution
+  one_breath: >
+    Define the level as a percentile of the unconditional distribution, so the base rate beside
+    it is exact rather than approximate.
+  stage: construction
+  module: model/severity.py
+  formula: "threshold(q) = quantile_q(10-day forward momentum returns, DESIGN tier)"
+  parameters:
+    horizon_days: 10
+    quantiles: [0.05, 0.01]
+    level_5pct: -0.0432
+    level_1pct: -0.0933
+    vintage: DESIGN tier through 2022-12-15, n=25288, frozen 2026-08-26
+  spec: >
+    A crash probability is only readable beside its base rate, and a threshold picked as a round
+    number makes that comparison approximate for no reason. Anchoring the level to a percentile
+    of the unconditional distribution makes it exact by construction: 5.00 percent of DESIGN-tier
+    10-day momentum returns fall at or below -0.0432, and 1.00 percent at or below -0.0933,
+    because that is how the numbers were defined.
+    Computed ONCE, on every DESIGN-tier observation, and frozen as a LEVEL rather than
+    recomputed. A threshold that drifts with the sample it is applied to is not a threshold; the
+    frozen level is what makes a probability at one date comparable with a probability at
+    another.
+    One figure is recorded because it corrects a common informal description. The 5th percentile
+    of a 10-day momentum return is -4.3 percent, not the eight-percent-class move the band is
+    sometimes named by. An eight-percent move sits near the 1st percentile. The block therefore
+    renders both lines rather than one.
+  transformations: >
+    None at use. The level is read from a constant and never recomputed on the sample under test.
+  used_by: []
+
+- id: mth-mechanism-first
+  name: Diagnose the mechanism before testing the stability
+  one_breath: >
+    A test that identifies WHY two numbers differ decides more, and costs less, than one that
+    only asks whether a number is stable.
+  stage: inference
+  module: validation/power.py
+  formula: "identify the mechanism > establish the property > repeat the measurement"
+  parameters:
+    applies_to: any discrepancy between two records of the same quantity
+    states: [mechanism-identified, stability-only]
+  spec: >
+    Faced with a certificate artefact and a console log disagreeing on three false-alarm rates,
+    the instructed response was a triple run: repeat the measurement, and if it wanders the
+    harness is nondeterministic. That answers whether the number is stable and nothing else.
+    The cheaper test answered more. Compute the disputed statistic under BOTH candidate
+    constructions -- the repaired characteristic cells and the broken ones -- and see which one
+    each source matches. All three statistics matched both ways exactly, which established
+    determinism, identified the cause as a null repair between two writes, cleared every other
+    certificate, and named which of the two records was stale. Minutes rather than a triple run,
+    and four conclusions rather than one.
+    The dividend compounds. Because determinism was ESTABLISHED rather than assumed, the schema
+    change that followed -- fingerprinting the null construction into the certificate -- verified
+    for free: re-issuing under the extended schema had to reproduce every value exactly, and did.
+    A stability-only diagnosis would have licensed neither the clearance nor the free
+    verification.
+    The general form: when two records of the same quantity disagree, prefer a test that
+    distinguishes CAUSES over a test that measures variance. Variance tests scale with
+    repetition; mechanism tests scale with how many hypotheses they eliminate.
+  transformations: >
+    None. The method is a choice of diagnostic, not a change to the data.
+  used_by: [exp-044]
+

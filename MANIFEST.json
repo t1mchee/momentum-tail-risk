@@ -1,0 +1,68 @@
+{
+  "built_from_commit": "469c8d42ad8c1a8c154d38c725b689f3f4bdd41f",
+  "files": 642,
+  "bytes": 77760536,
+  "megabytes": 77.8,
+  "contents": [
+    {
+      "path": "src",
+      "what": "the package, unpruned",
+      "pruned": "bytecode only"
+    },
+    {
+      "path": "scripts",
+      "what": "the 31 scripts the proof of concept runs",
+      "pruned": "166 scripts belonging to closed experiments"
+    },
+    {
+      "path": "notebooks",
+      "what": "the proof-of-concept notebook, with outputs from a fresh run",
+      "pruned": "checkpoints"
+    },
+    {
+      "path": "app",
+      "what": "the read-out: one server, one page",
+      "pruned": "nothing"
+    },
+    {
+      "path": "project",
+      "what": "what REGISTER.md is generated from: 91 experiments, 98 instrument faults, registered before each run",
+      "pruned": "nothing -- a register with the failures removed is not a register"
+    },
+    {
+      "path": "reports",
+      "what": "every artifact the pages are composed from, committed so replay needs no key",
+      "pruned": "intermediate output from closed experiments"
+    },
+    {
+      "path": "data/raw/french",
+      "what": "vintages for momentum_daily, ff3_daily, mom_10_daily, with their provenance JSON",
+      "pruned": "the industry and size-sorted files, unused by the PoC"
+    },
+    {
+      "path": "data/raw/fred",
+      "what": "the reference series",
+      "pruned": "nothing"
+    },
+    {
+      "path": "data/raw/fed",
+      "what": "FOMC statement dates, for the catalyst-window fields on the page",
+      "pruned": "the statement texts; only their dates are read"
+    },
+    {
+      "path": "data/processed",
+      "what": "point-in-time leg membership, the eight reference spreads, the feature panel",
+      "pruned": "everything derived from a source not shipped"
+    },
+    {
+      "path": "data/raw/ishares/IWV/panel",
+      "what": "15 yearly files, 2012 onward, columns as_of/ticker/price/weight_pct/sector/quantity only, daily: 3278 dates, 9,290,010 rows",
+      "pruned": "years before 2012 and every column the PoC does not read. The daily dates are NOT pruned: split correction is calibrated for daily spacing and monthly input would change the prices the sort ranks on"
+    },
+    {
+      "path": "data/raw/edgar_8k",
+      "what": "the full filing index plus 318 filing bodies for the 2020-10-31 legs",
+      "pruned": "the other 54,948 bodies; other dates replay from committed parquets"
+    }
+  ]
+}
