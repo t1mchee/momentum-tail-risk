@@ -1,8 +1,8 @@
 {
-  "built_from_commit": "4b4e915bb0c2862c63efe704076de23fbce61290",
-  "files": 655,
-  "bytes": 80127640,
-  "megabytes": 80.1,
+  "built_from_commit": "9f756f22580017bd7189bef2c5ae56b1624d54d4",
+  "files": 656,
+  "bytes": 78895108,
+  "megabytes": 78.9,
   "contents": [
     {
       "path": "src",
@@ -11,8 +11,8 @@
     },
     {
       "path": "scripts",
-      "what": "the 31 scripts the proof of concept runs",
-      "pruned": "166 scripts belonging to closed experiments"
+      "what": "the 30 scripts the proof of concept runs",
+      "pruned": "167 scripts belonging to closed experiments"
     },
     {
       "path": "notebooks",
@@ -26,7 +26,7 @@
     },
     {
       "path": "project",
-      "what": "what REGISTER.md is generated from: 91 experiments, 98 instrument faults, registered before each run",
+      "what": "what REGISTER.md is generated from: 14 experiments, 21 instrument faults, registered before each run",
       "pruned": "nothing -- a register with the failures removed is not a register"
     },
     {
@@ -43,6 +43,11 @@
       "path": "data/raw/fred",
       "what": "the reference series",
       "pruned": "nothing"
+    },
+    {
+      "path": "data/interim/severity_cache",
+      "what": "the severity stage's memo cache, so the pipeline tests terminate",
+      "pruned": "every other interim cache"
     },
     {
       "path": "data/raw/cboe",

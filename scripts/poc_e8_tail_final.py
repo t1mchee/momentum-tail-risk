@@ -105,8 +105,18 @@ def main() -> None:
         "pinball_ratio": {
             "on_the_book": e089["vs_uncond"]["scaled"],
             "on_the_published_factor": e084["primary_scaled_vs_uncond"]["12"],
+            # The INTERVAL, not the ratio. `block_ratio` returns la.sum()/lb.sum() as its
+            # point estimate, which has no block-length dependence at all, so reporting the
+            # ratio at three block lengths printed the same number three times to sixteen
+            # decimals and called it a sensitivity check. What block length actually governs
+            # is the width of the bootstrap interval, and that is what varies here.
             "block_lengths_published_factor": {
-                b: e084["primary_scaled_vs_uncond"][b]["ratio"] for b in ("6", "12", "24")},
+                b: {"ci90": e084["primary_scaled_vs_uncond"][b]["ci90"],
+                    "excludes_one": e084["primary_scaled_vs_uncond"][b]["excludes_one"]}
+                for b in ("6", "12", "24")},
+            "block_length_note": (
+                "the point ratio is invariant to block length by construction; only the "
+                "interval moves, so only the interval is reported"),
         },
         "shuffle_control": {
             "real_ratio": e086["arm_a"]["real_ratio"],

@@ -73,7 +73,7 @@ what the reader's existing screens say, what the loser leg is priced on, the nea
 analogues with an adjudicator's verdict, the catalyst days in the window, and what is designed
 and not built.
 
-Every numeral on it is registered: **74 numerals against 55 computed
+Every numeral on it is registered: **74 numerals against 56 computed
 fields**, and a build that finds a hand-typed number stops. Where several registered fields
 render the same string — both lines' breach rate at this date is 9.26% — the provenance says
 **AMBIGUOUS** and lists the candidates instead of guessing; **9** occurrences do.
@@ -158,7 +158,7 @@ the extract can be checked rather than taken on trust.
 ```
 src/unstructured_momentum/   the package: data loaders, factor construction, the null,
                              severity, the model seats and their gates
-scripts/                     the 31 scripts the proof of concept runs, in README order
+scripts/                     the 30 scripts the proof of concept runs, in README order
 app/                         the read-out: a FastAPI server and one static page
 REGISTER.md                  every experiment behind this package, with the hypothesis and
                              prediction frozen before it ran, and the faults found on the way
@@ -171,7 +171,7 @@ tests/                       the guards, including eight on data integrity
 ```
 
 `MANIFEST.json` records exactly what was pruned from the working repository and why. The
-working copy is 8.6 GB across twenty sources; this is 80 MB, and the prunes are row and column
+working copy is 8.6 GB across twenty sources; this is 79 MB, and the prunes are row and column
 filters, never transformations.
 
 ## The scripts, in the order the argument runs

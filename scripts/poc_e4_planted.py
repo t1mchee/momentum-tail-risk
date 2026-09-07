@@ -172,13 +172,19 @@ def main() -> None:
     client = anthropic.Anthropic()
     rows = []
     hosts = declined.sample(frac=1.0, random_state=SEED).reset_index(drop=True)
-    hi = 0
     # The control the first two runs lacked. Every host was DECLINED on the committed run, but
     # the reader is not deterministic, so the baseline for "does a plant make it flag" is not
-    # zero -- it is whatever a fresh read of the same document does with nothing added. Without
+    # zero -- it is whatever a fresh read of the SAME document does with nothing added. Without
     # this the recall number has no denominator, and it doubles as the run-to-run reliability
     # measurement the design defines and nothing had run.
+    #
+    # `hi` is reset PER ARM. It used to be initialised once above this loop, so the three arms
+    # consumed disjoint slices of the shuffled host list -- measured overlap 3, 3 and 0 of 120
+    # -- while this comment and the printed label both said "same hosts". The lift was therefore
+    # a difference between independent samples rather than a paired one, and the control did
+    # not control for the thing it names. Every arm now reads the same hosts in the same order.
     for arm in ("unplanted_reread", "planted_condition", "planted_boilerplate"):
+        hi = 0
         done = 0
         while done < N_PER_ARM and hi < len(hosts):
             h = hosts.iloc[hi]; hi += 1

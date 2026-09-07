@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+from conftest import needs
 import pytest
 import yaml
 
@@ -51,6 +52,7 @@ def test_market_returns_are_not_zero_filled_in_the_state_features() -> None:
 
 # ---- item 3: leg membership must not be carried across a holdings gap -----------------
 def _registered_gaps() -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    needs("project/sources.yaml", "the source register")
     data = yaml.safe_load(Path("project/sources.yaml").read_text())
     entries = data if isinstance(data, list) else data.get("sources", data)
     for s in entries:
@@ -85,6 +87,7 @@ def test_leg_membership_is_not_silently_carried_across_a_holdings_gap() -> None:
 
 # ---- item 4: retrospectively constructed inputs are restricted ------------------------
 def test_uncertainty_indices_are_restricted_to_the_contemporaneous_era() -> None:
+    needs("scripts/build_state_vector.py", "the state-vector builder")
     src = Path("scripts/build_state_vector.py").read_text()
     assert "TEXTMACRO_START" in src, "the uncertainty block must declare a start cutoff"
     assert "t[t.index >= TEXTMACRO_START]" in src, (
@@ -133,6 +136,7 @@ def test_every_zero_fill_in_the_package_is_classified() -> None:
     """
     import re
 
+    needs("project/zero_fill_registry.yaml", "the zero-fill classification registry")
     reg = yaml.safe_load(Path("project/zero_fill_registry.yaml").read_text())
     known = {(s["where"], s["code"]) for s in reg["sites"]}
     pattern = re.compile(r"fillna\(\s*0|nan_to_num|fill_value\s*=\s*0")
@@ -162,6 +166,8 @@ def test_declared_constants_are_bound_at_module_level() -> None:
     import ast
 
     checks = [("scripts/build_state_vector.py", "TEXTMACRO_START")]
+    for _p, _ in checks:
+        needs(_p, "the module whose constant binding is under test")
     for path, name in checks:
         tree = ast.parse(Path(path).read_text())
         bound = {
@@ -189,6 +195,7 @@ def test_registry_reconciles_with_the_store() -> None:
     recorded, the same 2017 outage in MTUM, and a two-week error in a source entry written the
     previous day.
     """
+    needs("scripts/reconcile_sources.py", "the source-coverage reconciler")
     sys.path.insert(0, "scripts")
     from reconcile_sources import reconcile
 

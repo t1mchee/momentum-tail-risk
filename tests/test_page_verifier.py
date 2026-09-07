@@ -6,13 +6,20 @@ import copy
 
 import pytest
 
+from conftest import needs
+
 from unstructured_momentum.pipeline.page import Composer, render
 from unstructured_momentum.pipeline.verify_page import verify
 
 
 @pytest.fixture(scope="module")
 def good():
-    return Composer().compose("2019-09-30").as_dict()
+    try:
+        return Composer().compose("2019-09-30").as_dict()
+    except FileNotFoundError as exc:
+        needs(str(exc).split("'")[1] if "'" in str(exc) else "the composer's inputs",
+              "the 2019-09-30 panel the verifier fixture composes from")
+        raise
 
 
 def test_a_real_page_is_accepted(good):

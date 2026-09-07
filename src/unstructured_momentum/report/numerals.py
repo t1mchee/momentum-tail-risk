@@ -47,7 +47,10 @@ DEFINITIONAL: dict[str, str] = {
 #: to contain digits. Both are stripped before the scan.
 _DATE = re.compile(r"\b\d{4}-\d{2}-\d{2}\b")
 _NAMES = re.compile(
-    r"\b8-K\b|COVID-19|\bMTUM\b|\bCOR1M\b|\bVIX\b|Russell 3000|\b12-1\b|\bItem 1A\b")
+    r"\b8-K\b|COVID-19|\bMTUM\b|\bCOR1M\b|\bVIX\b|Russell 3000|\b12-1\b|\bItem 1A\b"
+    # `item 2.02` names the 8-K item that carries results of operations. Like Item 1A it is
+    # a form identifier, not a quantity the page asserts.
+    r"|\bitem 2\.02\b")
 #: A decimal point counts only when digits follow it. Without that, a sentence-final numeral
 #: swallows the full stop -- "on 0." -- and then matches no registered field, so the canary
 #: rejects a page over punctuation.

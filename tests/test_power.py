@@ -10,6 +10,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from conftest import needs
+
 from unstructured_momentum.features.concentration import mean_pairwise
 from unstructured_momentum.validation import power as P
 
@@ -18,9 +20,12 @@ POOL = "data/gate1_E.npy"
 
 @pytest.fixture(scope="module")
 def pool():
+    # np.load raises before the size check can run, so a missing pool produced five errors
+    # rather than the skip this guard has always said it wanted.
+    needs(POOL, "the Gate 1 embedding pool these power checks plant into")
     p = np.load(POOL)
     if len(p) < 300:
-        pytest.skip("gate1_E.npy missing or too small")
+        pytest.skip(f"{POOL} holds {len(p)} rows; these checks need 300")
     return p
 
 

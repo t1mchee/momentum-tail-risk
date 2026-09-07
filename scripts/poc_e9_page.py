@@ -178,12 +178,25 @@ def main() -> None:
     # numeral canary cannot catch that, because it checks numbers and not claims.
     vs_ = "passes" if cs["p"] > 0.10 else "fails"
     vu_ = "passes" if cu["p"] > 0.10 else "fails"
+    # The branch tests COUNTS. It used to conclude from equal counts that the two lines
+    # "breach on the same formations", which is a claim about SETS and was false: four of the
+    # five are shared, the scaled line breaches on 2016-10-31 and the unconditional on
+    # 2020-07-31. That is exactly the kind of claim the comment above says the canary cannot
+    # catch, written three lines below the comment. The overlap is now computed.
     if cs["breaches"] == cu["breaches"]:
+        pt = tail[tail["formation"] < AS_OF]
+        b_s = set(pt.loc[pt["realised"] < pt["var_scaled"], "formation"])
+        b_u = set(pt.loc[pt["realised"] < pt["var_uncond"], "formation"])
+        shared = reg.num("shared_breaches", len(b_s & b_u),
+                         "formations where both lines breach", "reports/poc/e5_book_tail.csv",
+                         CMD5)
         calibration_note = [
-            "  At this date the two lines cannot be told apart: they breach on the same",
-            "  formations and Kupiec says the same of both. The divergence that makes the",
-            "  scaled line the better calibrated one appears later in the tier, and a reader",
-            "  standing here could not know it. The register carries the full-tier figures.",
+            "  At this date the two lines cannot be told apart on count: each breaches on the",
+            f"  same number of formations, {shared} of them the same formations, and Kupiec says",
+            "  the same of both. They are not the same set -- each has one breach the other",
+            "  does not -- so this is agreement on the test, not identical behaviour. The",
+            "  divergence that makes the scaled line the better calibrated one appears later",
+            "  in the tier, and a reader standing here could not know it.",
         ]
     else:
         calibration_note = [
@@ -225,7 +238,7 @@ def main() -> None:
                      "reports/gate2/nov2020_extractions.parquet", CMDX)
 
     # ---- item 8, catalyst fields ----------------------------------------------------
-    ew = reg.pct("earnings_weight_in_window", row["earnings_weight_in_window"],
+    _ew_unused = reg.pct("earnings_weight_in_window", row["earnings_weight_in_window"],
                  "gross book weight reporting earnings in the window",
                  "reports/poc/e5_book_tail.csv", CMD5, dp=1)
 
@@ -287,7 +300,14 @@ def main() -> None:
                          "uv run python scripts/poc_e7_expected_labels.py")
             L += ["  The theme below is the 8-K survival-condition reading, by the fallback rule",
                   "  registered before either result was seen. The theme pipeline ran on this date",
-                  f"  and produced no theme above the placebo. Across {ne} episode dates it raised a",
+                  "  and produced no theme above the placebo.",
+                  "  The three sentences that follow are INSTRUMENT DIAGNOSTICS, not market data,",
+                  "  and they are NOT point-in-time: they score the pipeline across every date it",
+                  "  was run on, five of which are after this one and three after the tier seal.",
+                  "  They say how well the instrument works, which a reader here could not know;",
+                  "  they are printed because the alternative is asking you to trust the fallback",
+                  "  without saying why it was needed.",
+                  f"  Across {ne} episode dates it raised a",
                   f"  theme on {nr}. The registration named an expected label in advance for {nl} of",
                   f"  those dates, and {nm} matched -- but no match was reachable, because the dates",
                   "  where a theme rose are not among the dates that carry an expected label. That",
@@ -362,10 +382,17 @@ def main() -> None:
           "  the v1 engine's state space, not the design's exposures, so these are the v1",
           "  engine's neighbours.",
           "", "CATALYST DAYS IN THE WINDOW   [fields, not a model input]",
-          f"  An FOMC decision day falls in the next ten sessions. Companies holding {ew} of",
-          "  gross book weight report earnings in it. These are printed so the reader can see",
-          "  what is scheduled; they are NOT inputs to the severity line above, because",
-          "  conditioning on them did not improve it.", "",
+          "  An FOMC decision day falls in the next ten sessions. FOMC dates are published a",
+          "  year ahead, so this one is genuinely scheduled and genuinely knowable today.",
+          "  The earnings figure this line used to carry has been REMOVED. It was built from",
+          "  the acceptance timestamps of 8-K item 2.02 filings inside the forecast window --",
+          "  that is, from filings that did not exist on this date. It described what did",
+          "  happen, not what was scheduled, and a page that sells point-in-time discipline",
+          "  cannot print realised data under the word `scheduled`. Reporting an earnings",
+          "  calendar properly needs a source of announced dates, which this package does not",
+          "  have; it is named in DESIGNED AND NOT BUILT rather than approximated.",
+          "  Neither field is an input to the severity line, because conditioning on the",
+          "  calendar state did not improve it.", "",
           "WHAT WOULD CHANGE THIS READING",
           "  A vaccine or treatment readout resolves the shared condition, the loser leg reprices",
           "  upward together, and the short half takes the loss. Named by the filings, not by a",

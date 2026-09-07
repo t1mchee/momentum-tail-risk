@@ -9,6 +9,7 @@ than the instrument.
 
 from __future__ import annotations
 
+from conftest import needs
 from unstructured_momentum.llm import exposure as X
 
 
@@ -62,6 +63,7 @@ def test_evidence_must_state_a_rate_exposure_not_merely_debt():
 
 
 def test_record_schema_matches_the_surviving_cache():
+    needs("data/interim/exposure_cache.json", "the surviving exposure cache")
     old = X.legacy_records("real")
     assert len(old) == 120
     sample = next(iter(old.values()))
@@ -71,6 +73,7 @@ def test_record_schema_matches_the_surviving_cache():
 
 def test_both_placebo_strata_survive_as_a_two_sided_target():
     """The failed sentence-boundary attempt is as useful as the one that worked."""
+    needs("data/interim/exposure_cache.json", "the surviving exposure cache")
     first, second = X.legacy_records("placebo"), X.legacy_records("placebo2")
     assert sum(1 for v in first.values() if v["exposure"] == "none") == 9
     assert sum(1 for v in second.values() if v["exposure"] == "none") == 20

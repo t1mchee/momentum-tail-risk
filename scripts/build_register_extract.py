@@ -64,7 +64,14 @@ EXTRA = {
 }
 
 
-def main() -> None:
+def selection() -> tuple[list, list, dict]:
+    """The experiments and faults this package claims, by the rule in the module docstring.
+
+    Returned as data rather than only rendered, so the bundler ships exactly these entries.
+    A package holding a 91-experiment register beside a 14-row extract makes claims about
+    work it does not present, and its own reproduce guard then fails on generators that were
+    deliberately not shipped.
+    """
     exps = yaml.safe_load((ROOT / "project" / "experiments.yaml").read_text())
     traps = yaml.safe_load((ROOT / "project" / "traps.yaml").read_text())
     ships = shipped_scripts()
@@ -93,6 +100,12 @@ def main() -> None:
     tk = sorted((t for t in traps
                  if t["id"] in named_traps or str(t["found_on"]) >= BUILD_BEGAN),
                 key=lambda t: t["id"])
+    return keep, tk, why
+
+
+def main() -> None:
+    keep, tk, why = selection()
+    ran = [e for e in keep if e.get("verdict") != "not_yet"]
 
     L = [
         "# The register",

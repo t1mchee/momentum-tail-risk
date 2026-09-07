@@ -58,10 +58,29 @@
       "excludes_one": true
     },
     "block_lengths_published_factor": {
-      "6": 0.8561217625005166,
-      "12": 0.8561217625005166,
-      "24": 0.8561217625005166
-    }
+      "6": {
+        "ci90": [
+          0.7773203814986324,
+          0.9283620752473085
+        ],
+        "excludes_one": true
+      },
+      "12": {
+        "ci90": [
+          0.7864443181924602,
+          0.9277020436535068
+        ],
+        "excludes_one": true
+      },
+      "24": {
+        "ci90": [
+          0.7868419920167784,
+          0.9233492237440413
+        ],
+        "excludes_one": true
+      }
+    },
+    "block_length_note": "the point ratio is invariant to block length by construction; only the interval moves, so only the interval is reported"
   },
   "shuffle_control": {
     "real_ratio": 0.8561217625005166,

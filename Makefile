@@ -29,7 +29,7 @@ live:
 	uv run python scripts/gate2_extract.py loser
 	uv run python scripts/gate2_extract.py winner
 	uv run python scripts/gate2_debate.py
-	uv run python scripts/gate2_page.py
+	uv run python scripts/poc_e9_page.py
 
 dash:
 	uv run python -m uvicorn app.server:app --port 8000
