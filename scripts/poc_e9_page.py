@@ -19,7 +19,9 @@ before either was seen.
 """
 from __future__ import annotations
 
+import glob
 import json
+import pickle
 import sys
 from pathlib import Path
 
@@ -28,11 +30,11 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
+from unstructured_momentum.data import cboe  # noqa: E402
 from unstructured_momentum.pipeline import contract  # noqa: E402
 from unstructured_momentum.report.numerals import (  # noqa: E402
     Registry, document_marks, enforce, segments)
 
-import gate2_page as G2  # noqa: E402
 
 AS_OF = pd.Timestamp("2020-10-31")          # the formation month-end
 TRADING = "2020-10-30"                       # the last session before it
@@ -42,6 +44,45 @@ R = "─" * 78
 CMD8 = "uv run python scripts/poc_e8_tail_final.py"
 CMD5 = "uv run python scripts/poc_e5_book_tail.py"
 CMDX = "uv run python scripts/gate2_extract.py loser"
+
+
+# --------------------------------------------------------------------------------------
+# The screen inputs. These lived in `gate2_page.py`, the FIRST design's page generator, and
+# were imported from it. That script does not ship -- it produces a superseded PM page whose
+# VaR is half this one's -- so importing from it made the delivered page unrenderable in the
+# package while working perfectly in the working repository, where the file still exists.
+# Thirty-five lines, copied rather than depended on.
+# --------------------------------------------------------------------------------------
+
+
+def _sectors() -> dict:
+    sec = {}
+    for f in sorted(glob.glob("data/raw/ishares/IWV/panel/IWV_*.parquet")):
+        d = pd.read_parquet(f, columns=["as_of", "ticker", "sector"])
+        d = d[d.as_of <= AS_OF]
+        if len(d):
+            sec.update(d.drop_duplicates("ticker", keep="last")
+                        .set_index("ticker")["sector"].to_dict())
+    return sec
+
+
+def _legs() -> dict:
+    return pickle.load(open("data/processed/leg_members.pkl", "rb"))[AS_OF]
+
+
+def sector_screen(sec: dict, losers: list) -> dict:
+    s = pd.Series([sec.get(t) for t in losers]).dropna()
+    share = s.value_counts(normalize=True)
+    return {"names": len(s), "sectors": int(s.nunique()), "hhi": float((share ** 2).sum()),
+            "top": share.index[0], "top_share": float(share.iloc[0])}
+
+
+def aggregates() -> dict:
+    out = {}
+    for n in ("VIX", "COR1M"):
+        v = cboe.close(n).dropna().loc[:AS_OF]
+        out[n] = {"level": float(v.iloc[-1]), "pctile": float((v <= v.iloc[-1]).mean())}
+    return out
 
 
 def theme_source() -> tuple[str, dict]:
@@ -125,10 +166,10 @@ def main() -> None:
     cov = {"scaled": E1.kupiec(yv, past["var_scaled"].to_numpy()),
            "unconditional": E1.kupiec(yv, past["var_uncond"].to_numpy())}
 
-    sec = G2._sectors()
-    legs = G2._legs()
-    scr = G2.sector_screen(sec, list(legs["losers"]))
-    agg = G2.aggregates()
+    sec = _sectors()
+    legs = _legs()
+    scr = sector_screen(sec, list(legs["losers"]))
+    agg = aggregates()
 
     lo = pd.read_parquet(GATE2 / "nov2020_extractions.parquet")
     lo = lo[lo["error"].isna()] if "error" in lo else lo
