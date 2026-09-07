@@ -13,6 +13,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+from conftest import needs
+
 from unstructured_momentum.pipeline import run as R
 from unstructured_momentum.pipeline.brief import render
 from unstructured_momentum.pipeline.dates import GOLDEN, resolve
@@ -70,6 +72,7 @@ def test_stale_partition_is_refused_not_reused():
     which has nothing to do with which date is used, so the sealed date bought nothing and cost
     a tier violation on every run.
     """
+    needs("data/processed/exp043_runs.csv", "the naming stage's partition runs")
     res = R.run("2022-06-30", translate=False)
     why = res.could_not_measure.get("composition", "")
     assert "stale" in why, f"expected a staleness refusal, got {why!r}"
