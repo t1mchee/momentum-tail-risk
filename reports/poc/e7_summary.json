@@ -1390,7 +1390,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.572308+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.224089+00:00"
   },
   {
    "date": "2017-08-31",
@@ -1416,7 +1416,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.574073+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.225240+00:00"
   },
   {
    "date": "2017-12-31",
@@ -2163,7 +2163,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.574433+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.225841+00:00"
   },
   {
    "date": "2018-08-31",
@@ -2966,7 +2966,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.575680+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.226685+00:00"
   },
   {
    "date": "2019-08-31",
@@ -4721,7 +4721,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.578209+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.227741+00:00"
   },
   {
    "date": "2020-10-31",
@@ -5623,7 +5623,7 @@
    "expected_terms_in_top_theme_label": [
     "treatment"
    ],
-   "expected_label_carried_at": "2026-09-07T10:27:42.581156+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.229116+00:00"
   },
   {
    "date": "2020-12-31",
@@ -7560,7 +7560,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.582647+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.230217+00:00"
   },
   {
    "date": "2022-10-31",
@@ -9216,7 +9216,7 @@
    "label_matches_expected": false,
    "label_match_basis": "no theme rose above the 95th percentile of the random books' maximum, so the registered rule has nothing to match",
    "expected_terms_in_top_theme_label": [],
-   "expected_label_carried_at": "2026-09-07T10:27:42.584955+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.231633+00:00"
   },
   {
    "date": "2024-06-30",
@@ -11153,7 +11153,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.587319+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.233683+00:00"
   },
   {
    "date": "2024-12-31",
@@ -13240,7 +13240,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.590304+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.235094+00:00"
   },
   {
    "date": "2025-03-31",
@@ -15356,7 +15356,7 @@
    "label_matches_expected": false,
    "label_match_basis": "no theme rose above the 95th percentile of the random books' maximum, so the registered rule has nothing to match",
    "expected_terms_in_top_theme_label": [],
-   "expected_label_carried_at": "2026-09-07T10:27:42.593552+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.236682+00:00"
   },
   {
    "date": "2026-07-31",
@@ -17441,7 +17441,7 @@
    "label_matches_expected": null,
    "label_match_basis": "no expected label was registered for this date",
    "expected_terms_in_top_theme_label": null,
-   "expected_label_carried_at": "2026-09-07T10:27:42.596579+00:00"
+   "expected_label_carried_at": "2026-09-07T14:43:40.238167+00:00"
   }
  ],
  "expected_label_check": {
@@ -17589,6 +17589,6 @@
    }
   ],
   "written_by": "scripts/poc_e7_expected_labels.py",
-  "written_at": "2026-09-07T10:27:42.598497+00:00"
+  "written_at": "2026-09-07T14:43:40.239340+00:00"
  }
 }

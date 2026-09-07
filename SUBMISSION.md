@@ -27,12 +27,12 @@ can be checked rather than taken on trust:
 | Element | Where it is checkable here |
 |---|---|
 | 1 · Problem definition | the event definitions are frozen constants in [`src/unstructured_momentum/pipeline/contract.py`](src/unstructured_momentum/pipeline/contract.py); the horizon and quantile appear on the example output |
-| 2 · Data design | [`docs/DATA_INVENTORY.md`](docs/DATA_INVENTORY.md), and `project/sources.yaml` — 26 sources with their publication lags and coverage limits |
+| 2 · Data design | [`docs/DATA_INVENTORY.md`](docs/DATA_INVENTORY.md) — every source with its publication lag and coverage limits, and where point-in-time gating is applied |
 | 3 · System design | [`docs/GATE2_POC.md`](docs/GATE2_POC.md) and [`docs/ANALOGUE_SYSTEM.md`](docs/ANALOGUE_SYSTEM.md); the deterministic/model split is visible in the read-out's stage labels, and [`docs/AI_USE_LOG.md`](docs/AI_USE_LOG.md) says where AI adds value and where it was declined |
 | 4 · **Proof of concept** | **the whole repository**, and `make dash` for the interactive form |
-| 5 · Validation | [`REGISTER.md`](REGISTER.md) — every experiment behind this package, each registered before it ran, four of them not supporting their hypothesis |
+| 5 · Validation | [`REGISTER.md`](REGISTER.md) — every experiment behind this package, each registered before it ran, 6 of the 13 that ran not supporting their hypothesis |
 | 6 · Example output | [`reports/poc/page_2020-10-30.txt`](reports/poc/page_2020-10-30.txt) |
-| 7 · Production path | the memo |
+| 7 · Production path | the memo carries the argument; what is checkable here is the list of what is designed and NOT built, printed on the example output itself and in [`docs/AI_USE_LOG.md`](docs/AI_USE_LOG.md) — the coverage that binds the theme pipeline, the positioning data the public sources cannot see, and the classifier that was not trained |
 
 ## Where the AI-use documentation is
 
