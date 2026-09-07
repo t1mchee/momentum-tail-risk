@@ -9,7 +9,7 @@ is shown able to see the effect, and a prediction is only evidence if it was wri
 before the answer was known. Without this file the negative results in the README would
 read as after-the-fact rationalisation; with it they read as what they are.
 
-**14 experiments**, of which **13 ran** and **6 of those did not support their hypothesis**, and **20 instrument faults** that touched them. A blocked experiment is counted as neither: it did not fail to support its hypothesis, it never tested it.
+**14 experiments**, of which **13 ran** and **6 of those did not support their hypothesis**, and **21 instrument faults** that touched them. A blocked experiment is counted as neither: it did not fail to support its hypothesis, it never tested it.
 
 The working repository holds a larger register covering retired phases. This is the
 extract for what this package claims, selected mechanically: an experiment is here if its
@@ -466,5 +466,15 @@ several of them changed a headline figure after it had already been written down
 **Why it parsed.** Every other number in the package is rendered from a committed artifact at build time. This document was written by hand as prose, so nothing rendered it and nothing checked it, and a markdown table of plausible percentages looks identical whether or not the file it came from still exists. The fault is worse for its location: it was committed INSIDE the document whose subject is how each output was checked, in a package that has a section explaining that an earlier README went stale for exactly this reason.
 
 **The defence.** A number in a shipped document is either rendered from an artifact at build time or it is a hand-typed number waiting to go stale, and prose is not an exemption -- the numeral canary covers the page and the README template covers the README, while this file had neither. The AI-use log is now a template rendered from reports/poc/e4_summary.json like the README, so a renamed or missing field stops the build. The second rule: where two runs of one experiment exist, the artifact naming says which is registered and which is superseded, and the rendered text names the file it came from so a reader can reconcile it in one step rather than by pattern-matching percentages across two files.
+
+---
+
+### trp-99 · A control arm read different documents from the treatment arms while the code and the register both said it re-read the same ones.
+
+**What happened.** In the constructed-ground-truth extraction test the host index `hi` was initialised once above the arm loop rather than inside it, so the three arms -- unplanted re-read, planted condition, planted boilerplate -- consumed disjoint slices of the shuffled host list. Measured overlap between the control and the two treatment arms is 3, 3 and 0 of 120. The script printed "CONTROL, same hosts re-read with nothing added" and the registration said "the same 120 documents". The recall lift was therefore a difference between independent samples rather than a paired one, and the paired reading it was given does not hold: +10.0 points with a 95 percent interval of [-4.6, +24.6], p = 0.18.
+
+**Why it parsed.** The loop ran, the arms filled, every count came out at exactly the 120 requested, and the resulting rates were all plausible and in the expected direction. Nothing about the output distinguishes three arms over one document set from three arms over three. The comment beside the bug asserted the property the bug removed, so reading the code around it confirmed the wrong belief rather than exposing it.
+
+**The defence.** A control arm's defining property is that it differs from treatment in exactly one respect, and that property has to be ASSERTED rather than assumed from the shape of the loop that builds it. The fix is one line -- reset the index per arm -- but the check that would have caught it is a test that the arms' document sets are identical, which costs nothing and was never written. Where a comment states an invariant, either the code enforces it or a test does; a comment alone is a claim, and this one was false for the whole life of the result.
 
 ---

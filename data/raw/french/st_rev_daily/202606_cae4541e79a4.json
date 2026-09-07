@@ -1,0 +1,9 @@
+{
+  "dataset": "st_rev_daily",
+  "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_ST_Reversal_Factor_daily_CSV.zip",
+  "sha256": "cae4541e79a4eb8f891aa6a4cd7c32836fafc7ee796d71b6d3b884c6f1335402",
+  "last_modified": "Mon, 03 Aug 2026 19:17:05 GMT",
+  "crsp_vintage": "202606",
+  "fetched_at": "2026-08-21T01:54:13.567768+00:00",
+  "n_bytes": 85903
+}

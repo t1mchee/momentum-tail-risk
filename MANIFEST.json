@@ -1,8 +1,8 @@
 {
   "built_from_commit": "dabb63c840dd6c3f9db3224e1467e135296fb86d",
-  "files": 656,
-  "bytes": 78896871,
-  "megabytes": 78.9,
+  "files": 658,
+  "bytes": 79375222,
+  "megabytes": 79.4,
   "contents": [
     {
       "path": "src",
@@ -36,7 +36,7 @@
     },
     {
       "path": "data/raw/french",
-      "what": "vintages for momentum_daily, ff3_daily, mom_10_daily, with their provenance JSON",
+      "what": "vintages for momentum_daily, ff3_daily, mom_10_daily, st_rev_daily, with their provenance JSON",
       "pruned": "the industry and size-sorted files, unused by the PoC"
     },
     {

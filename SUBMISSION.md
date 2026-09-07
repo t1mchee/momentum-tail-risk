@@ -44,5 +44,5 @@ fault found in the process, including the ones found in this deliverable while p
 
 1. `README.md` — the result in nine numbers, three of which are failures.
 2. `make dash` → **Example output**, and click a number. Then click **UAL**.
-3. [`REGISTER.md`](REGISTER.md) — what was predicted before each test ran, including the 6 of 13 that ran and did not support their hypothesis, and the 20 instrument faults found on the way.
+3. [`REGISTER.md`](REGISTER.md) — what was predicted before each test ran, including the 6 of 13 that ran and did not support their hypothesis, and the 21 instrument faults found on the way.
 4. `project/traps.yaml`, last five entries — what was caught, and how.

@@ -137,7 +137,7 @@ holds those records for everything this package claims. Of the 13 that ran,
 their hypothesis.
 
 **An implausible number is an instrument bug until proven otherwise, including a flattering one.**
-That presumption has been correct every time it was applied. 20 instrument faults found
+That presumption has been correct every time it was applied. 21 instrument faults found
 during this build are recorded in `REGISTER.md`, each one a case where the code ran clean and the
 number was wrong. Several changed a headline figure after it had already been written down:
 
