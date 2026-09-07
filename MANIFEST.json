@@ -1,8 +1,8 @@
 {
   "built_from_commit": "469c8d42ad8c1a8c154d38c725b689f3f4bdd41f",
-  "files": 642,
-  "bytes": 77760536,
-  "megabytes": 77.8,
+  "files": 655,
+  "bytes": 80127656,
+  "megabytes": 80.1,
   "contents": [
     {
       "path": "src",
@@ -42,6 +42,11 @@
     {
       "path": "data/raw/fred",
       "what": "the reference series",
+      "pruned": "nothing"
+    },
+    {
+      "path": "data/raw/cboe",
+      "what": "VIX and the term-structure series the page's screen line reads",
       "pruned": "nothing"
     },
     {

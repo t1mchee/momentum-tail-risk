@@ -171,7 +171,7 @@ tests/                       the guards, including eight on data integrity
 ```
 
 `MANIFEST.json` records exactly what was pruned from the working repository and why. The
-working copy is 8.6 GB across twenty sources; this is 78 MB, and the prunes are row and column
+working copy is 8.6 GB across twenty sources; this is 80 MB, and the prunes are row and column
 filters, never transformations.
 
 ## The scripts, in the order the argument runs
