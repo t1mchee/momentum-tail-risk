@@ -116,7 +116,7 @@ def main() -> None:
     # The memo's copy, in the working repository only. Inside the submission package this
     # path does not exist and creating it would leave a stray docs/drafting/ in a reader's
     # checkout, named after a directory that was deliberately not shipped.
-    if DRAFTING.parent.parent.is_dir() and not (DST.parent.parent / "MANIFEST.json").exists():
+    if DRAFTING.parent.parent.is_dir() and not Path("MANIFEST.json").exists():
         DRAFTING.parent.mkdir(parents=True, exist_ok=True)
         DRAFTING.write_bytes(DST.read_bytes())
         print(f"wrote {DST} and {DRAFTING}")
